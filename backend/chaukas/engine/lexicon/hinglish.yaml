@@ -1,0 +1,767 @@
+# Hinglish lexicon — Chaukas detection engine
+# Each signal has >=15 patterns covering inflections, ASR variants, euphemisms.
+# Hinglish = romanised Hindi mixed with English, common in ASR output.
+
+# ─── authority_claim (weight: 12, not hard) ───
+- signal: authority_claim
+  kind: phrase
+  value: "police wala"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "cyber crime se hu"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "CBI officer"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "ED department"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "TRAI se call"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "RBI policy"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "customs wala"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "income tax walon ne bheja"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "main inspector bol raha hoon"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "officer se baat ho rahi hai"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "local police station se"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "fraud cell department"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "security agency ka officer"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "investigating officer hu"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "sir main police department se hu"
+  lang: hinglish
+- signal: authority_claim
+  kind: token
+  value: "inspector"
+  lang: hinglish
+- signal: authority_claim
+  kind: token
+  value: "officer"
+  lang: hinglish
+- signal: authority_claim
+  kind: phrase
+  value: "narcootics control bureau"
+  lang: hinglish
+
+# ─── digital_arrest (weight: 22, not hard) ───
+- signal: digital_arrest
+  kind: phrase
+  value: "digital arrest lag gaya"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "aap arrest mein hain"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "warrant issue ho gaya"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "FIR aapke naam pe hai"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "case register ho chuka hai"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "court order aa gaya"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "girftari warrant nikal gaya"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "police aapko lene aayegi"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "custody mein lena padega"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "bail nahi milegi ab"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "judge kal sunwayi karenge"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "aapka naam list mein aa gaya"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "blacklist ban gayi hai"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "passport cancel kar denge"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "interpol notice bhej diya"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "criminal case chal raha hai"
+  lang: hinglish
+- signal: digital_arrest
+  kind: phrase
+  value: "aap track kiye ja rahe hain"
+  lang: hinglish
+
+# ─── accusation (weight: 14, not hard) ───
+- signal: accusation
+  kind: phrase
+  value: "money laundering ka case"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "parcel mein drugs mili"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "Aadhaar misuse hua hai"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "SIM illegal use hui"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "aapke Aadhaar se fraud hua"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "trafficking ka charge laga"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "hawala transaction mila"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "phone number flag ho gaya"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "illegal transfer detect hua"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "fraud ka shak hai"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "bank account involve hai"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "identity pe illegal activity"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "device pe evidence mila"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "terror module se link hai"
+  lang: hinglish
+- signal: accusation
+  kind: phrase
+  value: "PAN card illegal use hua"
+  lang: hinglish
+
+# ─── urgency_threat (weight: 10, not hard) ───
+- signal: urgency_threat
+  kind: phrase
+  value: "turant karo"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "abhi ke abhi"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "30 minute ke andar"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "account block ho jayega"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "last warning hai"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "varna arrest karenge"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "aur chance nahi hai"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "time khatam ho raha"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "midnight se pehle"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "SIM band hogi"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "bank freeze ho jayega"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "next hour mein"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "final notice hai"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "aaj hi karna padega"
+  lang: hinglish
+- signal: urgency_threat
+  kind: phrase
+  value: "fast action lena hai"
+  lang: hinglish
+
+# ─── secrecy_isolation (weight: 24, not hard) ───
+- signal: secrecy_isolation
+  kind: phrase
+  value: "kisi ko mat batana"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "call mat katna"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "video call pe raho"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "family ko mat batao"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "yeh confidential rakho"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "alag room mein jao"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "call connected rakho"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "kisi aur ko pata na chale"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "private rakhein yeh baat"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "kisi se discuss mat karo"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "phone switch off karo"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "quiet room mein baitho"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "kisi ko sunne mat do"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "rishtedaaron se chupao"
+  lang: hinglish
+- signal: secrecy_isolation
+  kind: phrase
+  value: "patni ko bhi mat batao"
+  lang: hinglish
+
+# ─── credential_request (weight: 30, HARD) ───
+- signal: credential_request
+  kind: phrase
+  value: "OTP batao"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "code padh ke sunao"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "PIN number do"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "UPI PIN enter karo"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "card number batao"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "CVV code do"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "verification code kya hai"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "Aadhaar number batao"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "password share karo"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "six digit code batao"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "OTP screen pe dikh raha hai"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "verification code type karo"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "PIN enter karo phone pe"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "security code share karo"
+  lang: hinglish
+- signal: credential_request
+  kind: phrase
+  value: "OTP jo SMS mein aaya"
+  lang: hinglish
+
+# ─── transfer_demand (weight: 30, HARD) ───
+- signal: transfer_demand
+  kind: phrase
+  value: "paisa transfer karo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "safe account mein bhejo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "jurmana dena padega"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "gift card khareedo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "crypto mein convert karo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "UPI se is number pe bhejo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "paise bhejne honge"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "deposit amount dena hai"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "verification amount bhejo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "security deposit lagta hai"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "innocence prove karne ke liye transfer"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "investigation ke liye funds"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "dusre account mein move karo"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "cash nikal ke do"
+  lang: hinglish
+- signal: transfer_demand
+  kind: phrase
+  value: "Paytm ya PhonePe pe pay karo"
+  lang: hinglish
+
+# ─── remote_access (weight: 28, HARD) ───
+- signal: remote_access
+  kind: phrase
+  value: "AnyDesk download karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "TeamViewer install karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "QuickSupport app"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "screen share karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "yeh app install karni padegi"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "link pe click karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "APK file download karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "Play Store se download karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "screen access deni padegi"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "browser mein link kholo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "screen ke instructions follow karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "remote support activate karo"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "mera phone control karne do"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "display share karo mere saath"
+  lang: hinglish
+- signal: remote_access
+  kind: phrase
+  value: "QR code scan karo connect karne ke liye"
+  lang: hinglish
+
+# ─── reward_task (weight: 14, not hard) ───
+- signal: reward_task
+  kind: phrase
+  value: "part-time job opportunity"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "like and earn scheme"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "task pe commission milega"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "paisa double kar denge"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "guaranteed returns wala plan"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "daily profit hota hai"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "lucky draw mein jeete"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "lottery lag gayi hai"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "prize money mila hai"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "ghar baithe kamao"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "work from home job"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "investment scheme accha hai"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "high returns guaranteed milenge"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "cash prizes jeet sakte ho"
+  lang: hinglish
+- signal: reward_task
+  kind: phrase
+  value: "reviews ke liye reward milega"
+  lang: hinglish
+
+# ─── kyc_expiry (weight: 10, not hard) ───
+- signal: kyc_expiry
+  kind: phrase
+  value: "KYC update karna hai"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "KYC expire ho gaya"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "PAN details update karo"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "account suspend ho jayega"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "bank account band kar denge"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "bijli kat jayegi"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "service deactivate ho jayegi"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "profile lock ho gayi"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "compliance pending hai"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "document verification chahiye"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "mandatory KYC lag gaya"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "government directive aaya hai"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "details update karne hain"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "regulatory requirement hai"
+  lang: hinglish
+- signal: kyc_expiry
+  kind: phrase
+  value: "permanent suspension ho jayega"
+  lang: hinglish
+
+# ─── courier_customs (weight: 10, not hard) ───
+- signal: courier_customs
+  kind: phrase
+  value: "FedEx se parcel aaya"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "DHL delivery"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "courier wala aaya"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "parcel airport pe phansa hai"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "customs duty dena padega"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "parcel mein prohibited items hain"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "import tax lag raha hai"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "package customs ne seize kiya"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "parcel deliver karna hai"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "tax ki wajah se delivery fail"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "Blue Dart courier"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "Xpressbees delivery"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "shipment stuck ho gayi"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "clearance chahiye pehle"
+  lang: hinglish
+- signal: courier_customs
+  kind: phrase
+  value: "international package hai"
+  lang: hinglish
+
+# ─── emergency_relative (weight: 16, not hard) ───
+- signal: emergency_relative
+  kind: phrase
+  value: "main aapka bhateeja hu"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "bhaiya main phas gaya"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "accident ho gaya mera"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "hospital ko paisa chahiye turant"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "turant paise bhejo"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "papa ko mat batana please"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "phone kho gaya hai"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "wallet chori ho gaya"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "madad chahiye urgent"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "bhai jail mein hai"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "beti ka accident ho gaya"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "beta achanak bimmar pad gaya"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "medicine ke liye paisa chahiye"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "office se bol raha hu"
+  lang: hinglish
+- signal: emergency_relative
+  kind: phrase
+  value: "relative mushkil mein hai"
+  lang: hinglish

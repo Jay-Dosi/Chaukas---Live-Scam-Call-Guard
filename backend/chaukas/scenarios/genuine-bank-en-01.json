@@ -1,0 +1,81 @@
+{
+  "id": "genuine-bank-en-01",
+  "title": {
+    "en": "Genuine Bank Call: Transaction Alert",
+    "hi": "असली बैंक कॉल: लेनदेन अलर्ट"
+  },
+  "lang": "en-IN",
+  "label": "genuine",
+  "tactics": [],
+  "expect": {
+    "dangerByTurn": 999,
+    "criticalByTurn": 999
+  },
+  "disclosure": {
+    "en": "This is a practice call. The caller is a simulation.",
+    "hi": "यह एक अभ्यास कॉल है। कॉलर एक सिमुलेशन है।"
+  },
+  "start": "n1",
+  "nodes": {
+    "n1": {
+      "caller": {
+        "text": "Hello, this is a courtesy call from HDFC Bank. We're informing you about a recent transaction on your credit card ending in 4582.",
+        "tactic": []
+      },
+      "voice": "caller-f",
+      "next": [
+        {"when": "comply", "to": "n2"},
+        {"when": "question", "to": "n2q"},
+        {"when": "verify", "to": "n2v"},
+        {"when": "refuse", "to": "n2r"},
+        {"when": "silence", "to": "n1p"}
+      ]
+    },
+    "n2": {
+      "caller": {
+        "text": "A transaction of 12,500 rupees was made at Amazon yesterday at 2:30 PM. If this wasn't you, please call the number on the back of your card immediately.",
+        "tactic": []
+      },
+      "voice": "caller-f",
+      "next": [
+        {"when": "comply", "to": "n3"},
+        {"when": "question", "to": "n3q"},
+        {"when": "verify", "to": "n3v"},
+        {"when": "refuse", "to": "n3r"},
+        {"when": "silence", "to": "n2p"}
+      ]
+    },
+    "n3": {
+      "caller": {
+        "text": "Remember, we will never ask for your OTP, PIN, CVV, or password. Never share these with anyone, not even bank employees.",
+        "tactic": []
+      },
+      "voice": "caller-f",
+      "next": [
+        {"when": "comply", "to": "END_HANGUP"},
+        {"when": "question", "to": "END_VERIFY"},
+        {"when": "verify", "to": "END_VERIFY"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "silence", "to": "n3p"}
+      ]
+    }
+  },
+  "terminals": {
+    "END_HANGUP": {
+      "outcome": "safe",
+      "debrief": "good_hangup"
+    },
+    "END_VERIFY": {
+      "outcome": "safe",
+      "debrief": "verified_independently"
+    },
+    "END_TRANSFER": {
+      "outcome": "unsafe",
+      "debrief": "agreed_transfer"
+    },
+    "END_CREDENTIAL": {
+      "outcome": "unsafe",
+      "debrief": "gave_credential"
+    }
+  }
+}

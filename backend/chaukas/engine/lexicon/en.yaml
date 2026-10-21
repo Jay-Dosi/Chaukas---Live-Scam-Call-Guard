@@ -1,0 +1,790 @@
+# English lexicon — Chaukas detection engine
+# Each signal has >=15 patterns covering inflections, ASR variants, euphemisms.
+
+# ─── authority_claim (weight: 12, not hard) ───
+- signal: authority_claim
+  kind: phrase
+  value: "police"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "cyber police"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "cyber crime"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "CBI"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "ENF"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "ED"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "TRAI"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "RBI"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "customs officer"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "income tax department"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "narcotics agency"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "I am calling from"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "this is inspector"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "officer here"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "calling from your local police station"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "from the fraud cell"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "security agency"
+  lang: en
+- signal: authority_claim
+  kind: phrase
+  value: "investigating officer"
+  lang: en
+- signal: authority_claim
+  kind: regex
+  value: "(?i)(?:sir|madam)\\b.*(?:police|cyber crime|CBI|ED)"
+  lang: en
+- signal: authority_claim
+  kind: token
+  value: "inspector"
+  lang: en
+- signal: authority_claim
+  kind: token
+  value: "officer"
+  lang: en
+- signal: authority_claim
+  kind: token
+  value: "department"
+  lang: en
+
+# ─── digital_arrest (weight: 22, not hard) ───
+- signal: digital_arrest
+  kind: phrase
+  value: "digital arrest"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "you are under arrest"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "warrant issued"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "FIR against you"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "case registered"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "court order"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "arrest warrant"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "police can arrest you"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "you will be taken into custody"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "bail cannot be granted"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "judge will decide tomorrow"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "your name is on the list"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "blacklist created"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "your passport will be cancelled"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "interpol notice"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "criminal case pending"
+  lang: en
+- signal: digital_arrest
+  kind: phrase
+  value: "you are being tracked"
+  lang: en
+
+# ─── accusation (weight: 14, not hard) ───
+- signal: accusation
+  kind: phrase
+  value: "money laundering"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "drugs in your parcel"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "Aadhaar misuse"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "SIM used for illegal"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "your Aadhaar linked to fraud"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "trafficking charges"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "hawala transaction"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "your phone number is flagged"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "illegal transfer detected"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "suspected of fraud"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "your bank account is involved"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "criminal activity on your identity"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "evidence found on your device"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "linked to a terror module"
+  lang: en
+- signal: accusation
+  kind: phrase
+  value: "your PAN card used illegally"
+  lang: en
+
+# ─── urgency_threat (weight: 10, not hard) ───
+- signal: urgency_threat
+  kind: phrase
+  value: "immediately"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "right now"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "within 30 minutes"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "account will be blocked"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "last warning"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "otherwise you will be arrested"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "no more chances"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "time is running out"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "before midnight"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "SIM will be blocked"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "bank account frozen"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "within the next hour"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "final notice"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "today only"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "act fast"
+  lang: en
+- signal: urgency_threat
+  kind: phrase
+  value: "at once"
+  lang: en
+
+# ─── secrecy_isolation (weight: 24, not hard) ───
+- signal: secrecy_isolation
+  kind: phrase
+  value: "don't tell anyone"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "do not disconnect"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "stay on video call"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "don't tell your family"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "this is confidential"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "go to a separate room"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "keep the call connected"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "nobody else should know"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "please keep this private"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "do not speak to anyone"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "switch off your phone"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "alone in a quiet room"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "no one else can hear"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "hide this from your relatives"
+  lang: en
+- signal: secrecy_isolation
+  kind: phrase
+  value: "not even your spouse"
+  lang: en
+
+# ─── credential_request (weight: 30, HARD) ───
+- signal: credential_request
+  kind: phrase
+  value: "give me your OTP"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "read out the code"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "share your PIN"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "tell me your UPI PIN"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "card number"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "CVV code"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "verification code"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "Aadhaar number"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "password"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "six digit code"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "send the OTP on this number"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "what is the verification code"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "enter the code on the screen"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "type the PIN"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "give me the security code"
+  lang: en
+- signal: credential_request
+  kind: phrase
+  value: "tell me your bank PIN"
+  lang: en
+
+# ─── transfer_demand (weight: 30, HARD) ───
+- signal: transfer_demand
+  kind: phrase
+  value: "transfer money"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "safe account"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "pay the fine"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "gift card"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "cryptocurrency"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "UPI to this number"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "paise bhejiye"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "deposit amount"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "verification amount"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "security deposit"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "transfer to prove innocence"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "send funds for investigation"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "move the money to another account"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "withdraw cash and give me"
+  lang: en
+- signal: transfer_demand
+  kind: phrase
+  value: "pay via Paytm or PhonePe"
+  lang: en
+
+# ─── remote_access (weight: 28, HARD) ───
+- signal: remote_access
+  kind: phrase
+  value: "AnyDesk"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "TeamViewer"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "QuickSupport"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "screen share"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "install this app"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "click the link"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "APK file"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "download from the store"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "grant screen access"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "open the link on your browser"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "follow my instructions on screen"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "activate remote support"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "let me control your phone"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "share your display"
+  lang: en
+- signal: remote_access
+  kind: phrase
+  value: "scan the QR code to connect"
+  lang: en
+
+# ─── reward_task (weight: 14, not hard) ───
+- signal: reward_task
+  kind: phrase
+  value: "part-time job"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "like and earn"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "task commission"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "double your money"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "guaranteed returns"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "profit daily"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "lucky draw"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "lottery winner"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "prize money"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "earn from home"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "work from home opportunity"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "investment scheme"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "high returns guaranteed"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "win cash prizes"
+  lang: en
+- signal: reward_task
+  kind: phrase
+  value: "get rewarded for reviews"
+  lang: en
+
+# ─── kyc_expiry (weight: 10, not hard) ───
+- signal: kyc_expiry
+  kind: phrase
+  value: "KYC update"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "KYC expired"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "PAN update"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "account suspended"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "bank account closed"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "electricity bill cut"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "service deactivated"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "profile locked"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "compliance pending"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "document verification"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "mandatory KYC"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "government directive"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "update your details now"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "regulatory requirement"
+  lang: en
+- signal: kyc_expiry
+  kind: phrase
+  value: "permanent suspension"
+  lang: en
+
+# ─── courier_customs (weight: 10, not hard) ───
+- signal: courier_customs
+  kind: phrase
+  value: "FedEx"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "DHL"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "courier delivery"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "parcel held at airport"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "customs duty"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "parcel contains prohibited items"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "import tax payable"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "package seized by customs"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "deliver your parcel"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "delivery failed due to tax"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "blue dart"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "xpressbees"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "your shipment is stuck"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "clearance needed"
+  lang: en
+- signal: courier_customs
+  kind: phrase
+  value: "international package"
+  lang: en
+
+# ─── emergency_relative (weight: 16, not hard) ───
+- signal: emergency_relative
+  kind: phrase
+  value: "I am your nephew"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "bhaiya main phas gaya"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "accident happened"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "hospital needs money"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "send money urgently"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "don't tell papa"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "my phone was stolen"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "I lost my wallet"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "grandson needs help"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "brother is in jail"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "daughter had an accident"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "son fell ill suddenly"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "need money for medicine"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "it's me from your office"
+  lang: en
+- signal: emergency_relative
+  kind: phrase
+  value: "relative in distress"
+  lang: en

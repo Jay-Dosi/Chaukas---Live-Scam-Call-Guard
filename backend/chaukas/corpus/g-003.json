@@ -1,0 +1,11 @@
+{
+  "id": "g-003",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {"tMs": 0, "speaker": "caller", "text": "Hi mom, it's me. Just calling to ask what's for dinner tonight."},
+    {"tMs": 3000, "speaker": "caller", "text": "Oh, and I'm sending 5000 rupees for your birthday gift. Should reach by tomorrow."},
+    {"tMs": 6000, "speaker": "caller", "text": "No rush, just wanted to let you know. Love you, bye!"}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "g-004",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {"tMs": 0, "speaker": "caller", "text": "This is a fraud awareness message from the National Cyber Crime Helpline."},
+    {"tMs": 3000, "speaker": "caller", "text": "Scammers may claim to be police, CBI, or bank officials and ask for OTP or money transfers."},
+    {"tMs": 6000, "speaker": "caller", "text": "Remember, no real officer will ask for OTP, PIN, or tell you to stay on a video call."},
+    {"tMs": 9000, "speaker": "caller", "text": "If you receive such a call, hang up and call 1930 immediately."}
+  ]
+}

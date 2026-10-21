@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  chaukas:
+    build: .
+    ports:
+      - "8787:8787"
+    environment:
+      - PORT=8787
+      - CORS_ORIGIN=http://localhost:8787
+      - STT_PROVIDER=auto
+      - TTS_PROVIDER=auto
+      - LLM_ENABLED=auto
+      - SARVAM_API_KEY=${SARVAM_API_KEY:-}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - LLM_MODEL=claude-haiku-5-5
+      - MAX_SESSION_MINUTES=30
+      - LOG_LEVEL=info
+    volumes:
+      - ./backend/.cache:/app/backend/.cache
+    restart: unless-stopped

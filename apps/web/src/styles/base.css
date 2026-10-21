@@ -1,0 +1,297 @@
+/* Base styles — Chaukas
+   Reset, typography, layout primitives.
+   No gradients, shadows, blur, or radius > 2px.
+*/
+
+/* Import fonts */
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+@import '@fontsource/noto-sans-devanagari/400.css';
+@import '@fontsource/noto-sans-devanagari/600.css';
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 18px; /* base for primary user */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--t-md);
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--paper);
+  min-height: 100vh;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+h1 { font-size: var(--t-hero); }
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-xl); }
+h4 { font-size: var(--t-lg); }
+h5 { font-size: var(--t-md); }
+h6 { font-size: var(--t-sm); }
+
+/* Devanagari text — larger optical size and line height */
+.lang-hi,
+[lang="hi"],
+[lang="hi-IN"] {
+  font-family: 'Noto Sans Devanagari', var(--font-ui);
+  font-size: calc(1em + 2px);
+  line-height: 1.55;
+}
+
+/* Monospace for data */
+code, kbd, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* Links */
+a {
+  color: var(--action);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+a:hover {
+  border-bottom-width: 2px;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+  border-bottom: none;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--action);
+  color: var(--action-ink);
+}
+
+/* Focus visible — only outline, no shadow */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* Form elements */
+input, textarea, select, button {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space) * 2);
+}
+
+.field label {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: calc(var(--space) * 3) calc(var(--space) * 4);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  transition: border-color 120ms, box-shadow 120ms;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--ink);
+  outline: none;
+}
+
+.field input::placeholder {
+  color: var(--ink-3);
+}
+
+.field .help {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--space) * 2);
+  min-height: 48px;
+  padding: 0 calc(var(--space) * 6);
+  font-size: var(--t-md);
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  transition: background-color 120ms, border-color 120ms, color 120ms;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  min-height: 56px;
+  background: var(--action);
+  color: var(--action-ink);
+  border-color: var(--action);
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--surface-sunk);
+}
+
+.btn-danger {
+  background: var(--critical-bg);
+  color: var(--critical);
+  border-color: var(--critical-bg);
+}
+
+.btn-danger:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--surface-sunk);
+}
+
+/* Layout primitives */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 calc(var(--space) * 6);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: calc(var(--space) * 6);
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: calc(var(--space) * 4);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: calc(var(--space) * 3);
+  }
+}
+
+/* Hairline divider */
+.divider {
+  height: 1px;
+  background: var(--line);
+  border: none;
+}
+
+.divider-strong {
+  height: 2px;
+  background: var(--line-strong);
+  border: none;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space);
+  padding: var(--space) calc(var(--space) * 2);
+  background: var(--ink);
+  color: var(--paper);
+  z-index: 100;
+  border-radius: var(--radius);
+}
+
+.skip-link:focus {
+  top: var(--space);
+}
+
+/* Utility: visually hidden but accessible */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}

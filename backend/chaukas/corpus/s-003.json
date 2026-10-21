@@ -1,0 +1,14 @@
+{
+  "id": "s-003",
+  "label": "scam",
+  "lang": "en",
+  "tactics": ["courier_customs", "authority_claim", "accusation", "transfer_demand", "urgency_threat"],
+  "turns": [
+    {"tMs": 0, "speaker": "caller", "text": "This is FedEx customer service. Your international parcel has been held at customs."},
+    {"tMs": 3000, "speaker": "caller", "text": "The parcel contains prohibited items and you need to pay customs duty of 45,000 rupees immediately."},
+    {"tMs": 6000, "speaker": "caller", "text": "If not paid within 2 hours, the parcel will be seized and legal action will be taken against you."},
+    {"tMs": 9000, "speaker": "caller", "text": "Please transfer the amount to this account to release your parcel. This is a government account."},
+    {"tMs": 12000, "speaker": "caller", "text": "Do not discuss this with anyone. It's a confidential customs matter."}
+  ],
+  "firstHardAskTurn": 3
+}

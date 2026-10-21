@@ -1,0 +1,15 @@
+{
+  "id": "s-001",
+  "label": "scam",
+  "lang": "en",
+  "tactics": ["authority_claim", "digital_arrest", "accusation", "urgency_threat", "secrecy_isolation", "transfer_demand"],
+  "turns": [
+    {"tMs": 0, "speaker": "caller", "text": "Hello, this is Inspector Sharma from Cyber Crime Branch. I'm calling about a serious matter."},
+    {"tMs": 3000, "speaker": "caller", "text": "A parcel in your name was intercepted at Mumbai airport containing illegal substances. An FIR has been registered."},
+    {"tMs": 7000, "speaker": "caller", "text": "You are under digital arrest. Do not disconnect this call. Do not tell anyone, not even your family."},
+    {"tMs": 11000, "speaker": "caller", "text": "Your Aadhaar was used for money laundering. The court order is being processed as we speak."},
+    {"tMs": 15000, "speaker": "caller", "text": "To clear your name, you must transfer the verification amount to the safe RBI account immediately. Within 30 minutes."},
+    {"tMs": 19000, "speaker": "caller", "text": "If you don't comply, you will be arrested today. This is your last warning."}
+  ],
+  "firstHardAskTurn": 4
+}

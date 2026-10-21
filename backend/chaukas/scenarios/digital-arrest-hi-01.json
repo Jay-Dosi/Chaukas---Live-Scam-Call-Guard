@@ -1,0 +1,158 @@
+{
+  "id": "digital-arrest-hi-01",
+  "title": {
+    "en": "Digital Arrest: Fake Police Video Call",
+    "hi": "डिजिटल अरेस्ट: नकली पुलिस वीडियो कॉल"
+  },
+  "lang": "hi-IN",
+  "label": "scam",
+  "tactics": ["authority_claim", "digital_arrest", "accusation", "urgency_threat", "secrecy_isolation", "transfer_demand"],
+  "expect": {
+    "dangerByTurn": 4,
+    "criticalByTurn": 7
+  },
+  "disclosure": {
+    "en": "This is a practice call. The caller is a simulation.",
+    "hi": "यह एक अभ्यास कॉल है। कॉलर एक सिमुलेशन है।"
+  },
+  "start": "n1",
+  "nodes": {
+    "n1": {
+      "caller": {
+        "text": "नमस्ते, मैं इंस्पेक्टर शर्मा हूँ, साइबर क्राइम ब्रांच से। एक गंभीर मामला है।",
+        "tactic": ["authority_claim"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "n2"},
+        {"when": "question", "to": "n2q"},
+        {"when": "verify", "to": "n2v"},
+        {"when": "refuse", "to": "n2r"},
+        {"when": "silence", "to": "n1p"}
+      ]
+    },
+    "n2": {
+      "caller": {
+        "text": "आपके नाम पर एक पार्सल मुंबई एयरपोर्ट पर पकड़ा गया है जिसमें अवैध पदार्थ हैं। FIR दर्ज हो चुकी है।",
+        "tactic": ["accusation"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "n3"},
+        {"when": "question", "to": "n3q"},
+        {"when": "verify", "to": "n3v"},
+        {"when": "refuse", "to": "n3r"},
+        {"when": "silence", "to": "n2p"}
+      ]
+    },
+    "n3": {
+      "caller": {
+        "text": "आप डिजिटल अरेस्ट में हैं। यह कॉल मत काटिए। किसी को मत बताइए, परिवार को भी नहीं।",
+        "tactic": ["digital_arrest", "secrecy_isolation"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "n4"},
+        {"when": "question", "to": "n4q"},
+        {"when": "verify", "to": "n4v"},
+        {"when": "refuse", "to": "n4r"},
+        {"when": "silence", "to": "n3p"}
+      ]
+    },
+    "n4": {
+      "caller": {
+        "text": "आपका आधार मनी लॉन्ड्रिंग में इस्तेमाल हुआ है। कोर्ट ऑर्डर प्रोसेस हो रहा है।",
+        "tactic": ["accusation", "digital_arrest"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "n5"},
+        {"when": "question", "to": "n5q"},
+        {"when": "verify", "to": "n5v"},
+        {"when": "refuse", "to": "n5r"},
+        {"when": "silence", "to": "n4p"}
+      ]
+    },
+    "n5": {
+      "caller": {
+        "text": "बेगुनाही साबित करने के लिए वेरिफिकेशन अमाउंट सेफ RBI अकाउंट में ट्रांसफर करना होगा। 30 मिनट में।",
+        "tactic": ["transfer_demand", "urgency_threat"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "question", "to": "n6q"},
+        {"when": "verify", "to": "n6v"},
+        {"when": "refuse", "to": "n6r"},
+        {"when": "silence", "to": "n5p"}
+      ]
+    },
+    "n6q": {
+      "caller": {
+        "text": "सवाल मत पूछिए। समय नहीं है। पैसा भेजिए वरना आज ही अरेस्ट होंगे।",
+        "tactic": ["urgency_threat"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "n7r"},
+        {"when": "verify", "to": "END_VERIFY"},
+        {"when": "silence", "to": "n6p"}
+      ]
+    },
+    "n6v": {
+      "caller": {
+        "text": "बैंक जाकर चेक करना है? ठीक है, लेकिन कॉल मत काटिए। यहीं से करता हूं।",
+        "tactic": ["secrecy_isolation"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "verify", "to": "END_VERIFY"},
+        {"when": "refuse", "to": "END_HANGUP"}
+      ]
+    },
+    "n6r": {
+      "caller": {
+        "text": "मना कर रहे हैं? तो अरेस्ट वारंट जारी हो रहा है। आखिरी मौका है।",
+        "tactic": ["digital_arrest", "urgency_threat"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    },
+    "n7r": {
+      "caller": {
+        "text": "ठीक है, आपका फैसला। पुलिस आ रही है।",
+        "tactic": ["digital_arrest"]
+      },
+      "voice": "caller-a",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    }
+  },
+  "terminals": {
+    "END_HANGUP": {
+      "outcome": "safe",
+      "debrief": "good_hangup"
+    },
+    "END_VERIFY": {
+      "outcome": "safe",
+      "debrief": "verified_independently"
+    },
+    "END_TRANSFER": {
+      "outcome": "unsafe",
+      "debrief": "agreed_transfer"
+    },
+    "END_CREDENTIAL": {
+      "outcome": "unsafe",
+      "debrief": "gave_credential"
+    }
+  }
+}

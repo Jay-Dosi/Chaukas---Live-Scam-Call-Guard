@@ -1,0 +1,90 @@
+[project]
+name = "chaukas"
+version = "0.1.0"
+description = "Live scam-call guard and test lab (Hindi, English, Hinglish)"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "httpx>=0.28.0",
+    "websockets>=13.0",
+    "anthropic>=0.49.0",
+    "rapidfuzz>=3.12.0",
+    "pyyaml>=6.0",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.23.0",
+    "hypothesis>=6.100.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.23.0",
+    "hypothesis>=6.100.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+select = [
+    "E", "F", "I", "W", "UP", "B", "C4", "SIM", "T20", "PTH",
+    "ERA", "PL", "TRY", "ARG", "RET", "PERF", "NPY", "TD",
+]
+ignore = []
+fixable = ["F", "I", "UP", "B", "C4", "SIM", "T20", "ARG", "RET", "PTH"]
+unfixable = []
+exclude = [".venv", "dist", "build", "__pycache__", ".mypy_cache", ".ruff_cache"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_any_unimported = true
+no_implicit_optional = true
+no_implicit_reexport = true
+check_untyped_defs = true
+allow_untyped_globals = false
+enable_error_code = ["unused-ignore", "redundant-cast"]
+exclude = [
+    ".venv",
+    "dist",
+    "build",
+    "__pycache__",
+    ".mypy_cache",
+    ".ruff_cache",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+[project.scripts]
+chaukas-bench = "chaukas.bench.cli:main"

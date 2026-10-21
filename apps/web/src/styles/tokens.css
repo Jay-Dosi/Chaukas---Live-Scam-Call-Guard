@@ -1,0 +1,69 @@
+/* Design tokens — Chaukas
+   Single light theme, no gradients, no shadows, max 2px radius.
+   All values from PRD §10.3.
+*/
+
+:root {
+  /* surfaces */
+  --paper: #F7F6F2;       /* page background */
+  --surface: #FFFFFF;     /* panels */
+  --surface-sunk: #EFEDE6; /* wells, transcript bg */
+
+  /* ink */
+  --ink: #14171C;         /* primary text */
+  --ink-2: #454B55;       /* secondary text, 7.5:1 on paper */
+  --ink-3: #6B717C;       /* tertiary, only >=18px */
+
+  /* lines */
+  --line: #CFCDC4;        /* 1px borders, dividers */
+  --line-strong: #14171C; /* 2px structural rules */
+
+  /* meaning — always paired with word + shape */
+  --calm: #1F6A3D;
+  --calm-bg: #E3EFE7;
+
+  --caution: #8A5A00;
+  --caution-bg: #F6EBCF;
+
+  --danger: #B3261E;
+  --danger-bg: #F7E0DD;
+
+  --critical: #FFFFFF;
+  --critical-bg: #8F1B15; /* inverted block */
+
+  --action: #1B3A5C;
+  --action-ink: #FFFFFF;  /* primary buttons, links */
+
+  --focus: #1B3A5C;
+
+  /* type */
+  --font-ui: 'IBM Plex Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* scale — base 18px for primary user */
+  --t-xs: 0.8125rem;   /* 14.6px */
+  --t-sm: 0.9375rem;   /* 15px */
+  --t-md: 1.125rem;    /* 18px — base */
+  --t-lg: 1.375rem;    /* 22px */
+  --t-xl: 1.75rem;     /* 28px */
+  --t-2xl: 2.5rem;     /* 40px */
+  --t-hero: 4rem;      /* 64px — state word */
+
+  --space: 4px;        /* all spacing multiples of 4 */
+  --radius: 2px;       /* max border radius */
+}
+
+/* Text size settings — applied to :root via JS */
+html[data-size="normal"] { font-size: 100%; }
+html[data-size="large"] { font-size: 118%; }
+html[data-size="extra-large"] { font-size: 135%; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

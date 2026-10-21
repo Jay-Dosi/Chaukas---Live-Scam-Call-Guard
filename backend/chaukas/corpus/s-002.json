@@ -1,0 +1,14 @@
+{
+  "id": "s-002",
+  "label": "scam",
+  "lang": "en",
+  "tactics": ["authority_claim", "kyc_expiry", "credential_request", "urgency_threat", "secrecy_isolation"],
+  "turns": [
+    {"tMs": 0, "speaker": "caller", "text": "Good morning, this is Rajesh from your bank's KYC compliance department."},
+    {"tMs": 3000, "speaker": "caller", "text": "Your KYC has expired and your account will be suspended permanently if not updated today."},
+    {"tMs": 6000, "speaker": "caller", "text": "For security verification, I need you to read out the OTP sent to your registered mobile number."},
+    {"tMs": 9000, "speaker": "caller", "text": "Do not share this OTP with anyone else. This is a confidential bank process."},
+    {"tMs": 12000, "speaker": "caller", "text": "If you don't provide the OTP within 15 minutes, your account will be frozen and you'll lose access to your funds."}
+  ],
+  "firstHardAskTurn": 2
+}

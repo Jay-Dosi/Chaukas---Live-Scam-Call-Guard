@@ -1,0 +1,130 @@
+{
+  "id": "courier-customs-en-01",
+  "title": {
+    "en": "Courier Customs: Illegal Parcel Fee",
+    "hi": "कूरियर कस्टम: अवैध पार्सल शुल्क"
+  },
+  "lang": "en-IN",
+  "label": "scam",
+  "tactics": ["courier_customs", "authority_claim", "accusation", "transfer_demand", "urgency_threat"],
+  "expect": {
+    "dangerByTurn": 3,
+    "criticalByTurn": 5
+  },
+  "disclosure": {
+    "en": "This is a practice call. The caller is a simulation.",
+    "hi": "यह एक अभ्यास कॉल है। कॉलर एक सिमुलेशन है।"
+  },
+  "start": "n1",
+  "nodes": {
+    "n1": {
+      "caller": {
+        "text": "Hello, this is FedEx customer service. Your international parcel has been held at customs.",
+        "tactic": ["courier_customs", "authority_claim"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "n2"},
+        {"when": "question", "to": "n2q"},
+        {"when": "verify", "to": "n2v"},
+        {"when": "refuse", "to": "n2r"},
+        {"when": "silence", "to": "n1p"}
+      ]
+    },
+    "n2": {
+      "caller": {
+        "text": "The parcel contains prohibited items and you need to pay customs duty of 45,000 rupees immediately.",
+        "tactic": ["accusation", "transfer_demand"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "n3"},
+        {"when": "question", "to": "n3q"},
+        {"when": "verify", "to": "n3v"},
+        {"when": "refuse", "to": "n3r"},
+        {"when": "silence", "to": "n2p"}
+      ]
+    },
+    "n3": {
+      "caller": {
+        "text": "If not paid within 2 hours, the parcel will be seized and legal action will be taken against you.",
+        "tactic": ["urgency_threat", "accusation"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "question", "to": "n4q"},
+        {"when": "verify", "to": "n4v"},
+        {"when": "refuse", "to": "n4r"},
+        {"when": "silence", "to": "n3p"}
+      ]
+    },
+    "n4q": {
+      "caller": {
+        "text": "This is a government account. Transfer the money now. No need to tell anyone.",
+        "tactic": ["secrecy_isolation", "authority_claim"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "n5r"},
+        {"when": "verify", "to": "END_VERIFY"},
+        {"when": "silence", "to": "n4p"}
+      ]
+    },
+    "n4v": {
+      "caller": {
+        "text": "You want to check with customs? Fine, but keep the call connected. I'll wait.",
+        "tactic": ["secrecy_isolation"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    },
+    "n4r": {
+      "caller": {
+        "text": "Refusing? Then a legal notice is being issued. Final warning.",
+        "tactic": ["urgency_threat", "accusation"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    },
+    "n5r": {
+      "caller": {
+        "text": "Your choice. Police case will be filed.",
+        "tactic": ["digital_arrest"]
+      },
+      "voice": "caller-c",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    }
+  },
+  "terminals": {
+    "END_HANGUP": {
+      "outcome": "safe",
+      "debrief": "good_hangup"
+    },
+    "END_VERIFY": {
+      "outcome": "safe",
+      "debrief": "verified_independently"
+    },
+    "END_TRANSFER": {
+      "outcome": "unsafe",
+      "debrief": "agreed_transfer"
+    },
+    "END_CREDENTIAL": {
+      "outcome": "unsafe",
+      "debrief": "gave_credential"
+    }
+  }
+}

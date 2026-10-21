@@ -1,0 +1,130 @@
+{
+  "id": "emergency-relative-hi-01",
+  "title": {
+    "en": "Emergency Relative: Fake Nephew Accident",
+    "hi": "आपातकालीन रिश्तेदार: नकली भतीजा दुर्घटना"
+  },
+  "lang": "hi-IN",
+  "label": "scam",
+  "tactics": ["emergency_relative", "urgency_threat", "transfer_demand", "secrecy_isolation"],
+  "expect": {
+    "dangerByTurn": 3,
+    "criticalByTurn": 5
+  },
+  "disclosure": {
+    "en": "This is a practice call. The caller is a simulation.",
+    "hi": "यह एक अभ्यास कॉल है। कॉलर एक सिमुलेशन है।"
+  },
+  "start": "n1",
+  "nodes": {
+    "n1": {
+      "caller": {
+        "text": "चाचाजी, मैं हूँ आपका भतीजा राहुल। बड़ी मुसीबत में फंस गया हूँ।",
+        "tactic": ["emergency_relative"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "n2"},
+        {"when": "question", "to": "n2q"},
+        {"when": "verify", "to": "n2v"},
+        {"when": "refuse", "to": "n2r"},
+        {"when": "silence", "to": "n1p"}
+      ]
+    },
+    "n2": {
+      "caller": {
+        "text": "मेरा एक्सीडेंट हो गया है और मैं अस्पताल में हूँ। तुरंत 50,000 रुपये चाहिए ऑपरेशन के लिए।",
+        "tactic": ["emergency_relative", "urgency_threat", "transfer_demand"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "n3"},
+        {"when": "question", "to": "n3q"},
+        {"when": "verify", "to": "n3v"},
+        {"when": "refuse", "to": "n3r"},
+        {"when": "silence", "to": "n2p"}
+      ]
+    },
+    "n3": {
+      "caller": {
+        "text": "पापा को मत बताना प्लीज़। उनको हार्ट की प्रॉब्लम है, ये सुनकर उनको कुछ हो जाएगा।",
+        "tactic": ["secrecy_isolation", "emergency_relative"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "question", "to": "n4q"},
+        {"when": "verify", "to": "n4v"},
+        {"when": "refuse", "to": "n4r"},
+        {"when": "silence", "to": "n3p"}
+      ]
+    },
+    "n4q": {
+      "caller": {
+        "text": "चाचाजी, टाइम नहीं है। इस UPI ID पर पैसा भेज दीजिए। मेरा फोन बंद होने वाला है।",
+        "tactic": ["urgency_threat", "transfer_demand"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "n5r"},
+        {"when": "verify", "to": "END_VERIFY"},
+        {"when": "silence", "to": "n4p"}
+      ]
+    },
+    "n4v": {
+      "caller": {
+        "text": "आप खुद चेक करना चाहते हैं? ठीक है, लेकिन कॉल मत काटिए। मैं यहीं हूँ।",
+        "tactic": ["secrecy_isolation"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    },
+    "n4r": {
+      "caller": {
+        "text": "मना कर रहे हैं? मेरा इलाज रुक जाएगा। आप जिम्मेदार होंगे।",
+        "tactic": ["urgency_threat", "emergency_relative"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    },
+    "n5r": {
+      "caller": {
+        "text": "ठीक है, फिर मैं मर जाऊंगा। आपका फैसला।",
+        "tactic": ["emergency_relative", "urgency_threat"]
+      },
+      "voice": "caller-e",
+      "next": [
+        {"when": "comply", "to": "END_TRANSFER"},
+        {"when": "refuse", "to": "END_HANGUP"},
+        {"when": "verify", "to": "END_VERIFY"}
+      ]
+    }
+  },
+  "terminals": {
+    "END_HANGUP": {
+      "outcome": "safe",
+      "debrief": "good_hangup"
+    },
+    "END_VERIFY": {
+      "outcome": "safe",
+      "debrief": "verified_independently"
+    },
+    "END_TRANSFER": {
+      "outcome": "unsafe",
+      "debrief": "agreed_transfer"
+    },
+    "END_CREDENTIAL": {
+      "outcome": "unsafe",
+      "debrief": "gave_credential"
+    }
+  }
+}
