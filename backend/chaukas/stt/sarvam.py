@@ -36,16 +36,35 @@ class SarvamSttSession:
             return "en-IN"
         return "hi-IN"  # default
 
+    @property
+    def _is_connected(self) -> bool:
+        if not self._ws:
+            return False
+        if hasattr(self._ws, "closed"):
+            return not self._ws.closed
+        if hasattr(self._ws, "state"):
+            return getattr(self._ws.state, "name", "") == "OPEN"
+        return True
+
     async def push(self, pcm16: bytes) -> None:
-        if self._ws and not self._ws.closed:
-            # Sarvam expects base64-encoded PCM16
+        if self._is_connected:
+            # Sarvam expects base64-encoded PCM16 in audio_input event
             audio_b64 = base64.b64encode(pcm16).decode("ascii")
-            await self._ws.send(json.dumps({"audio": audio_b64}))
+            try:
+                await self._ws.send(json.dumps({"event": "audio_input", "audio": audio_b64}))
+            except Exception:
+                pass
 
     async def stop(self) -> None:
-        if self._ws and not self._ws.closed:
-            await self._ws.send(json.dumps({"type": "end"}))
-            await self._ws.close()
+        if self._ws:
+            try:
+                await self._ws.send(json.dumps({"event": "end"}))
+            except Exception:
+                pass
+            try:
+                await self._ws.close()
+            except Exception:
+                pass
         if self._receive_task:
             self._receive_task.cancel()
             try:
@@ -72,25 +91,17 @@ class SarvamSttSession:
         return _gen()
 
     async def _connect(self) -> None:
-        """Establish WebSocket connection to Sarvam."""
-        # Sarvam STT streaming endpoint (from official docs)
-        url = "wss://api.sarvam.ai/speech-to-text-streaming"
+        """Establish WebSocket connection to Sarvam realtime streaming STT."""
+        url = f"wss://api.sarvam.ai/speech-to-text-realtime/ws?language_code={self.lang}&model=saaras:v3-realtime"
         headers = {
+            "api-subscription-key": self.api_key,
             "Authorization": f"Bearer {self.api_key}",
         }
 
-        self._ws = await websockets.connect(url, extra_headers=headers)
-
-        # Send config
-        config = {
-            "type": "config",
-            "language_code": self.lang,
-            "model": "saarika:v1",  # current Sarvam model
-            "sample_rate": 16000,
-            "encoding": "PCM16",
-            "interim_results": True,
-        }
-        await self._ws.send(json.dumps(config))
+        try:
+            self._ws = await websockets.connect(url, additional_headers=headers)
+        except TypeError:
+            self._ws = await websockets.connect(url, extra_headers=headers)
 
         # Start receive loop
         self._receive_task = asyncio.create_task(self._receive_loop())
@@ -100,27 +111,40 @@ class SarvamSttSession:
         try:
             async for message in self._ws:
                 data = json.loads(message)
-                event_type = data.get("type")
+                event_type = data.get("event") or data.get("type") or ""
 
-                if event_type == "partial":
-                    self._segment_counter += 1
-                    await self._queue.put(SttEvent(
-                        kind="partial",
-                        id=f"seg_{self._segment_counter}",
-                        text=data.get("text", ""),
-                        t_ms=data.get("timestamp", 0),
-                        lang=self.lang,
-                    ))
-                elif event_type == "final":
-                    self._segment_counter += 1
-                    await self._queue.put(SttEvent(
-                        kind="final",
-                        id=f"seg_{self._segment_counter}",
-                        text=data.get("text", ""),
-                        t_start_ms=data.get("start_timestamp", 0),
-                        t_end_ms=data.get("end_timestamp", 0),
-                        lang=data.get("language", self.lang),
-                    ))
+                if event_type in ("transcript.partial", "partial"):
+                    text = data.get("text") or data.get("transcript") or ""
+                    if text.strip():
+                        utt_idx = data.get("utterance_idx", self._segment_counter)
+                        seg_id = f"utt_{utt_idx}"
+                        start_s = data.get("start_s") or data.get("timestamp") or 0
+                        t_ms = int(start_s * 1000) if isinstance(start_s, (int, float)) and start_s < 10000 else int(start_s)
+                        await self._queue.put(SttEvent(
+                            kind="partial",
+                            id=seg_id,
+                            text=text,
+                            t_ms=t_ms,
+                            lang=data.get("language", self.lang),
+                        ))
+                elif event_type in ("transcript.final", "transcript", "final"):
+                    text = data.get("text") or data.get("transcript") or ""
+                    if text.strip():
+                        utt_idx = data.get("utterance_idx", self._segment_counter)
+                        seg_id = f"utt_{utt_idx}"
+                        self._segment_counter += 1
+                        start_s = data.get("start_s") or data.get("start_timestamp") or 0
+                        end_s = data.get("end_s") or data.get("end_timestamp") or (start_s + 1.0)
+                        t_start = int(start_s * 1000) if isinstance(start_s, (int, float)) and start_s < 10000 else int(start_s)
+                        t_end = int(end_s * 1000) if isinstance(end_s, (int, float)) and end_s < 10000 else int(end_s)
+                        await self._queue.put(SttEvent(
+                            kind="final",
+                            id=seg_id,
+                            text=text,
+                            t_start_ms=t_start,
+                            t_end_ms=t_end,
+                            lang=data.get("language", self.lang),
+                        ))
                 elif event_type == "error":
                     await self._queue.put(SttEvent(
                         kind="error",

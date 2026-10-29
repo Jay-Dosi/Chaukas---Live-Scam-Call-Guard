@@ -4,7 +4,7 @@ import { useTranslation } from '@i18n/useTranslation';
 import { useSessionStore } from '@state/session';
 import { useSettingsStore } from '@state/settings';
 import { SessionSocket, startSession, stopSession, muteForAlert } from '@api/sessionSocket';
-import { fetchHealth } from '@api/client';
+import { fetchHealth, playTtsAudio } from '@api/client';
 import type { HealthData } from '@api/client';
 import { StateBlock } from '@components/StateBlock';
 import { TranscriptView } from '@components/TranscriptView';
@@ -33,10 +33,19 @@ export function LiveGuardPage() {
   const [socket, setSocket] = useState<SessionSocket | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [providers, setProviders] = useState<HealthData | null>(null);
-  const [consentGiven, setConsentGiven] = useState(false);
+  const [consentGiven, setConsentGiven] = useState(() => {
+    try {
+      return localStorage.getItem('chaukas_mic_consent') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [showConsent, setShowConsent] = useState(false);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
   const durationRef = useRef<number>();
+  const isListeningRef = useRef<boolean>(false);
+  const recognitionRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const workletNodeRef = useRef<AudioWorkletNode | null>(null);
@@ -115,9 +124,23 @@ export function LiveGuardPage() {
       setShowConsent(true);
       return;
     }
+    setShowConsent(false);
+    try {
+      localStorage.setItem('chaukas_mic_consent', 'true');
+    } catch {}
 
     try {
-      // Request microphone
+      // 1. Initialize session on backend first
+      if (socket) {
+        startSession(socket, {
+          mode: 'live',
+          lang: 'auto',
+          sensitivity: alertSensitivity,
+          fixture_id: undefined,
+        });
+      }
+
+      // 2. Request microphone
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: false,
@@ -127,32 +150,88 @@ export function LiveGuardPage() {
           channelCount: 1,
         },
       });
+      mediaStreamRef.current = stream;
 
-      // Set up AudioWorklet
-      const audioContext = new AudioContext({ sampleRate: 16000 });
-      audioContextRef.current = audioContext;
-      await audioContext.audioWorklet.addModule('/audio/capture.worklet.js');
+      // 3. AudioWorklet for server-side STT (Sarvam)
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+        audioContextRef.current = audioContext;
+        await audioContext.audioWorklet.addModule('/audio/capture.worklet.js');
 
-      const workletNode = new AudioWorkletNode(audioContext, 'pcm-processor');
-      workletNodeRef.current = workletNode;
+        const workletNode = new AudioWorkletNode(audioContext, 'pcm-processor');
+        workletNodeRef.current = workletNode;
 
-      const source = audioContext.createMediaStreamSource(stream);
-      source.connect(workletNode).connect(audioContext.destination);
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(workletNode);
 
-      workletNode.port.onmessage = (e) => {
-        if (e.data.type === 'pcm' && socket) {
-          socket.sendBinary(e.data.buffer);
-        }
-      };
+        workletNode.port.onmessage = (e) => {
+          if (e.data.type === 'pcm' && socket) {
+            socket.sendBinary(e.data.buffer);
+          }
+        };
+      } catch (workletErr) {
+        console.warn('AudioWorklet setup warning (falling back to Web Speech):', workletErr);
+      }
 
+      const now = Date.now();
+      isListeningRef.current = true;
       setIsListening(true);
-      setStartTime(Date.now());
-      startSession(socket!, {
-        mode: 'live',
-        lang: 'auto',
-        sensitivity: alertSensitivity,
-        fixture_id: undefined,
-      });
+      setStartTime(now);
+
+      // 4. Client-side Web Speech API fallback for immediate 0ms live transcription
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        try {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          const { callLanguage } = useSettingsStore.getState();
+          recognition.lang = callLanguage === 'hi-IN' ? 'hi-IN' : 'en-IN';
+
+          let turnId = `live_${Date.now()}`;
+          recognition.onresult = (evt: any) => {
+            const results = evt.results;
+            for (let i = evt.resultIndex; i < results.length; i++) {
+              const res = results[i];
+              const text = res[0]?.transcript?.trim();
+              if (!text) continue;
+              const isFinal = res.isFinal;
+              const segId = `${turnId}_${i}`;
+              const elapsedMs = Date.now() - now;
+
+              appendTranscript(segId, text, isFinal, elapsedMs);
+
+              if (socket) {
+                socket.send({
+                  type: 'text',
+                  id: segId,
+                  text,
+                  is_final: isFinal,
+                  t_ms: elapsedMs,
+                });
+              }
+              if (isFinal) {
+                turnId = `live_${Date.now()}`;
+              }
+            }
+          };
+
+          recognition.onerror = (e: any) => {
+            console.warn('Web Speech fallback notice:', e.error);
+          };
+
+          recognition.onend = () => {
+            if (isListeningRef.current) {
+              try { recognition.start(); } catch {}
+            }
+          };
+
+          recognition.start();
+          recognitionRef.current = recognition;
+        } catch (e) {
+          console.warn('Web Speech API not available or blocked:', e);
+        }
+      }
     } catch (err) {
       console.error('Mic error:', err);
       alert(t('errors.micDenied'));
@@ -160,6 +239,22 @@ export function LiveGuardPage() {
   };
 
   const handleStop = () => {
+    isListeningRef.current = false;
+
+    // Clean up Web Speech
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.abort();
+      } catch {}
+      recognitionRef.current = null;
+    }
+
+    // Clean up media stream tracks
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
+    }
+
     // Clean up audio
     workletNodeRef.current?.disconnect();
     audioContextRef.current?.close();
@@ -184,12 +279,8 @@ export function LiveGuardPage() {
   };
 
   const speakAlert = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'en-US';
-      utter.rate = 1;
-      speechSynthesis.speak(utter);
-    }
+    const { callLanguage } = useSettingsStore.getState();
+    playTtsAudio(text, callLanguage === 'hi-IN' ? 'hi-IN' : 'en-IN');
   };
 
   const duration = startTime ? Date.now() - startTime : 0;
@@ -200,10 +291,29 @@ export function LiveGuardPage() {
         <h2>{t('liveGuard.consent.title')}</h2>
         <p>{t('liveGuard.consent.text')}</p>
         <label style={{display: 'flex', alignItems: 'flex-start', gap: '12px', margin: '16px 0', cursor: 'pointer'}}>
-          <input type="checkbox" onChange={(e) => setConsentGiven(e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={consentGiven}
+            onChange={(e) => {
+              setConsentGiven(e.target.checked);
+              if (e.target.checked) {
+                try { localStorage.setItem('chaukas_mic_consent', 'true'); } catch {}
+              }
+            }}
+          />
           <span>{t('liveGuard.consent.agree')}</span>
         </label>
-        <Button variant="primary" large onClick={handleStart} disabled={!consentGiven}>
+        <Button
+          variant="primary"
+          large
+          onClick={() => {
+            setShowConsent(false);
+            setConsentGiven(true);
+            try { localStorage.setItem('chaukas_mic_consent', 'true'); } catch {}
+            handleStart();
+          }}
+          disabled={!consentGiven}
+        >
           {t('liveGuard.consent.continue')}
         </Button>
         <Button variant="secondary" onClick={() => setShowConsent(false)} style={{marginLeft: '12px'}}>

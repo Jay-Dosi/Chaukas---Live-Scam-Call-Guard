@@ -1,0 +1,5 @@
+WebSocket connection established.
+Start message sent.
+Received ready message: {"type":"ready","providers":{"stt":"sarvam","engine":"rules","llm":false}}
+Noisy audio chunk sent.
+No STT/Analysis response received within the timeout period.

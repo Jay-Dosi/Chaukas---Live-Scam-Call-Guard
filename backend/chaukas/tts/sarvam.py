@@ -5,7 +5,9 @@ Implemented against Sarvam's current official TTS API docs.
 
 from __future__ import annotations
 
+import base64
 import hashlib
+import logging
 import os
 from pathlib import Path
 
@@ -13,6 +15,8 @@ import httpx
 
 from chaukas.tts.base import TtsProvider
 from chaukas.tts.cache import TtsCache
+
+logger = logging.getLogger(__name__)
 
 
 class SarvamTtsProvider:
@@ -38,23 +42,32 @@ class SarvamTtsProvider:
         # Sarvam TTS endpoint
         url = "https://api.sarvam.ai/text-to-speech"
         headers = {
+            "api-subscription-key": self.api_key,
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         }
 
+        target_lang = "hi-IN" if str(lang).startswith("hi") else "en-IN"
         payload = {
-            "text": text,
-            "language_code": lang,
-            "voice": voice or "bulbul:v1",
-            "sample_rate": 16000,
+            "inputs": [text],
+            "target_language_code": target_lang,
         }
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            resp = await client.post(url, headers=headers, json=payload)
-            if resp.status_code != 200:
-                return None
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.post(url, headers=headers, json=payload)
+                if resp.status_code != 200:
+                    logger.warning(f"Sarvam TTS failed with {resp.status_code}: {resp.text}")
+                    return None
 
-            audio_data = resp.content
+                data = resp.json()
+                if "audios" in data and data["audios"]:
+                    audio_data = base64.b64decode(data["audios"][0])
+                else:
+                    return None
+        except Exception as e:
+            logger.warning(f"Sarvam TTS request exception: {e}")
+            return None
 
         # Cache and return
         self.cache.set(cache_key, audio_data)

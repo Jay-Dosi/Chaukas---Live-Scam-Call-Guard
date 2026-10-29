@@ -35,14 +35,33 @@ class DeepgramSttSession:
             return "en"
         return "en"
 
+    @property
+    def _is_connected(self) -> bool:
+        if not self._ws:
+            return False
+        if hasattr(self._ws, "closed"):
+            return not self._ws.closed
+        if hasattr(self._ws, "state"):
+            return getattr(self._ws.state, "name", "") == "OPEN"
+        return True
+
     async def push(self, pcm16: bytes) -> None:
-        if self._ws and not self._ws.closed:
-            await self._ws.send(pcm16)
+        if self._is_connected:
+            try:
+                await self._ws.send(pcm16)
+            except Exception:
+                pass
 
     async def stop(self) -> None:
-        if self._ws and not self._ws.closed:
-            await self._ws.send(json.dumps({"type": "CloseStream"}))
-            await self._ws.close()
+        if self._ws:
+            try:
+                await self._ws.send(json.dumps({"type": "CloseStream"}))
+            except Exception:
+                pass
+            try:
+                await self._ws.close()
+            except Exception:
+                pass
         if self._receive_task:
             self._receive_task.cancel()
             try:
@@ -76,7 +95,10 @@ class DeepgramSttSession:
             "Authorization": f"Token {self.api_key}",
         }
 
-        self._ws = await websockets.connect(url, extra_headers=headers)
+        try:
+            self._ws = await websockets.connect(url, additional_headers=headers)
+        except TypeError:
+            self._ws = await websockets.connect(url, extra_headers=headers)
 
         # Start receive loop
         self._receive_task = asyncio.create_task(self._receive_loop())

@@ -86,7 +86,7 @@ class ScorerState:
     """Mutable scorer state for a session."""
     active_hits: dict[str, ActiveHit] = field(default_factory=dict)
     signal_repetition_counts: dict[str, int] = field(default_factory=lambda: defaultdict(int))
-    last_level: Level = "calm"
+    last_level: Level = Level.CALM
     level_drop_timer_ms: int | None = None  # when score dropped below threshold-HYSTERESIS
     level_raise_immediate: bool = True  # level increases are always immediate
 
@@ -412,12 +412,12 @@ def ingest_segment(
 def _score_to_level(score: int) -> Level:
     """Convert score to level without hysteresis."""
     if score >= 80:
-        return "critical"
+        return Level.CRITICAL
     if score >= 55:
-        return "danger"
+        return Level.DANGER
     if score >= 30:
-        return "caution"
-    return "calm"
+        return Level.CAUTION
+    return Level.CALM
 
 
 def _apply_hysteresis(state: ScorerState, new_level: Level, score: int) -> Level:
@@ -425,7 +425,16 @@ def _apply_hysteresis(state: ScorerState, new_level: Level, score: int) -> Level
     current = state.last_level
 
     # Level order for comparison
-    level_order = {"calm": 0, "caution": 1, "danger": 2, "critical": 3}
+    level_order = {
+        Level.CALM: 0,
+        Level.CAUTION: 1,
+        Level.DANGER: 2,
+        Level.CRITICAL: 3,
+        "calm": 0,
+        "caution": 1,
+        "danger": 2,
+        "critical": 3,
+    }
     curr_idx = level_order[current]
     new_idx = level_order[new_level]
 
@@ -442,7 +451,14 @@ def _apply_hysteresis(state: ScorerState, new_level: Level, score: int) -> Level
 
     # Potential level decrease
     # Check if score is below threshold - HYSTERESIS_MARGIN for current level
-    thresholds = {"caution": 30, "danger": 55, "critical": 80}
+    thresholds = {
+        Level.CAUTION: 30,
+        Level.DANGER: 55,
+        Level.CRITICAL: 80,
+        "caution": 30,
+        "danger": 55,
+        "critical": 80,
+    }
     threshold = thresholds.get(current, 0)
     below_hysteresis = score < (threshold - HYSTERESIS_MARGIN)
 
@@ -455,9 +471,6 @@ def _apply_hysteresis(state: ScorerState, new_level: Level, score: int) -> Level
         # We'll track time via t_ms in next call
         return current
 
-    # For simplicity, we track that we're in drop window.
-    # Actual 20s timer handled by engine with t_ms from segments.
-    # Here we just return current level (engine will call again with newer segments)
     return current
 
 

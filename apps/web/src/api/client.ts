@@ -119,6 +119,104 @@ export async function fetchTts(text: string, lang: string, voice?: string): Prom
   return res.blob();
 }
 
+interface AudioQueueItem {
+  text: string;
+  lang: string;
+  voice?: string;
+  resolve: () => void;
+}
+
+const audioQueue: AudioQueueItem[] = [];
+let isProcessingQueue = false;
+let currentAudio: HTMLAudioElement | null = null;
+
+/**
+ * Cancel and stop all currently playing and queued TTS speech.
+ */
+export function stopAllTtsAudio(): void {
+  audioQueue.length = 0;
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  isProcessingQueue = false;
+}
+
+/**
+ * Play speech audio aloud sequentially using server TTS (Sarvam Bulbul)
+ * with browser speechSynthesis fallback. Queues incoming lines to prevent overlapping.
+ */
+export async function playTtsAudio(text: string, lang: string = 'en-IN', voice?: string): Promise<void> {
+  if (!text || !text.trim()) return;
+
+  return new Promise<void>((resolve) => {
+    audioQueue.push({ text, lang, voice, resolve });
+    drainAudioQueue();
+  });
+}
+
+async function drainAudioQueue(): Promise<void> {
+  if (isProcessingQueue) return;
+  const item = audioQueue.shift();
+  if (!item) return;
+
+  isProcessingQueue = true;
+
+  // 1. Try server TTS (Sarvam Bulbul)
+  try {
+    const blob = await fetchTts(item.text, item.lang, item.voice);
+    if (blob && blob.size > 0) {
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      currentAudio = audio;
+
+      await new Promise<void>((done) => {
+        audio.onended = () => {
+          URL.revokeObjectURL(audioUrl);
+          done();
+        };
+        audio.onerror = () => {
+          URL.revokeObjectURL(audioUrl);
+          done();
+        };
+        audio.play().catch(() => done());
+      });
+
+      currentAudio = null;
+      item.resolve();
+      isProcessingQueue = false;
+      drainAudioQueue();
+      return;
+    }
+  } catch (err) {
+    console.warn('Server TTS unavailable, falling back to browser speech synthesis:', err);
+  }
+
+  // 2. Browser speech synthesis fallback
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+      const utter = new SpeechSynthesisUtterance(item.text);
+      utter.lang = item.lang.startsWith('hi') ? 'hi-IN' : 'en-US';
+      utter.rate = 1.0;
+
+      await new Promise<void>((done) => {
+        utter.onend = () => done();
+        utter.onerror = () => done();
+        window.speechSynthesis.speak(utter);
+      });
+    } catch (e) {
+      console.warn('Browser speechSynthesis failed:', e);
+    }
+  }
+
+  item.resolve();
+  isProcessingQueue = false;
+  drainAudioQueue();
+}
+
 // Upload audio file for analysis
 export async function uploadAudio(file: File): Promise<{ job_id: string }> {
   const formData = new FormData();

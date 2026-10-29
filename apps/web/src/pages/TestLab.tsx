@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useTranslation } from '@i18n/useTranslation';
-import { fetchScenarios, fetchScenario, runBenchmark, triggerBolnaCall } from '@api/client';
+import { fetchScenarios, fetchScenario, runBenchmark, triggerBolnaCall, playTtsAudio, stopAllTtsAudio } from '@api/client';
 import type { ScenarioBrief, ScenarioFull, BenchmarkResult } from '@api/client';
 import { Button } from '@components/Button';
 import type { ServerEvent } from '@protocol/index';
@@ -16,6 +16,7 @@ export function TestLabPage() {
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>('');
   const [selectedScenario, setSelectedScenario] = useState<ScenarioFull | null>(null);
   const [isPlayingScenario, setIsPlayingScenario] = useState(false);
+  const [playScenarioAudio, setPlayScenarioAudio] = useState(true);
   const [playerSpeed, setPlayerSpeed] = useState<number>(2.0);
   const [liveTranscript, setLiveTranscript] = useState<Array<{ id: string; text: string; isFinal: boolean }>>([]);
   const [liveScore, setLiveScore] = useState<number>(0);
@@ -115,6 +116,9 @@ export function TestLabPage() {
             const filtered = prev.filter((p) => p.id !== msg.id);
             return [...filtered, { id: msg.id, text: msg.text, isFinal: true }];
           });
+          if (playScenarioAudio) {
+            playTtsAudio(msg.text, selectedScenario?.lang || 'en-IN');
+          }
         } else if (msg.type === 'analysis') {
           setLiveScore(msg.analysis.score);
           setLiveLevel(msg.analysis.level);
@@ -137,6 +141,7 @@ export function TestLabPage() {
   };
 
   const stopScenarioReplay = () => {
+    stopAllTtsAudio();
     if (playerWsRef.current) {
       try {
         playerWsRef.current.send(JSON.stringify({ type: 'stop' }));
@@ -184,13 +189,8 @@ export function TestLabPage() {
           setDrillHistory((prev) => [...prev, { speaker: 'caller', text: msg.text }]);
           setDrillAwaitingChip(true);
 
-          // Optional Speech Synthesis
-          if ('speechSynthesis' in window) {
-            const utter = new SpeechSynthesisUtterance(msg.text);
-            utter.lang = drillLang === 'hi-IN' ? 'hi-IN' : 'en-US';
-            utter.rate = 1.0;
-            speechSynthesis.speak(utter);
-          }
+          // Speak caller lines aloud via Sarvam Bulbul / browser speech synthesis
+          playTtsAudio(msg.text, drillLang);
         } else if (msg.type === 'ended') {
           setDrillResult({
             outcome: msg.outcome,
@@ -228,6 +228,7 @@ export function TestLabPage() {
   };
 
   const stopFireDrill = () => {
+    stopAllTtsAudio();
     if (drillWsRef.current) {
       try {
         drillWsRef.current.send(JSON.stringify({ type: 'stop' }));
@@ -363,6 +364,17 @@ export function TestLabPage() {
             </select>
           </div>
 
+          <div className="form__group" style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: 'var(--t-sm)' }}>
+              <input
+                type="checkbox"
+                checked={playScenarioAudio}
+                onChange={(e) => setPlayScenarioAudio(e.target.checked)}
+              />
+              <span>Speak caller lines aloud (Acoustic audio playback)</span>
+            </label>
+          </div>
+
           <div style={{ display: 'flex', gap: '10px' }}>
             {!isPlayingScenario ? (
               <Button variant="primary" large onClick={startScenarioReplay} disabled={!selectedScenarioId} style={{ flex: 1 }}>
@@ -408,8 +420,18 @@ export function TestLabPage() {
               <div style={{ maxHeight: '280px', overflowY: 'auto', background: 'var(--surface-sunk)', padding: '10px', border: '1px solid var(--line)' }}>
                 {selectedScenario?.nodes ? (
                   Object.entries(selectedScenario.nodes).map(([k, node]) => (
-                    <div key={k} style={{ marginBottom: '8px', fontSize: 'var(--t-sm)', borderBottom: '1px dashed var(--line)', paddingBottom: '6px' }}>
-                      <span style={{ fontWeight: 600, color: 'var(--ink-2)' }}>[{k}]</span> {node.caller.text}
+                    <div key={k} style={{ marginBottom: '8px', fontSize: 'var(--t-sm)', borderBottom: '1px dashed var(--line)', paddingBottom: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                      <div style={{ flex: 1 }}>
+                        <span style={{ fontWeight: 600, color: 'var(--ink-2)' }}>[{k}]</span> {node.caller.text}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => playTtsAudio(node.caller.text, selectedScenario.lang)}
+                        style={{ border: '1px solid var(--line)', background: 'var(--surface)', padding: '2px 6px', fontSize: 'var(--t-xs)', cursor: 'pointer', whiteSpace: 'nowrap', borderRadius: 'var(--radius)' }}
+                        title="Listen to this line"
+                      >
+                        Play Line
+                      </button>
                     </div>
                   ))
                 ) : (
@@ -960,7 +982,7 @@ export function TestLabPage() {
           role="tab"
           aria-selected={activeTab === 'scenarios'}
           className={`tabs__item ${activeTab === 'scenarios' ? 'tabs__item--active' : ''}`}
-          onClick={() => setActiveTab('scenarios')}
+          onClick={() => { stopAllTtsAudio(); setActiveTab('scenarios'); }}
         >
           {t('scenarios.title')}
         </button>
@@ -968,7 +990,7 @@ export function TestLabPage() {
           role="tab"
           aria-selected={activeTab === 'fireDrill'}
           className={`tabs__item ${activeTab === 'fireDrill' ? 'tabs__item--active' : ''}`}
-          onClick={() => setActiveTab('fireDrill')}
+          onClick={() => { stopAllTtsAudio(); setActiveTab('fireDrill'); }}
         >
           {t('fireDrill.title')}
         </button>
@@ -976,7 +998,7 @@ export function TestLabPage() {
           role="tab"
           aria-selected={activeTab === 'benchmark'}
           className={`tabs__item ${activeTab === 'benchmark' ? 'tabs__item--active' : ''}`}
-          onClick={() => setActiveTab('benchmark')}
+          onClick={() => { stopAllTtsAudio(); setActiveTab('benchmark'); }}
         >
           {t('benchmark.title')}
         </button>

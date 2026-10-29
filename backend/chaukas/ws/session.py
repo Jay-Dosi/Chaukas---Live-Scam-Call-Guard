@@ -105,13 +105,20 @@ async def handle_session(websocket: WebSocket):
 
     try:
         # First message must be start
-        raw = await websocket.receive_text()
-        try:
-            start_data = ClientStart.model_validate_json(raw)
-        except ValidationError as e:
-            await websocket.send_json(ErrorEvent(code="invalid_start", message=str(e)).model_dump())
-            await websocket.close()
-            return
+        start_data = None
+        while True:
+            msg = await websocket.receive()
+            if msg.get("type") == "websocket.disconnect":
+                return
+            if "text" in msg:
+                try:
+                    start_data = ClientStart.model_validate_json(msg["text"])
+                    break
+                except ValidationError as e:
+                    await websocket.send_json(ErrorEvent(code="invalid_start", message=str(e)).model_dump())
+                    await websocket.close()
+                    return
+            # Ignore stray binary audio frames received before start
 
         ctx = SessionContext(websocket, start_data)
 
@@ -250,9 +257,25 @@ async def _stt_event_pump(ctx: SessionContext):
 
     async for event in ctx.stt_session.events():
         if event.kind == "partial":
+            seg_id = event.id or str(uuid.uuid4())[:8]
+            t_ms = event.t_ms or 0
             await ctx.websocket.send_json(PartialEvent(
-                type="partial", id=event.id or str(uuid.uuid4())[:8], text=event.text or "", t_ms=event.t_ms or 0
+                type="partial", id=seg_id, text=event.text or "", t_ms=t_ms
             ).model_dump())
+
+            # Ingest partial into engine so risk score and tactics update in real-time
+            if event.text and (int(time.time() * 1000) > ctx.mute_until_ms):
+                seg = Segment(
+                    id=seg_id,
+                    text=event.text,
+                    is_final=False,
+                    t_start_ms=t_ms,
+                    t_end_ms=t_ms + 1000,
+                    lang=event.lang or (ctx.lang if ctx.lang != "auto" else None),
+                    speaker=Speaker.UNKNOWN,
+                )
+                analysis = ctx.engine.ingest(seg)
+                await _push_analysis(ctx, analysis)
 
         elif event.kind == "final":
             seg_id = event.id or str(uuid.uuid4())[:8]
