@@ -85,7 +85,7 @@ export function AboutPage() {
 
       <div style={{paddingTop: '24px', borderTop: '2px solid var(--line-strong)', color: 'var(--ink-3)', fontSize: 'var(--t-sm)'}}>
         <p>Chaukas v0.1.0 — Live Scam-Call Guard and Test Lab</p>
-        <p>Built for India. Languages: Hindi, English, Hinglish.</p>
+        <p>Built for India. Languages: Hindi, English, Hinglish. Released under the GNU Affero General Public License (AGPL-3.0).</p>
       </div>
     </div>
   );

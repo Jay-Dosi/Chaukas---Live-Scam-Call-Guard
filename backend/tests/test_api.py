@@ -58,3 +58,10 @@ def test_upload_endpoint():
     assert resp.status_code == 200
     data = resp.json()
     assert "job_id" in data
+
+
+def test_bolna_call_unconfigured():
+    # If Bolna is not configured in test environment, should return 400
+    resp = client.post("/api/bolna/call", json={"recipient_phone_number": "+919876543210"})
+    assert resp.status_code == 400
+    assert "Bolna AI integration is not configured" in resp.json()["detail"]

@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from chaukas.api import health, scenarios, tts, benchmark, upload
+from chaukas.api import health, scenarios, tts, benchmark, upload, bolna
 from chaukas.config import get_settings
 from chaukas.ws.session import handle_session
 from chaukas.ws.drill_session import handle_drill_session
@@ -70,7 +70,7 @@ def create_app() -> FastAPI:
     )
 
     # API routes (support both /api/* and direct routes)
-    for router in [health.router, scenarios.router, tts.router, benchmark.router, upload.router]:
+    for router in [health.router, scenarios.router, tts.router, benchmark.router, upload.router, bolna.router]:
         app.include_router(router, prefix="/api")
         app.include_router(router)
 

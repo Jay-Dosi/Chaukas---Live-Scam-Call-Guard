@@ -54,6 +54,10 @@ class Settings(BaseSettings):
     deepgram_api_key: str = Field(default="")
     anthropic_api_key: str = Field(default="")
 
+    # Bolna AI Telephony Integration
+    bolna_api_key: str = Field(default="")
+    bolna_agent_id: str = Field(default="")
+
     # LLM
     llm_model: str = Field(default="claude-haiku-5-5")
 

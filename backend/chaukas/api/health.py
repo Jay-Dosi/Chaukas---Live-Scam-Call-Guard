@@ -36,5 +36,9 @@ async def health():
             "model": settings.llm_model if settings.resolved_llm_enabled() else None,
         },
         "ffmpeg": True,  # TODO: check at startup
+        "bolna": {
+            "configured": bool(settings.bolna_api_key and settings.bolna_agent_id),
+            "agent_id": settings.bolna_agent_id[:6] + "..." if settings.bolna_agent_id else None,
+        },
         "version": "0.1.0",
     }

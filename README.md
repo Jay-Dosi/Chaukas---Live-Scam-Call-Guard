@@ -215,7 +215,7 @@ grep -R "border-radius" apps/web/src/styles/
 
 ## License
 
-MIT — See LICENSE file.
+GNU Affero General Public License v3.0 (AGPL-3.0) — See [LICENSE](LICENSE) file. Anyone modifying or running this software as a network service must make their modifications publicly available under the AGPL-3.0.
 
 ## Acknowledgments
 

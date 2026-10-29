@@ -4,6 +4,7 @@ export interface HealthData {
   stt: { provider: string; streaming: boolean; langs: string[] };
   tts: { provider: string; voices: string[] };
   llm: { enabled: boolean; model: string | null };
+  bolna?: { configured: boolean; agent_id: string | null };
   ffmpeg: boolean;
   version: string;
 }
@@ -138,5 +139,25 @@ export async function runBenchmark(req: BenchmarkRequest): Promise<BenchmarkResu
     body: JSON.stringify(req),
   });
   if (!res.ok) throw new Error(`Benchmark failed: ${res.status}`);
+  return res.json();
+}
+
+// Trigger outbound phone call via Bolna AI
+export async function triggerBolnaCall(
+  recipientPhoneNumber: string,
+  scenarioId: string,
+): Promise<{ status: string; execution_id: string; message: string }> {
+  const res = await fetch('/api/bolna/call', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      recipient_phone_number: recipientPhoneNumber,
+      scenario_id: scenarioId,
+    }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({ detail: `Error ${res.status}` }));
+    throw new Error(data.detail || 'Bolna call request failed');
+  }
   return res.json();
 }

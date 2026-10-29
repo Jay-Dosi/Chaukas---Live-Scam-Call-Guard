@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useTranslation } from '@i18n/useTranslation';
-import { fetchScenarios, fetchScenario, runBenchmark } from '@api/client';
+import { fetchScenarios, fetchScenario, runBenchmark, triggerBolnaCall } from '@api/client';
 import type { ScenarioBrief, ScenarioFull, BenchmarkResult } from '@api/client';
 import { Button } from '@components/Button';
 import type { ServerEvent } from '@protocol/index';
@@ -35,6 +35,12 @@ export function TestLabPage() {
   const [drillHistory, setDrillHistory] = useState<Array<{ speaker: 'caller' | 'user'; text: string; act?: string }>>([]);
   const [drillResult, setDrillResult] = useState<{ outcome: 'safe' | 'unsafe'; scorecard: any; debrief: any } | null>(null);
   const drillWsRef = useRef<WebSocket | null>(null);
+
+  // Bolna AI Telephony State
+  const [bolnaPhone, setBolnaPhone] = useState<string>('');
+  const [bolnaLoading, setBolnaLoading] = useState<boolean>(false);
+  const [bolnaMessage, setBolnaMessage] = useState<string | null>(null);
+  const [bolnaError, setBolnaError] = useState<string | null>(null);
 
   // ─────────────────────────────────────────────────────────────
   // 3. Benchmark State
@@ -229,6 +235,24 @@ export function TestLabPage() {
       } catch {}
     }
     setDrillActive(false);
+  };
+
+  const handleTriggerBolnaCall = async () => {
+    if (!bolnaPhone.trim()) {
+      setBolnaError('Please enter a valid phone number with country code (e.g. +919876543210)');
+      return;
+    }
+    setBolnaLoading(true);
+    setBolnaError(null);
+    setBolnaMessage(null);
+    try {
+      const res = await triggerBolnaCall(bolnaPhone.trim(), drillScenarioId || 'courier-customs-en-01');
+      setBolnaMessage(res.message);
+    } catch (err: any) {
+      setBolnaError(err.message || 'Failed to trigger Bolna call');
+    } finally {
+      setBolnaLoading(false);
+    }
   };
 
   // ─────────────────────────────────────────────────────────────
@@ -480,6 +504,54 @@ export function TestLabPage() {
           <Button variant="primary" large onClick={startFireDrill} disabled={!drillScenarioId} style={{ width: '100%' }}>
             {t('fireDrill.disclosure.acknowledge')}
           </Button>
+
+          {/* Real Phone Drill via Bolna AI Telephony */}
+          <div className="card" style={{ marginTop: '24px', border: '1px solid var(--line)', background: 'var(--surface-sunk)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span style={{ fontSize: 'var(--t-xs)', fontWeight: 700, padding: '2px 8px', background: 'var(--action)', color: 'var(--surface)', borderRadius: 'var(--radius)' }}>
+                BOLNA AI
+              </span>
+              <h3 style={{ margin: 0 }}>Real Phone Drill (Telephony Call)</h3>
+            </div>
+            <p style={{ fontSize: 'var(--t-sm)', color: 'var(--ink-2)', marginBottom: '14px', lineHeight: 1.5 }}>
+              Practice on an actual phone call! Bolna's AI voice agent will place an outbound call to your mobile phone playing the selected scam scenario. Answer on speakerphone, switch to <strong>Live Guard</strong>, and watch Chaukas protect you live!
+            </p>
+
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: '8px' }}>
+              <div className="form__group" style={{ flex: 1, minWidth: '220px' }}>
+                <label className="form__label">Recipient Phone Number (with country code)</label>
+                <input
+                  type="tel"
+                  className="form__input"
+                  placeholder="+919876543210"
+                  value={bolnaPhone}
+                  onChange={(e) => setBolnaPhone(e.target.value)}
+                  disabled={bolnaLoading}
+                />
+              </div>
+              <Button
+                variant="secondary"
+                large
+                onClick={handleTriggerBolnaCall}
+                disabled={bolnaLoading || !bolnaPhone.trim()}
+                style={{ minWidth: '180px' }}
+              >
+                {bolnaLoading ? 'Queuing Call...' : 'Call My Phone'}
+              </Button>
+            </div>
+
+            {bolnaMessage && (
+              <div style={{ padding: '10px 12px', background: 'var(--calm-bg)', border: '1px solid var(--calm)', fontSize: 'var(--t-sm)', color: 'var(--calm)', marginTop: '8px' }}>
+                <strong>Call Queued!</strong> {bolnaMessage}
+              </div>
+            )}
+
+            {bolnaError && (
+              <div style={{ padding: '10px 12px', background: 'var(--danger-bg)', border: '1px solid var(--danger)', fontSize: 'var(--t-sm)', color: 'var(--danger)', marginTop: '8px' }}>
+                <strong>Note:</strong> {bolnaError}
+              </div>
+            )}
+          </div>
         </div>
       ) : drillActive ? (
         /* Active Drill Interactive Call */
