@@ -1,0 +1,18 @@
+{
+  "id": "g-033",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, HR department se calling for tomorrow's video interview."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Google Meet link has been sent to your registered email address."
+    }
+  ]
+}

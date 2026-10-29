@@ -1,0 +1,23 @@
+{
+  "id": "g-009",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, Kotak Bank security alert. We noticed a new device login to your mobile app."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "If this was you, no action needed. Agar aap nahi the to apna card block kijiye via app."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Never share your net banking password or OTP with anyone."
+    }
+  ]
+}

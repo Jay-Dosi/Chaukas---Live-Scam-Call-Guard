@@ -1,0 +1,34 @@
+{
+  "id": "s-019",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "courier_customs",
+    "accusation",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "डीएचएल कूरियर मुंबई हेड ऑफिस से कॉल है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आपके नाम पर विदेश से पार्सल आया है जो कस्टम ड्यूटी न भरने के कारण एयरपोर्ट पर रोक लिया गया है।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "कस्टम ड्यूटी तुरंत भरिए, जुर्माना 25,000 रुपये है।"
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "अगर 1 घंटे में पैसे ट्रांसफर नहीं किए तो कानूनी कार्रवाई होगी।"
+    }
+  ],
+  "firstHardAskTurn": 2
+}

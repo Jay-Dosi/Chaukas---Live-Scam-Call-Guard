@@ -28,9 +28,11 @@
       "@stt/*": ["src/stt/*"],
       "@tts/*": ["src/tts/*"],
       "@i18n/*": ["src/i18n/*"],
-      "@styles/*": ["src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "@protocol": ["../../packages/protocol/index.d.ts"],
+      "@protocol/*": ["../../packages/protocol/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../../packages/protocol/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,0 +1,40 @@
+{
+  "id": "s-007",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "accusation",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, main CBI headquarters New Delhi se officer Verma bol raha hoon."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapke naam se ek parcel Taiwan bheja gaya tha jisme narcotics aur fake passports mile hain."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Aapke khilaf FIR lodge ho gayi hai aur aap digital arrest par hain."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Phone disconnect mat karna varna local police station se team bhej kar lockup me daal denge."
+    },
+    {
+      "tMs": 12000,
+      "speaker": "caller",
+      "text": "Apna account verify karane ke liye verification amount RBI safe account me transfer karein right now."
+    }
+  ],
+  "firstHardAskTurn": 4
+}

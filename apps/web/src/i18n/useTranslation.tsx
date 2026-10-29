@@ -5,7 +5,7 @@ import type { HiTranslations } from './hi';
 import { en } from './en';
 import { hi } from './hi';
 
-type Language = 'en' | 'hi';
+export type Language = 'en' | 'hi';
 
 export const translations: Record<Language, EnTranslations | HiTranslations> = {
   en,
@@ -15,14 +15,15 @@ export const translations: Record<Language, EnTranslations | HiTranslations> = {
 interface TranslationContextValue {
   lang: Language;
   setLang: (lang: Language) => void;
-  t: (key: string) => string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  t: (key: string) => any;
 }
 
 const TranslationContext = createContext<TranslationContextValue | null>(null);
 
-function deepGet(obj: unknown, path: string): string {
+function deepGet(obj: unknown, path: string): any {
   const keys = path.split('.');
-  let current: unknown = obj;
+  let current: any = obj;
   for (const k of keys) {
     if (current && typeof current === 'object' && k in current) {
       current = (current as Record<string, unknown>)[k];
@@ -30,17 +31,17 @@ function deepGet(obj: unknown, path: string): string {
       return '';
     }
   }
-  return typeof current === 'string' ? current : '';
+  return current !== undefined ? current : '';
 }
 
 function useBaseTranslation(lang: Language) {
   const dict = translations[lang] ?? en;
   return useCallback(
-    (key: string): string => {
+    (key: string): any => {
       const val = deepGet(dict, key);
-      if (val) return val;
+      if (val !== undefined && val !== '') return val;
       const enVal = deepGet(en, key);
-      return enVal || key;
+      return enVal !== undefined && enVal !== '' ? enVal : key;
     },
     [dict],
   );

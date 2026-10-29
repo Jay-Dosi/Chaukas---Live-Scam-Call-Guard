@@ -1,0 +1,18 @@
+{
+  "id": "g-023",
+  "label": "genuine",
+  "lang": "hi",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "बेटा, ट्रेन में बैठ गए क्या? टिकट संभाल कर रखना।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "स्टेशन पहुंचकर फोन कर देना।"
+    }
+  ]
+}

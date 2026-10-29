@@ -1,0 +1,27 @@
+{
+  "id": "s-038",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "authority_claim",
+    "credential_request"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Good afternoon, I am calling on behalf of the banking ombudsman security committee."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "We are conducting a routine verification of active account credentials."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Could you kindly read out the six-digit verification code you just received on your handset?"
+    }
+  ],
+  "firstHardAskTurn": 2
+}

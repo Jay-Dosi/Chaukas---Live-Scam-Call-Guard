@@ -1,0 +1,29 @@
+{
+  "id": "s-029",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "emergency_relative",
+    "urgency_threat",
+    "transfer_demand",
+    "secrecy_isolation"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Auntie, this is your nephew Amit. I lost my wallet abroad and I'm detained at the precinct."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Please don't inform my parents, they will panic."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "I urgently need 40,000 rupees for bail. Please transfer immediately to my friend's account."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

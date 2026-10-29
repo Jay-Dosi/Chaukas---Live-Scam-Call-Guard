@@ -1,0 +1,28 @@
+{
+  "id": "g-037",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Public interest announcement by RBI and National Cyber Crime Portal."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Beware of fraudsters threatening digital arrest or courier customs duty fines."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Real law enforcement agencies never ask you to transfer funds to any safe account."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Never share OTP, PIN or remote screen access with anyone. Dial 1930 immediately."
+    }
+  ]
+}

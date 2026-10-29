@@ -1,0 +1,33 @@
+{
+  "id": "s-015",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "kyc_expiry",
+    "credential_request",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Dear customer, this is an urgent call regarding your credit card renewal."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Your card has been flagged for mandatory KYC update or it will be deactivated today."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Please read out your 16-digit card number and the CVV on the back."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Now tell me the one time password received on SMS to complete the process."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

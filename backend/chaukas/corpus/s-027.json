@@ -1,0 +1,34 @@
+{
+  "id": "s-027",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "emergency_relative",
+    "urgency_threat",
+    "transfer_demand",
+    "secrecy_isolation"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "चाचाजी, मैं रोहित बोल रहा हूँ। बहुत बड़ी मुसीबत में फँस गया हूँ।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "मेरी गाड़ी से एक्सीडेंट हो गया है और पुलिस ने पकड़ लिया है।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "पापा को मत बताइएगा नहीं तो उनकी तबीयत खराब हो जाएगी।"
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "वकील को देने के लिए तुरंत 35,000 रुपये इस नंबर पर ट्रांसफर कर दीजिए प्लीज।"
+    }
+  ],
+  "firstHardAskTurn": 3
+}

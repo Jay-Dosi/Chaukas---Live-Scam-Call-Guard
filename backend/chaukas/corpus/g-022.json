@@ -1,0 +1,18 @@
+{
+  "id": "g-022",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello grandma, happy anniversary to you and grandpa!"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "We ordered some sweets for you that should arrive this evening. Have a wonderful celebration!"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import type { Level } from '@protocol/';
+import type { Level } from '@protocol/index';
 
 export interface HealthData {
   stt: { provider: string; streaming: boolean; langs: string[] };

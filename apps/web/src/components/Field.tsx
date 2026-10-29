@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 
 export interface FieldProps {
-  label: string;
+  label?: string;
   help?: string;
   error?: string;
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export interface FieldProps {
 export function Field({ label, help, error, children, className = '' }: FieldProps) {
   return (
     <div className={`field ${className}`}>
-      <label className="field__label">{label}</label>
+      {label && <label className="field__label">{label}</label>}
       {children}
       {(error || help) && (
         <p className={`field__help ${error ? 'field__error' : ''}`} style={{color: error ? 'var(--danger)' : 'var(--ink-3)'}}>

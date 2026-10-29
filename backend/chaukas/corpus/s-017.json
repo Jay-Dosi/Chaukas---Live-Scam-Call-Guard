@@ -1,0 +1,28 @@
+{
+  "id": "s-017",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "kyc_expiry",
+    "credential_request",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Sir aapke Airtel SIM card ka KYC pending hai."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "TRAI regulations ke according 24 ghante me SIM block ho jayegi."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Verification ke liye message me aaya hua OTP share kijiye right now."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

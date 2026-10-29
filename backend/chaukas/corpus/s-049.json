@@ -1,0 +1,23 @@
+{
+  "id": "s-049",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "kyc_expiry",
+    "credential_request",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Aapka bank khata band hone wala hai. KYC update mandatory hai."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Turant SMS wala OTP batao varna account will be blocked today."
+    }
+  ],
+  "firstHardAskTurn": 1
+}

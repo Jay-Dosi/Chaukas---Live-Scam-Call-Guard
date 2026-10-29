@@ -1,0 +1,23 @@
+{
+  "id": "g-013",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Good afternoon, Delhivery courier representative here."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Your shipment arrives between 2 PM and 5 PM today."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Please keep exact change ready if it is a cash on delivery order."
+    }
+  ]
+}

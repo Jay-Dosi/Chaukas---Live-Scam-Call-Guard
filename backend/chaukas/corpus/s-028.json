@@ -1,0 +1,28 @@
+{
+  "id": "s-028",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "emergency_relative",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Bhaiya main phas gaya hoon police case me college ke bahar."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Hospital aur settlement ke liye urgent paise chahiye, phone confiscate hone wala hai."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Ghar pe mat batana, send money urgently to this UPI ID right now."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

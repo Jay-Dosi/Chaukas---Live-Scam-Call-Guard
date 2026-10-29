@@ -2,7 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { Layout as LayoutIcon, Mic, Settings, Info } from 'lucide-react';
 import { useTranslation } from '@i18n/useTranslation';
 
-export function Layout() {
+export function Layout({ children }: { children?: React.ReactNode }) {
   const { t, lang } = useTranslation();
 
   const navItems = [
@@ -29,7 +29,6 @@ export function Layout() {
               className={({ isActive }) =>
                 `layout__nav-item${isActive ? ' layout__nav-item--active' : ''}`
               }
-              aria-current={({ isActive }) => (isActive ? 'page' : undefined)}
             >
               <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
               <span>{label}</span>
@@ -39,7 +38,7 @@ export function Layout() {
       </header>
 
       <main id="main" className="layout__main" role="main">
-        <Outlet />
+        {children || <Outlet />}
       </main>
 
       <nav className="bottom-bar" aria-label={t('a11y.mainNavigation')} role="navigation">
@@ -50,7 +49,6 @@ export function Layout() {
             className={({ isActive }) =>
               `bottom-bar__item${isActive ? ' bottom-bar__item--active' : ''}`
             }
-            aria-current={({ isActive }) => (isActive ? 'page' : undefined)}
           >
             <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
             <span>{label}</span>

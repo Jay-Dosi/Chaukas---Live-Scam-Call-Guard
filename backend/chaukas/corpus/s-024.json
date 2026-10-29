@@ -1,0 +1,27 @@
+{
+  "id": "s-024",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "reward_task",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello ma'am, global crypto investment platform se baat kar raha hoon."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Hamare task based trading me 200% guaranteed profit milta hai within 24 hours."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Start karne ke liye minimum investment transfer kijiye hamare designated account me."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

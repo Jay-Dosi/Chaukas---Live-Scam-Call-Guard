@@ -1,0 +1,18 @@
+{
+  "id": "g-034",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "This is City Library desk calling to notify that the reserved textbook is available for pickup."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "It will be held for you until Friday."
+    }
+  ]
+}

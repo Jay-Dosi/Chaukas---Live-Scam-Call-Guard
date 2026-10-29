@@ -18,21 +18,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Backend dependencies
+# Backend dependencies & build
 COPY backend/pyproject.toml backend/uv.lock ./backend/
+COPY backend/chaukas ./backend/chaukas
 RUN cd backend && uv sync --frozen --no-dev
 
-# Frontend dependencies
-COPY package.json pnpm-workspace.yaml ./
-COPY apps/web/package.json ./apps/web/
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
-
-# Copy source
-COPY backend/chaukas ./backend/chaukas
-COPY apps/web ./apps/web
+# Frontend dependencies & build
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
 COPY packages/protocol ./packages/protocol
-
-# Build frontend
+COPY apps/web ./apps/web
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 RUN cd apps/web && pnpm build
 
 # ---- Runtime Stage ----
@@ -46,6 +41,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy uv from builder
+COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
+
 # Copy backend from builder
 COPY --from=builder /app/backend /app/backend
 
@@ -57,8 +55,9 @@ COPY --from=builder /app/packages/protocol ./packages/protocol
 
 # Environment
 ENV PYTHONPATH=/app/backend
+ENV PATH="/app/backend/.venv/bin:$PATH"
 ENV PORT=8787
 
 # Run
 EXPOSE 8787
-CMD ["uv", "run", "--directory", "/app/backend", "uvicorn", "chaukas.main:app", "--host", "0.0.0.0", "--port", "8787"]
+CMD ["uv", "run", "--no-dev", "--directory", "/app/backend", "uvicorn", "chaukas.main:app", "--host", "0.0.0.0", "--port", "8787"]

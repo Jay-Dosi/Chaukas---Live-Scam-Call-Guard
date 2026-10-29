@@ -20,7 +20,7 @@ CaseLabel = Literal["scam", "genuine"]
 
 def load_corpus() -> list[dict]:
     """Load all corpus cases."""
-    corpus_dir = Path(__file__).parent.parent.parent / "corpus"
+    corpus_dir = Path(__file__).resolve().parent.parent / "corpus"
     cases = []
     for path in sorted(corpus_dir.glob("*.json")):
         with open(path, encoding="utf-8") as f:
@@ -72,7 +72,7 @@ def run_benchmark(
         first_danger_ms = None
         detected_tactics = set()
 
-        for turn in noisy_turns:
+        for turn_idx, turn in enumerate(noisy_turns):
             text = turn["text"]
             is_final = True
             t_ms = turn.get("tMs", 0)
@@ -80,7 +80,7 @@ def run_benchmark(
             # Create segment
             from chaukas.models.base import Segment, Speaker
             seg = Segment(
-                id=f"{case_id}_{turn.get('tMs', 0)}",
+                id=f"{case_id}_{turn_idx}",
                 text=text,
                 is_final=is_final,
                 t_start_ms=t_ms,
@@ -95,8 +95,8 @@ def run_benchmark(
                 peak_score = analysis.score
                 peak_level = analysis.level
 
-            if analysis.level == "danger" and first_danger_turn is None:
-                first_danger_turn = turn.get("turn", 0)
+            if (analysis.level in ("danger", "critical")) and first_danger_turn is None:
+                first_danger_turn = turn_idx
                 first_danger_ms = t_ms
 
             for hit in analysis.hits:
@@ -111,11 +111,14 @@ def run_benchmark(
             if first_danger_turn is not None and first_danger_turn <= first_hard_ask + 1:
                 scam_recall_at_danger += 1
                 passed = True
+            elif first_danger_turn is not None and "firstHardAskTurn" not in case:
+                scam_recall_at_danger += 1
+                passed = True
             if first_danger_ms is not None:
                 time_to_danger_values.append(first_danger_ms)
         else:
             genuine_total += 1
-            # False alarm: ever reached Danger
+            # False alarm: ever reached Danger or Critical
             if first_danger_turn is None:
                 passed = True
             else:
@@ -134,21 +137,18 @@ def run_benchmark(
             "level": peak_level,
             "time_to_danger": first_danger_ms,
             "explanation": f"Detected: {sorted(detected_tactics)}; Missed: {sorted(missed)}" if missed else f"Detected: {sorted(detected_tactics)}",
+            "detected_tactics": list(detected_tactics),
         })
 
-    # Threshold sweep
+    # Threshold sweep (30 to 90)
     sweep = []
     for threshold in range(30, 91, 5):
-        # Re-evaluate with different threshold
-        sweep_recall = 0
-        sweep_fa = 0
-        for case in cases:
-            # Simplified - would need full re-run
-            pass
+        scam_det = sum(1 for r in results if r["label"] == "scam" and r["score"] >= threshold)
+        gen_fa = sum(1 for r in results if r["label"] == "genuine" and r["score"] >= threshold)
         sweep.append({
             "threshold": threshold,
-            "detection_rate": 0.0,
-            "false_alarm_rate": 0.0,
+            "detection_rate": round(scam_det / scam_total, 4) if scam_total > 0 else 0.0,
+            "false_alarm_rate": round(gen_fa / genuine_total, 4) if genuine_total > 0 else 0.0,
         })
 
     # Per-tactic stats
@@ -160,13 +160,14 @@ def run_benchmark(
             tactic_stats[t]["total"] += 1
 
     for result in results:
+        detected_set = set(result.get("detected_tactics", []))
         for t in result.get("tactics", []):
-            if result["result"] == "pass":
+            if t in detected_set:
                 tactic_stats[t]["detected"] += 1
 
     per_tactic = [
-        {"tactic": t, "detected": v["detected"], "total": v["total"], "rate": v["detected"] / v["total"] if v["total"] > 0 else 0}
-        for t, v in tactic_stats.items()
+        {"tactic": t, "detected": v["detected"], "total": v["total"], "rate": round(v["detected"] / v["total"], 4) if v["total"] > 0 else 0.0}
+        for t, v in sorted(tactic_stats.items())
     ]
 
     # Summary

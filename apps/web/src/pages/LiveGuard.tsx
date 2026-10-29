@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { Phone, Mic, MicOff, Shield, AlertTriangle, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Phone, Mic, MicOff, Shield, AlertTriangle } from 'lucide-react';
 import { useTranslation } from '@i18n/useTranslation';
 import { useSessionStore } from '@state/session';
 import { useSettingsStore } from '@state/settings';
 import { SessionSocket, startSession, stopSession, muteForAlert } from '@api/sessionSocket';
 import { fetchHealth } from '@api/client';
+import type { HealthData } from '@api/client';
 import { StateBlock } from '@components/StateBlock';
 import { TranscriptView } from '@components/TranscriptView';
 import { SignalList } from '@components/SignalList';
@@ -19,7 +20,6 @@ export function LiveGuardPage() {
     analysis,
     isListening,
     transcriptParts,
-    alerts,
     setIsListening,
     resetSession,
     setLevel,
@@ -29,10 +29,10 @@ export function LiveGuardPage() {
     addAlert,
   } = useSessionStore();
 
-  const { voiceAlerts, sensitivity } = useSettingsStore();
+  const { voiceAlerts, alertSensitivity } = useSettingsStore();
   const [socket, setSocket] = useState<SessionSocket | null>(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [providers, setProviders] = useState<Record<string, unknown>>({});
+  const [providers, setProviders] = useState<HealthData | null>(null);
   const [consentGiven, setConsentGiven] = useState(false);
   const [showConsent, setShowConsent] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -41,7 +41,6 @@ export function LiveGuardPage() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const workletNodeRef = useRef<AudioWorkletNode | null>(null);
   const analysisHistoryRef = useRef<Array<{ score: number; level: string; t_ms: number }>>([]);
-  const alertCooldownRef = useRef<Map<string, number>>(new Map());
 
   // Initialize socket
   useEffect(() => {
@@ -49,7 +48,7 @@ export function LiveGuardPage() {
     setSocket(ws);
 
     ws.on('ready', (evt) => {
-      setProviders(evt.providers);
+      setProviders(evt.providers as any);
     });
 
     ws.on('analysis', (evt) => {
@@ -151,7 +150,7 @@ export function LiveGuardPage() {
       startSession(socket!, {
         mode: 'live',
         lang: 'auto',
-        sensitivity,
+        sensitivity: alertSensitivity,
         fixture_id: undefined,
       });
     } catch (err) {
@@ -166,9 +165,10 @@ export function LiveGuardPage() {
     audioContextRef.current?.close();
     mediaRecorderRef.current?.stop();
 
-    stopSession(socket!);
+    if (socket) stopSession(socket);
     setIsListening(false);
     setStartTime(null);
+    resetSession();
   };
 
   const handleCall1930 = () => {
@@ -178,7 +178,7 @@ export function LiveGuardPage() {
   const handleAlertFamily = () => {
     const { familyContactNumber } = useSettingsStore.getState();
     if (familyContactNumber) {
-      const msg = encodeURIComponent(`Chaukas Alert: Possible scam call detected at ${new Date().toLocaleTimeString()}. Top tactics: ${analysis?.signals?.map((s: any) => s.signal_id).join(', ') || 'Unknown'}`);
+      const msg = encodeURIComponent(`Chaukas Alert: Possible scam call detected at ${new Date().toLocaleTimeString()}. Top tactics: ${analysis?.hits?.map((h) => h.signal_id).join(', ') || 'Unknown'}`);
       window.open(`https://wa.me/${familyContactNumber.replace('+', '')}?text=${msg}`, '_blank');
     }
   };
@@ -220,9 +220,10 @@ export function LiveGuardPage() {
         <h2 style={{fontSize: 'var(--t-2xl)', marginBottom: '16px'}}>{t('liveGuard.ready')}</h2>
         <p style={{fontSize: 'var(--t-lg)', color: 'var(--ink-2)', marginBottom: '24px'}}>{t('liveGuard.disclaimer')}</p>
         <ul style={{textAlign: 'left', display: 'inline-block', marginBottom: '24px', color: 'var(--ink-2)'}}>
-          {t('liveGuard.instructions').map((inst, i) => (
-            <li key={i} style={{marginBottom: '12px', fontSize: 'var(--t-md)'}}>{inst}</li>
-          ))}
+          {Array.isArray(t('liveGuard.instructions')) &&
+            (t('liveGuard.instructions') as string[]).map((inst: string, i: number) => (
+              <li key={i} style={{marginBottom: '12px', fontSize: 'var(--t-md)'}}>{inst}</li>
+            ))}
         </ul>
         <Button variant="primary" large onClick={handleStart} style={{minWidth: '280px'}}>
           <Mic size={24} style={{marginRight: '8px'}} />
@@ -278,15 +279,15 @@ export function LiveGuardPage() {
           <div className="status-panel">
             <div className="status-panel__item">
               <span className="status-panel__label">{t('liveGuard.statusPanel.speech')}: </span>
-              <span className="status-panel__value">{providers.stt || 'Unknown'}</span>
+              <span className="status-panel__value">{providers?.stt?.provider || 'Unknown'}</span>
             </div>
             <div className="status-panel__item">
               <span className="status-panel__label">{t('liveGuard.statusPanel.voice')}: </span>
-              <span className="status-panel__value">{providers.tts || 'Browser'}</span>
+              <span className="status-panel__value">{providers?.tts?.provider || 'Browser'}</span>
             </div>
             <div className="status-panel__item">
               <span className="status-panel__label">{t('liveGuard.statusPanel.secondOpinion')}: </span>
-              <span className="status-panel__value">{providers.llm ? 'Enabled' : 'Off'}</span>
+              <span className="status-panel__value">{providers?.llm?.enabled ? 'Enabled' : 'Off'}</span>
             </div>
           </div>
         </div>

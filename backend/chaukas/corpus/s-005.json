@@ -2,13 +2,38 @@
   "id": "s-005",
   "label": "scam",
   "lang": "en",
-  "tactics": ["emergency_relative", "urgency_threat", "transfer_demand", "secrecy_isolation"],
+  "tactics": [
+    "emergency_relative",
+    "urgency_threat",
+    "transfer_demand",
+    "secrecy_isolation"
+  ],
   "turns": [
-    {"tMs": 0, "speaker": "caller", "text": "Uncle, it's me, your nephew Rahul. I'm in big trouble."},
-    {"tMs": 3000, "speaker": "caller", "text": "I had an accident and I'm at the hospital. They need 50,000 rupees for surgery right now."},
-    {"tMs": 6000, "speaker": "caller", "text": "Please don't tell papa. He has a heart condition and this will kill him."},
-    {"tMs": 9000, "speaker": "caller", "text": "Send the money to this UPI ID immediately. My phone is about to die."},
-    {"tMs": 12000, "speaker": "caller", "text": "Please hurry, I'm scared. This is between you and me only."}
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Uncle, it's me, your nephew Rahul. I'm in big trouble."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "I had an accident and I'm at the hospital. They need 50,000 rupees for surgery right now."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Please don't tell papa. He has a heart condition and this will kill him."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Send the money to this UPI ID immediately. My phone is about to die."
+    },
+    {
+      "tMs": 12000,
+      "speaker": "caller",
+      "text": "Please hurry, I'm scared. This is between you and me only."
+    }
   ],
   "firstHardAskTurn": 3
 }

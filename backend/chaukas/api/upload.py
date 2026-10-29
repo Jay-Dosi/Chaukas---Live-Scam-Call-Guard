@@ -5,25 +5,33 @@ Decodes with ffmpeg, streams through STT + engine at accelerated pace.
 
 import asyncio
 import tempfile
+import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from chaukas.audio.decode import decode_audio
-from chaukas.bench.runner import run_benchmark  # reuse engine
 
 router = APIRouter()
+
+# In-memory store for upload jobs: job_id -> decoded pcm wav path
+UPLOAD_JOBS: dict[str, str] = {}
 
 
 @router.post("/upload")
 async def upload_audio(file: UploadFile = File(...)):
     """Upload audio file for analysis. Returns job_id."""
-    # Validate file
+    # Validate file size if available
     if file.size and file.size > 25 * 1024 * 1024:
         raise HTTPException(status_code=413, detail="File too large (max 25 MB)")
 
-    allowed_types = {"audio/wav", "audio/mpeg", "audio/mp4", "audio/ogg", "audio/x-m4a"}
-    if file.content_type not in allowed_types:
+    allowed_types = {
+        "audio/wav", "audio/wave", "audio/x-wav",
+        "audio/mpeg", "audio/mp3",
+        "audio/mp4", "audio/ogg", "audio/x-m4a",
+        "application/octet-stream",
+    }
+    if file.content_type and file.content_type not in allowed_types:
         raise HTTPException(status_code=400, detail="Unsupported audio format")
 
     # Save to temp file
@@ -33,18 +41,23 @@ async def upload_audio(file: UploadFile = File(...)):
         tmp.write(content)
         tmp_path = tmp.name
 
-    # Decode with ffmpeg
+    # Decode with ffmpeg (or fallback if already wav)
+    pcm_path = None
     try:
         pcm_path = await decode_audio(tmp_path)
+    except FileNotFoundError:
+        # ffmpeg not installed, if already wav use as-is
+        if suffix.lower() in (".wav", ".wave"):
+            pcm_path = tmp_path
+        else:
+            raise HTTPException(status_code=500, detail="ffmpeg binary not found on server to decode non-WAV audio")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Audio decode failed: {e}")
     finally:
-        Path(tmp_path).unlink(missing_ok=True)
+        if pcm_path != tmp_path:
+            Path(tmp_path).unlink(missing_ok=True)
 
-    # For now, return job_id - actual async processing would be a background task
-    import uuid
     job_id = str(uuid.uuid4())
+    UPLOAD_JOBS[job_id] = pcm_path
 
-    # TODO: Store job with decoded PCM path for async processing
-    # For sync demo, run benchmark directly
     return {"job_id": job_id}

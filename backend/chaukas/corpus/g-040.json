@@ -1,0 +1,23 @@
+{
+  "id": "g-040",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Cyber security alert: Scammers are using fake job and investment offers promising guaranteed double returns."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Do not deposit money to unknown UPI accounts or install AnyDesk on stranger's advice."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Report fraud immediately to national helpline 1930."
+    }
+  ]
+}

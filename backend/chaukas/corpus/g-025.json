@@ -1,0 +1,23 @@
+{
+  "id": "g-025",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Good day, calling from ACT Fibernet customer support regarding ticket number 98432."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Our field engineer has repaired the optical fiber in your sector. Can you verify your internet light?"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Great, the connection is restored. We will close this ticket now. Thank you."
+    }
+  ]
+}

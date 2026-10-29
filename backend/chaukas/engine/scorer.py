@@ -24,6 +24,7 @@ from chaukas.engine.lexicon.loader import (
     SIGNAL_WEIGHTS,
 )
 from chaukas.engine.normalize import Token, normalise
+from rapidfuzz.distance import Levenshtein
 from chaukas.engine.signals import (
     COMBOS,
     DECAY_DURATION_HARD,
@@ -96,14 +97,35 @@ def _detect_context(
     match_token_start: int,
     match_token_end: int,
 ) -> ContextType:
-    """Determine context: asserted, warning, or negated."""
+    """Determine context: asserted, warning, or negated (PRD §6.5)."""
+    token_strs = [t.text for t in tokens]
+
     # Check for negation first (strongest)
-    if get_negation_context([t.text for t in tokens], match_token_start):
+    if get_negation_context(token_strs, match_token_start):
         return "negated"
 
     # Check for warning context (within ±7 tokens)
-    if get_warning_context([t.text for t in tokens], match_token_start):
+    if get_warning_context(token_strs, match_token_start):
         return "warning"
+
+    # Awareness and advisory cues in the segment indicate protective frame
+    awareness_cues = (
+        "awareness", "advisory", "helpline", "1930", "जनहित", "जागरूकता",
+        "scammer", "scammers", "fraudster", "fraudsters", "impersonat",
+        "fake call", "fake calls", "never ask", "never share", "never demand",
+        "never transfer", "do not deposit", "do not transfer", "never tell",
+        "courtesy call", "सतर्कता", "सावधान रहें", "सावधानी", "सलाह",
+        "announcement", "advised", "be advised", "beware", "portal", "cybercrime",
+        "ghoshna", "ghoshana", "घोषणा", "सतर्क", "सावधान", "stranger's advice",
+        "strangers advice", "report fraud", "do not install", "never install",
+        "do not share", "do not disclose", "never disclose", "क्लिक न करें",
+        "नहीं मांगता", "नहीं मांगती", "नहीं मांगते", "न बताएं", "मत बताएं", "मत बताइए",
+        "फर्जी", "सावधानी बरतें",
+    )
+    norm_lower = normalised_text.lower()
+    for ac in awareness_cues:
+        if ac in norm_lower:
+            return "warning"
 
     return "asserted"
 
@@ -121,7 +143,7 @@ def _is_request_context(
 
 
 def _match_patterns(
-    text: str,
+    normalised_text: str,
     tokens: list[Token],
     normalised_tokens: list[str],
     patterns: list[CompiledPattern],
@@ -132,6 +154,11 @@ def _match_patterns(
     Returns list of (pattern, token_start, token_end, context).
     """
     matches: list[tuple[CompiledPattern, int, int, ContextType]] = []
+    if not normalised_tokens:
+        return matches
+
+    n_len = len(normalised_tokens)
+    token_set = set(normalised_tokens)
 
     for pattern in patterns:
         if pattern.kind == "regex":
@@ -148,13 +175,32 @@ def _match_patterns(
                 matches.append((pattern, token_start, token_end, context))
 
         elif pattern.kind in ("phrase", "token"):
-            # Exact phrase/token match on token sequence
-            pattern_tokens = pattern.value.lower().split()
-            for i in range(len(normalised_tokens) - len(pattern_tokens) + 1):
-                window = normalised_tokens[i:i + len(pattern_tokens)]
-                if window == pattern_tokens:
+            pattern_tokens = pattern.tokens if pattern.tokens else tuple(pattern.value.lower().split())
+            p_len = len(pattern_tokens)
+            if p_len == 0 or p_len > n_len:
+                continue
+
+            first_p = pattern_tokens[0]
+            fuzzy = pattern.fuzzy and len(first_p) >= 6
+
+            # Fast skip: if exact first token not present in tokens and pattern not fuzzy
+            if not fuzzy and first_p not in token_set:
+                continue
+
+            for i in range(n_len - p_len + 1):
+                window = normalised_tokens[i:i + p_len]
+                matched = True
+                for p_tok, w_tok in zip(pattern_tokens, window):
+                    if p_tok == w_tok:
+                        continue
+                    if pattern.fuzzy and len(p_tok) >= 6 and len(w_tok) >= 5:
+                        if Levenshtein.distance(p_tok, w_tok) <= 1:
+                            continue
+                    matched = False
+                    break
+                if matched:
                     token_start = i
-                    token_end = i + len(pattern_tokens)
+                    token_end = i + p_len
                     context = _detect_context(normalised_text, tokens, token_start, token_end)
                     matches.append((pattern, token_start, token_end, context))
 
@@ -235,32 +281,40 @@ def ingest_segment(
         rep_count = state.signal_repetition_counts[pattern.signal_id] + 1
         state.signal_repetition_counts[pattern.signal_id] = rep_count
 
-        if rep_count > 1:
-            additive = base_weight * REPETITION_ADDITIVE_FACTOR
+        # Repetition handling applies to the context-adjusted effective weight
+        if rep_count > 1 and effective_weight > 0:
+            additive = effective_weight * REPETITION_ADDITIVE_FACTOR
             effective_weight = min(
-                base_weight * REPETITION_MAX_MULTIPLIER,
-                base_weight + additive * (rep_count - 1),
+                effective_weight * REPETITION_MAX_MULTIPLIER,
+                effective_weight + additive * (rep_count - 1),
             )
 
         # Get span in original text
         orig_start = tokens[token_start].start if token_start < len(tokens) else 0
         orig_end = tokens[token_end - 1].end if token_end <= len(tokens) else len(segment.text)
 
-        # Create/update active hit
-        key = f"{pattern.signal_id}:{segment.id}:{token_start}"
+        # Create/update active hit per signal (PRD §6.3: at most 2x weight per signal)
+        key = pattern.signal_id
+        is_hard = signal_def.hard and (context == "asserted") and is_req
         if key in state.active_hits:
             hit = state.active_hits[key]
             hit.effective_weight = max(hit.effective_weight, effective_weight)
             hit.last_seen_ms = current_t
             hit.repetition_count = rep_count
-            hit.context = context  # context can change, keep the most recent
+            hit.context = context
+            hit.segment_id = segment.id
+            hit.span_start = orig_start
+            hit.span_end = orig_end
+            hit.matched = pattern.value
+            if is_hard:
+                hit.hard = True
         else:
             state.active_hits[key] = ActiveHit(
                 signal_id=pattern.signal_id,
                 label_en=signal_def.label_en,
                 label_hi=signal_def.label_hi,
                 base_weight=base_weight,
-                hard=signal_def.hard,
+                hard=is_hard,
                 matched=pattern.value,
                 segment_id=segment.id,
                 span_start=orig_start,
@@ -292,12 +346,13 @@ def ingest_segment(
             # Don't include negated hits in active list
             continue
 
-        active_hits.append(SignalHit(
+        hit_is_hard = hit.hard and (ctx == "asserted")
+        active_hits.append(SignalHit.model_construct(
             signal_id=hit.signal_id,
             label_en=hit.label_en,
             label_hi=hit.label_hi,
             weight=hit.effective_weight,
-            hard=hit.hard,
+            hard=hit_is_hard,
             matched=hit.matched,
             segment_id=hit.segment_id,
             span_start=hit.span_start,
@@ -306,10 +361,11 @@ def ingest_segment(
             context=ctx,
         ))
 
-        if hit.hard:
-            hard_signals_active.add(hit.signal_id)
-        else:
-            non_hard_signals_active.add(hit.signal_id)
+        if ctx == "asserted":
+            if hit_is_hard:
+                hard_signals_active.add(hit.signal_id)
+            else:
+                non_hard_signals_active.add(hit.signal_id)
 
     # Calculate base score
     base_score = sum(h.weight for h in active_hits)
@@ -339,7 +395,7 @@ def ingest_segment(
     reason_en, reason_hi = _generate_reason(active_hits, combos, score, level)
     advice_en, advice_hi = _generate_advice(level, hard_signals_active, non_hard_signals_active)
 
-    return Analysis(
+    return Analysis.model_construct(
         score=score,
         level=level,
         hits=active_hits,

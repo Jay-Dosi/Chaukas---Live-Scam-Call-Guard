@@ -1,0 +1,34 @@
+{
+  "id": "s-010",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "This is Officer Rathore from National Cyber Security Cell."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Your national ID has been linked to severe cyber fraud activities."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "A digital arrest order is active on you right now. Stay on this line."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "To stop immediate police dispatch, transfer the bail bond amount to RBI clearing portal."
+    }
+  ],
+  "firstHardAskTurn": 3
+}

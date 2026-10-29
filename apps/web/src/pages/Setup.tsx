@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from '@i18n/useTranslation';
 import { useSettingsStore, deleteAllData } from '@state/settings';
 import { Button } from '@components/Button';

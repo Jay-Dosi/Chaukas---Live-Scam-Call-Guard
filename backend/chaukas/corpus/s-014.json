@@ -1,0 +1,34 @@
+{
+  "id": "s-014",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "authority_claim",
+    "kyc_expiry",
+    "credential_request",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Sir main PayTM KYC verification desk se bol raha hoon."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapka wallet aur UPI KYC expire ho chuka hai. Account block ho jayega."
+    },
+    {
+      "tMs": 6000,
+      "caller": "caller",
+      "text": "Abhi aapke mobile par verification code aayega, turant OTP batao."
+    },
+    {
+      "tMs": 9000,
+      "caller": "caller",
+      "text": "Code nahi doge to sara balance freeze ho jayega within 10 minutes."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

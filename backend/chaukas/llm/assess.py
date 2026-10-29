@@ -15,7 +15,10 @@ import json
 import os
 from dataclasses import dataclass
 
-from anthropic import AsyncAnthropic
+try:
+    from anthropic import AsyncAnthropic
+except Exception:
+    AsyncAnthropic = None
 
 from chaukas.config import get_settings
 from chaukas.llm.prompt import SYSTEM_PROMPT, build_user_prompt
@@ -35,7 +38,7 @@ class LlmAssessor:
         settings = get_settings()
         self.enabled = settings.resolved_llm_enabled()
         self.model = settings.llm_model
-        if self.enabled and settings.anthropic_api_key:
+        if self.enabled and settings.anthropic_api_key and AsyncAnthropic is not None:
             self.client = AsyncAnthropic(api_key=settings.anthropic_api_key)
         else:
             self.client = None

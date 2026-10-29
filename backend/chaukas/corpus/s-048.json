@@ -1,0 +1,24 @@
+{
+  "id": "s-048",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "सीबीआई हेडक्वार्टर। आपके खिलाफ अरेस्ट वारंट जारी हुआ है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "डिजिटल अरेस्ट लागू है। तुरंत 50,000 रुपये सरकारी सुरक्षित खाते में ट्रांसफर करें।"
+    }
+  ],
+  "firstHardAskTurn": 1
+}

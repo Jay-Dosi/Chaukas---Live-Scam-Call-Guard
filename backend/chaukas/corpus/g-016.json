@@ -1,0 +1,18 @@
+{
+  "id": "g-016",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, Uber driver here. I have arrived at your pickup location near the metro station."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Waiting right outside pillar number 42."
+    }
+  ]
+}

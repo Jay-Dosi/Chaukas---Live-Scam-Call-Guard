@@ -1,0 +1,28 @@
+{
+  "id": "s-035",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "kyc_expiry",
+    "urgency_threat",
+    "credential_request"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Water and power utility department notice."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Immediate disconnection scheduled for your meter."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "To stop disconnection officer, share your banking OTP to process emergency payment."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

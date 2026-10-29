@@ -1,0 +1,28 @@
+{
+  "id": "s-046",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "authority_claim",
+    "secrecy_isolation",
+    "credential_request"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Police cyber crime investigation department se officer बोल रहा हूँ."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Call mat katiye, this matter is gopniya. Kisi ko mat batana."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Security clearance ke liye phone par aaya hua verification code OTP bataiye."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

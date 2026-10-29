@@ -5,7 +5,7 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -69,24 +69,25 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # API routes
-    app.include_router(health.router)
-    app.include_router(scenarios.router)
-    app.include_router(tts.router)
-    app.include_router(benchmark.router)
-    app.include_router(upload.router)
+    # API routes (support both /api/* and direct routes)
+    for router in [health.router, scenarios.router, tts.router, benchmark.router, upload.router]:
+        app.include_router(router, prefix="/api")
+        app.include_router(router)
 
     # WebSocket endpoints
     @app.websocket("/ws/session")
-    async def ws_session(websocket):
+    async def ws_session(websocket: WebSocket):
         await handle_session(websocket)
 
     @app.websocket("/ws/drill")
-    async def ws_drill(websocket):
+    async def ws_drill(websocket: WebSocket):
         await handle_drill_session(websocket)
 
     # Serve built frontend in production
-    build_dir = Path(__file__).parent.parent.parent.parent / "apps" / "web" / "dist"
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    build_dir = repo_root / "apps" / "web" / "dist"
+    if not build_dir.exists():
+        build_dir = Path("/app/apps/web/dist")
     if build_dir.exists():
         app.mount("/", StaticFiles(directory=build_dir, html=True), name="static")
 

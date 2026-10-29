@@ -1,0 +1,28 @@
+{
+  "id": "g-038",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Official telecom and law enforcement awareness advisory."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Fraudsters are impersonating police officers and customs authorities regarding intercepted parcels."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Please be advised that police never demands money over video calls or threatens digital arrest."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Do not share verification codes. Report suspicious incidents at cybercrime.gov.in or 1930."
+    }
+  ]
+}

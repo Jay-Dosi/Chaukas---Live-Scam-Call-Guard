@@ -1,0 +1,33 @@
+{
+  "id": "s-018",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "kyc_expiry",
+    "credential_request",
+    "secrecy_isolation"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, ICICI Bank risk department calling."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Suspicious login attempts detected from another device. Your net banking is locked."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "To secure your account, state your secret UPI PIN and verification code."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Keep this call strictly confidential and do not disconnect."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

@@ -1,0 +1,18 @@
+{
+  "id": "g-028",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Urban Company appliance repair technician here. Confirming our visit for AC servicing at 11 AM today."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Please ensure the unit is accessible. See you shortly."
+    }
+  ]
+}

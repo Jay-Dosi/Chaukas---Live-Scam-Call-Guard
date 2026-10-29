@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import type { Language } from '@i18n/useTranslation';
 import type { Analysis, Level } from '@api/sessionSocket';
 import { useSettingsStore } from '@state/settings';
 
@@ -31,8 +30,6 @@ export interface SessionState {
   addAlert: (level: Level, text: string) => void;
   resetSession: () => void;
 }
-
-const LEVELS: Level[] = ['calm', 'caution', 'danger', 'critical'];
 
 // Determine level from score based on standard thresholds
 // High sensitivity lowers by 8: caution >=22, danger >=47, critical >=72
@@ -108,15 +105,16 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 function saveRecording(state: SessionState) {
   try {
     const recordings = JSON.parse(localStorage.getItem('chaukas-sessions') ?? '[]');
+    const startTime = Date.now() - Math.floor(
+      state.transcriptParts.reduce((max, t) => Math.max(max, t.tMs), 0),
+    );
     const recording: SessionRecording = {
       id: crypto.randomUUID(),
-      startTime: Date.now() - Math.floor(
-        state.transcriptParts.reduce((max, t) => Math.max(max, t.tMs), 0),
-      ),
+      startTime,
       endTime: Date.now(),
-      durationSecs: Math.round((Date.now() - (recording.startTime || Date.now())) / 1000),
+      durationSecs: Math.max(0, Math.round((Date.now() - startTime) / 1000)),
       peakLevel: state.level,
-      tacticsHeard: state.analysis?.signals ?? [],
+      tacticsHeard: state.analysis?.hits?.map((h) => h.label_en) ?? [],
       firstCautionMs: null,
       firstDangerMs: null,
       transcript: state.transcriptParts.map((t) => t.text).join(' '),

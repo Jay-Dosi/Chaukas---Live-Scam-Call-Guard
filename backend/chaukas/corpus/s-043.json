@@ -1,0 +1,22 @@
+{
+  "id": "s-043",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "reward_task",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Work from home part time job. Earn 2000 rupees daily liking YouTube videos."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Enrollment complete karne ke liye registration fee transfer kijiye is number par."
+    }
+  ],
+  "firstHardAskTurn": 1
+}

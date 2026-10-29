@@ -1,0 +1,28 @@
+{
+  "id": "s-025",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "reward_task",
+    "transfer_demand",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Special hiring team from Amazon reviews project calling."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "You earned 1200 rupees on level 1 tasks. Level 2 has 20,000 rupees payout."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "To claim your earnings you must deposit a security deposit of 8,000 rupees right now."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

@@ -1,0 +1,18 @@
+{
+  "id": "g-015",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Sir main Blinkit se bol raha hoon, 5 minute me aapka grocery order deliver ho jayega."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Gate open kar dijiye please."
+    }
+  ]
+}

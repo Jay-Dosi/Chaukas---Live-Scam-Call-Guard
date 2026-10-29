@@ -1,0 +1,23 @@
+{
+  "id": "g-027",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "IndiGo airlines customer care se call hai regarding flight 6E-204."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Due to weather conditions, departure time is rescheduled to 4 PM."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Updated boarding pass aapke email par bhej diya gaya hai."
+    }
+  ]
+}

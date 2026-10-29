@@ -1,42 +1,136 @@
-# Ignore local environment and dependency folders
+# ─────────────────────────────────────────────────────────────
+# Environment, secrets & credentials
+# ─────────────────────────────────────────────────────────────
 .env
-.env.local
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
 
-# Node modules
-/node_modules
-/apps/web/node_modules
-/packages/protocol/node_modules
+# ─────────────────────────────────────────────────────────────
+# Python & Bytecode
+# ─────────────────────────────────────────────────────────────
+__pycache__/
+**/*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
 
-# Build artifacts
-/dist
-/apps/web/dist
-/packages/protocol/dist
-.vite
+# Python virtual environments & packages
+.venv/
+**/.venv/
+env/
+venv/
+ENV/
+*.egg-info/
+.installed.cfg
+*.egg
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+pip-wheel-metadata/
 
-# Python virtual environment
-/.venv
-/backend/.venv
+# Python test, coverage & type checking caches
+.pytest_cache/
+**/.pytest_cache/
+.mypy_cache/
+**/.mypy_cache/
+.ruff_cache/
+**/.ruff_cache/
+.hypothesis/
+**/.hypothesis/
+.cache/
+**/.cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+htmlcov/
+*.cover
+*.py,cover
 
-# Cache folders
-.pytest_cache
-.mypy_cache
-.ruff_cache
-.cache
-/backend/.cache
+# ─────────────────────────────────────────────────────────────
+# Node, JavaScript, TypeScript & Frontend
+# ─────────────────────────────────────────────────────────────
+node_modules/
+**/node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# IDE and OS generated files
-.vscode/
-*.swp
-*.swo
-Thumbs.db
-Desktop.ini
+# Frontend build outputs & caches
+dist/
+**/dist/
+dist-ssr/
+.vite/
+**/.vite/
+.turbo/
+.eslintcache
+*.tsbuildinfo
+playwright-report/
+test-results/
 
-# Logs
+# ─────────────────────────────────────────────────────────────
+# Logs & Temporary files
+# ─────────────────────────────────────────────────────────────
 *.log
 logs/
+tmp/
+**/tmp/
+*.tmp
+*.temp
 
-# Build tools cache
-.cache/
+# ─────────────────────────────────────────────────────────────
+# Operating System & IDEs
+# ─────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+[Dd]esktop.ini
+ehthumbs.db
+ehthumbs_vista.db
 
-# Specific to this project
-/apps/web/public/audio/*.wav # generated audio files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ─────────────────────────────────────────────────────────────
+# Project-Specific: Audio Caches, Exports & Uploads
+# ─────────────────────────────────────────────────────────────
+# Generated/cached TTS and temp speech files
+.cache/tts/
+backend/.cache/tts/
+/apps/web/public/audio/*.wav
+*.pcm
+*.raw
+
+# Generated benchmark exports
+chaukas-benchmark-*.json
+chaukas-cases-*.csv

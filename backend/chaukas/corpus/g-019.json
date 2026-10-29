@@ -1,0 +1,23 @@
+{
+  "id": "g-019",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hey dad, just checking in. Hope your doctor appointment went smoothly today."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "I will transfer my share of the house maintenance fee over the weekend."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Take care and tell mom I said hi!"
+    }
+  ]
+}

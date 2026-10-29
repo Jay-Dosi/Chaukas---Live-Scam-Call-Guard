@@ -1,0 +1,28 @@
+{
+  "id": "s-034",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "kyc_expiry",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Electricity board official calling."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Your bill payment failed and electricity will be cut within 30 minutes."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Disconnection avoid karne ke liye paise bhejiye abhi ke abhi is UPI par."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

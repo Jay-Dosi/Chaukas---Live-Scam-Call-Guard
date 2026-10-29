@@ -93,7 +93,7 @@ def normalise(text: str, lang: str | None = None) -> tuple[str, list[Token]]:
             cleaned += ch
         elif ch.isdigit() or _is_devanagari_digit(ch):
             cleaned += ch
-        elif unicodedata.category(ch).startswith('L'):
+        elif unicodedata.category(ch).startswith(('L', 'M')):
             cleaned += ch
         elif ch in (' ', '\t', '\n', '\r'):
             cleaned += ' '
@@ -124,91 +124,97 @@ def _build_tokens_with_offsets(
     original: str, cleaned: str, lang: str | None = None
 ) -> tuple[list[Token], list[tuple[int, int]]]:
     """Build tokens from cleaned text, tracking char-offsets in the original."""
+    clean_chars: list[str] = []
+    clean_to_orig: list[int] = []
+
+    for orig_idx, ch in enumerate(original):
+        # Fast path for ASCII alphanumeric and space
+        if ch.isascii():
+            if 'a' <= ch <= 'z' or '0' <= ch <= '9':
+                clean_chars.append(ch)
+                clean_to_orig.append(orig_idx)
+                continue
+            if 'A' <= ch <= 'Z':
+                clean_chars.append(ch.lower())
+                clean_to_orig.append(orig_idx)
+                continue
+            if ch in (' ', '\t', '\n', '\r') or ch in ('-', '/', '_', ':', ';', ',', '.', '!', '?', '(', ')', '[', ']', '"', "'", '“', '”'):
+                if clean_chars and clean_chars[-1] != ' ':
+                    clean_chars.append(' ')
+                    clean_to_orig.append(orig_idx)
+                continue
+            if ch == '%':
+                clean_chars.append('%')
+                clean_to_orig.append(orig_idx)
+                continue
+            continue
+
+        # Non-ASCII path (Indic scripts, Devanagari digits, ₹)
+        if ch == '₹':
+            clean_chars.append('₹')
+            clean_to_orig.append(orig_idx)
+            continue
+
+        if _is_devanagari_digit(ch):
+            clean_chars.append(_to_ascii_digit(ch))
+            clean_to_orig.append(orig_idx)
+            continue
+
+        cat = unicodedata.category(ch)
+        if cat.startswith(('L', 'M')):
+            clean_chars.append(ch.lower())
+            clean_to_orig.append(orig_idx)
+
+    while clean_chars and clean_chars[-1] == ' ':
+        clean_chars.pop()
+        clean_to_orig.pop()
+
     tokens: list[Token] = []
-    in_token = False
-    token_start = 0
-
-    for i, ch in enumerate(cleaned):
-        if ch == ' ':
-            if in_token:
-                # End current token
-                while token_start < len(original) and original[token_start] == ' ':
-                    token_start += 1
-                orig_end = _find_orig_position(original, token_start, i)
-                tokens.append(Token(text=cleaned[token_start:i], start=token_start, end=orig_end))
-                in_token = False
-            token_start = i + 1
-        else:
-            if not in_token:
-                token_start = i
-                in_token = True
-
-    # Last token
-    if in_token:
-        orig_end = len(original)
-        tokens.append(Token(text=cleaned[token_start:], start=token_start, end=orig_end))
+    i = 0
+    n = len(clean_chars)
+    while i < n:
+        if clean_chars[i] == ' ':
+            i += 1
+            continue
+        start_idx = i
+        while i < n and clean_chars[i] != ' ':
+            i += 1
+        end_idx = i
+        tok_text = ''.join(clean_chars[start_idx:end_idx])
+        orig_start = clean_to_orig[start_idx]
+        orig_end = clean_to_orig[end_idx - 1] + 1
+        tokens.append(Token(text=tok_text, start=orig_start, end=orig_end))
 
     return tokens, [(t.start, t.end) for t in tokens]
 
 
-def _find_orig_position(original: str, orig_pos: int, cleaned_pos: int) -> int:
-    """Find where cleaned position maps back in the original string."""
-    ci = cleaned_pos
-    oi = orig_pos
-    count = 0
-    target_count = sum(1 for c in cleaned[:ci] if c != ' ')
-
-    for oi_scan in range(orig_pos, min(orig_pos + 200, len(original))):
-        ch = original[oi_scan]
-        if ch in (' ', '\t', '\n', '\r'):
-            continue
-        count += 1
-        if count >= target_count:
-            return oi_scan + 1
-    return len(original)
-
-
 def _join_acronyms(tokens: list[Token], origs: list[tuple[int, int]]) -> tuple[list[Token], list[tuple[int, int]]]:
     """Rule 4: Join letter-spaced acronym tokens like 'o t p' -> 'otp'."""
+    if not tokens:
+        return [], []
+
     result_tokens: list[Token] = []
     result_origs: list[tuple[int, int]] = []
 
-    buffer: list[str] = []
-    buffer_origs: list[tuple[int, int]] = []
+    i = 0
+    n = len(tokens)
+    while i < n:
+        tok = tokens[i]
+        if (len(tok.text) == 1 and tok.text.isalpha()) or tok.text in _acronym_chars:
+            j = i
+            while j < n and ((len(tokens[j].text) == 1 and tokens[j].text.isalpha()) or tokens[j].text in _acronym_chars):
+                j += 1
+            if j - i >= 2:
+                joined_text = "".join(t.text for t in tokens[i:j])
+                joined_tok = Token(text=joined_text, start=tokens[i].start, end=tokens[j - 1].end)
+                result_tokens.append(joined_tok)
+                result_origs.append((joined_tok.start, joined_tok.end))
+                i = j
+                continue
 
-    def flush_buffer() -> None:
-        if not buffer:
-            return
-
-        if len(buffer) == 1:
-            result_tokens.append(tokens[len(result_tokens)])
-            result_origs.append(origs[len(result_tokens) - 1])
-        else:
-            all_single = all(len(t) == 1 for t in buffer)
-            if all_single and set(buffer).issubset(_acronym_chars):
-                joined = ''.join(buffer)
-                result_tokens.append(Token(text=joined, start=buffer_origs[0][0], end=buffer_origs[-1][1]))
-                result_origs.append((buffer_origs[0][0], buffer_origs[-1][1]))
-            else:
-                for t, o in zip(buffer, buffer_origs):
-                    result_tokens.append(t)
-                    result_origs.append(o)
-
-        buffer.clear()
-        buffer_origs.clear()
-
-    for tok in tokens:
-        ch = tok.text
-        if len(ch) <= 2 and ch in _acronym_chars:
-            buffer.append(ch)
-            buffer_origs.append(origs[len(result_tokens) + len(buffer) - 1])
-            if len(buffer) >= 3:
-                flush_buffer()
-        else:
-            flush_buffer()
-
-    if buffer:
-        flush_buffer()
+        result_tokens.append(tok)
+        result_origs.append((tok.start, tok.end))
+        i += 1
 
     return result_tokens, result_origs
 
@@ -227,9 +233,23 @@ def _replace_spelled_digits(
     result: list[Token] = []
     result_origs: list[tuple[int, int]] = []
 
-    for tok, orig in zip(tokens, origs):
+    n = len(tokens)
+    for idx, (tok, orig) in enumerate(zip(tokens, origs)):
         lower = tok.text.lower()
         if lower in spelled:
+            # 'do' in Hinglish is ambiguous with English 'do' (e.g. 'do not')
+            if lower == 'do':
+                prev_tok = tokens[idx - 1].text.lower() if idx > 0 else ''
+                next_tok = tokens[idx + 1].text.lower() if idx + 1 < n else ''
+                is_digit_run = (
+                    prev_tok in spelled or prev_tok.isdigit() or
+                    next_tok in spelled or next_tok.isdigit()
+                )
+                if not is_digit_run:
+                    result.append(tok)
+                    result_origs.append(orig)
+                    continue
+
             num = spelled[lower]
             result.append(Token(text=num, start=orig[0], end=orig[1]))
             result_origs.append(orig)

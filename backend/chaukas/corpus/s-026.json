@@ -1,0 +1,27 @@
+{
+  "id": "s-026",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "reward_task",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "टेलीग्राम टास्क ग्रुप में आपका स्वागत है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "टास्क पूरा करके भारी प्रॉफिट कमाएं। लकी ड्रा और डबल मनी ऑफर है।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "प्रीमियम टास्क के लिए पैसे भेजिए और तुरंत विड्रॉल लीजिए।"
+    }
+  ],
+  "firstHardAskTurn": 2
+}

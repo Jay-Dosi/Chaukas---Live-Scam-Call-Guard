@@ -1,0 +1,34 @@
+{
+  "id": "s-011",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "secrecy_isolation",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "साइबर सेल हेडक्वार्टर से डीएसपी यादव बोल रहा हूँ।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आपके पैन कार्ड से गैरकानूनी फंड्स ट्रांसफर हुए हैं। आप अरेस्ट हैं।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "किसी को मत बताइए, कमरे का दरवाजा बंद कर लीजिए और कॉल चालू रखिए।"
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "सरकारी खाते में तुरंत पैसे भेजिए अपनी बेगुनाही साबित करने के लिए।"
+    }
+  ],
+  "firstHardAskTurn": 3
+}

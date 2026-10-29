@@ -1,0 +1,34 @@
+{
+  "id": "s-013",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "authority_claim",
+    "kyc_expiry",
+    "credential_request",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "नमस्कार, भारतीय स्टेट बैंक कस्टमर सर्विस से बोल रहा हूँ।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आपका बैंक खाता केवाईसी अपडेट न होने के कारण आज बंद हो जाएगा।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "केवाईसी रिन्यू करने के लिए आपके फोन पर 6 अंकों का ओटीपी भेजा गया है।"
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "तुरंत वह ओटीपी बताइए वरना एटीएम और नेटबैंकिंग ब्लॉक हो जाएगी।"
+    }
+  ],
+  "firstHardAskTurn": 3
+}

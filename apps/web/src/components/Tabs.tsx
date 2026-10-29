@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
 export interface TabsProps {
   children: React.ReactNode;
@@ -11,10 +11,12 @@ export function Tabs({ children, activeTab, onChange, className = '' }: TabsProp
   return (
     <div className={`tabs ${className}`} role="tablist">
       {React.Children.map(children, (child) => {
-        if (!React.isValidElement(child)) return null;
+        if (!React.isValidElement<{ id?: string; isActive?: boolean; onClick?: () => void }>(child)) return null;
         return React.cloneElement(child, {
           isActive: child.props.id === activeTab,
-          onClick: () => onChange(child.props.id),
+          onClick: () => {
+            if (child.props.id) onChange(child.props.id);
+          },
         });
       })}
     </div>

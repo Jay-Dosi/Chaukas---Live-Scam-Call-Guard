@@ -65,17 +65,57 @@ class DrillState:
     asked_before_complying: bool = False
 
 
-def load_scenario(scenario_id: str, lang: str) -> Scenario:
-    """Load scenario from JSON file."""
-    path = Path(__file__).parent.parent / "scenarios" / f"{scenario_id}.json"
+def load_scenario(scenario_id: str, lang: str = "en") -> Scenario:
+    """Load scenario from JSON file and instantiate CallerNode and TerminalNode objects."""
+    clean_id = scenario_id[:-5] if scenario_id.endswith(".json") else scenario_id
+    scenarios_dir = Path(__file__).resolve().parent.parent / "scenarios"
+    path = scenarios_dir / f"{clean_id}.json"
+    if not path.exists():
+        # Try matching by prefix or finding first scenario
+        matches = list(scenarios_dir.glob(f"{clean_id}*.json"))
+        if matches:
+            path = matches[0]
+        else:
+            raise FileNotFoundError(f"Scenario not found: {scenario_id}")
+
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
-    # Filter to requested language variant
-    # Scenario JSON contains all 3 language variants in nodes
-    # For simplicity, we assume the caller text is already in the right language
-    # The scenario file should have lang-specific nodes or we filter
-    return Scenario(**data)
+    nodes: dict[str, CallerNode] = {}
+    for nid, ndata in data.get("nodes", {}).items():
+        if isinstance(ndata, dict):
+            caller_info = ndata.get("caller", {})
+            text = caller_info.get("text") if isinstance(caller_info, dict) else ndata.get("text", "")
+            tactics = caller_info.get("tactic", []) if isinstance(caller_info, dict) else ndata.get("tactics", [])
+            voice = ndata.get("voice", "caller-a")
+            next_list = ndata.get("next", [])
+            nodes[nid] = CallerNode(
+                node_id=nid,
+                text=text or "",
+                tactics=tactics if isinstance(tactics, list) else [tactics],
+                voice=voice,
+                next=next_list,
+            )
+
+    terminals: dict[str, TerminalNode] = {}
+    for tid, tdata in data.get("terminals", {}).items():
+        if isinstance(tdata, dict):
+            outcome = tdata.get("outcome", "safe")
+            debrief_key = tdata.get("debrief_key") or tdata.get("debrief", "good_hangup")
+            terminals[tid] = TerminalNode(outcome=outcome, debrief_key=debrief_key)
+
+    return Scenario(
+        id=data["id"],
+        title=data.get("title", {"en": data["id"]}),
+        lang=data.get("lang", "en"),
+        label=data.get("label", "scam"),
+        tactics=data.get("tactics", []),
+        expect=data.get("expect", {}),
+        disclosure=data.get("disclosure", {}),
+        start=data.get("start", "n1"),
+        nodes=nodes,
+        terminals=terminals,
+    )
 
 
 def get_next_node(

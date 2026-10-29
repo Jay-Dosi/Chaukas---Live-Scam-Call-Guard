@@ -86,7 +86,7 @@ export function RiskTimeline({ history, thresholds, width, height = 160 }: RiskT
               0s
             </text>
             <text x={padding + chartWidth} y={padding + chartHeight + 20} textAnchor="end" fontSize="10" fill="var(--ink-3)">
-              {Math.round(points[points.length - 1].t / 1000)}s
+              {Math.round((points[points.length - 1]?.t ?? 0) / 1000)}s
             </text>
           </>
         )}

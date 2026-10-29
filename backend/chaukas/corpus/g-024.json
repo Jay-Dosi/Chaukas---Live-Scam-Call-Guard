@@ -1,0 +1,18 @@
+{
+  "id": "g-024",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Bhai groceries le aaya main, bill receipt table par rakh di hai."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Shaam ko chai banate hain."
+    }
+  ]
+}

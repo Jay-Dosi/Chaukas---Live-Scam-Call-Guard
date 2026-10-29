@@ -1,774 +1,776 @@
-# Hindi lexicon — Chaukas detection engine
-# Each signal has >=15 patterns covering inflections, ASR variants, euphemisms.
-
-# ─── authority_claim (weight: 12, not hard) ───
 - signal: authority_claim
   kind: phrase
-  value: "पुलिस"
+  value: पुलिस
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "साइबर क्राइम"
+  value: साइबर क्राइम
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "सीबीआई"
+  value: साइबर पुलिस
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "एनआईए"
+  value: सीबीआई
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "ED"
+  value: एनआईए
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "TRAI"
+  value: ईडी
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "आरबीआई"
+  value: ट्राई
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "कस्टम विभाग"
+  value: आरबीआई
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "इनकम टैक्स"
+  value: कस्टम विभाग
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "नार्कोटिक्स कंट्रोल ब्यूरो"
+  value: कस्टम अधिकारी
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "main ... se bol raha hoon"
+  value: इनकम टैक्स
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "inspector here"
+  value: सब-इंस्पेक्टर
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "officer calling"
+  value: इंस्पेक्टर
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "local police station"
+  value: डीएसपी
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "fraud cell"
+  value: पुलिस स्टेशन
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "security agency"
+  value: क्राइम ब्रांच
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "investigating officer"
+  value: विशेष जांच अधिकारी
   lang: hi
 - signal: authority_claim
   kind: phrase
-  value: "sir main police department se hu"
+  value: सरकारी अधिकारी
   lang: hi
 - signal: authority_claim
-  kind: token
-  value: "inspector"
-  lang: hi
-- signal: authority_claim
-  kind: token
-  value: "officer"
-  lang: hi
-
-# ─── digital_arrest (weight: 22, not hard) ───
-- signal: digital_arrest
   kind: phrase
-  value: "digital arrest"
+  value: टेलीकॉम अथॉरिटी
+  lang: hi
+- signal: authority_claim
+  kind: phrase
+  value: न्यायालय
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "aap arrest hain"
+  value: डिजिटल अरेस्ट
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "वारंट जारी"
+  value: डिजिटल गिरफ्तारी
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "FIR aapke khilaf"
+  value: अरेस्ट हैं
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "case registered"
+  value: अरेस्ट वारंट
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "court order"
+  value: गैर-जमानती वारंट
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "girftari warrant"
+  value: वारंट जारी
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "police aapko le jayegi"
+  value: एफआईआर दर्ज
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "custody mein lena hai"
+  value: एफआईआर
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "bail nahi milega"
+  value: कोर्ट ऑर्डर
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "judge kal decision dega"
+  value: सुप्रीम कोर्ट
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "aapka naam list mein hai"
+  value: गिरफ्तारी आदेश
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "blacklist ban gayi"
+  value: पुलिस हिरासत
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "passport cancel ho jayega"
+  value: हिरासत में
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "interpol notice"
+  value: केस दर्ज
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "criminal case chal raha hai"
+  value: गैरकानूनी गतिविधि
   lang: hi
 - signal: digital_arrest
   kind: phrase
-  value: "aap tracking mein hain"
+  value: अरेस्ट करने
   lang: hi
-
-# ─── accusation (weight: 14, not hard) ───
-- signal: accusation
+- signal: digital_arrest
   kind: phrase
-  value: "मनी लॉन्ड्रिंग"
+  value: अरेस्ट ऑर्डर
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "parsing mein drugs"
+  value: मनी लॉन्ड्रिंग
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "Aadhaar misuse"
+  value: पार्सल में ड्रग्स
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "SIM illegal use"
+  value: अवैध पदार्थ
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "aapke Aadhaar se fraud"
+  value: फर्जी पासपोर्ट
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "trafficking charges"
+  value: हवाला
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "hawala transaction"
+  value: गैरकानूनी
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "aapka phone number flag hua"
+  value: अवैध सिम
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "illegal transfer detect hua"
+  value: आपके आधार से
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "suspected of fraud"
+  value: आधार का दुरुपयोग
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "aapka bank account involved"
+  value: बैंक धोखाधड़ी
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "illegal activity on identity"
+  value: ब्लैकमेलिंग
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "evidence device pe mila"
+  value: अवैध ट्रांजेक्शन
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "terror module linked"
+  value: प्रतिबंधित सामान
   lang: hi
 - signal: accusation
   kind: phrase
-  value: "PAN card illegal use"
+  value: टैक्स चोरी
   lang: hi
-
-# ─── urgency_threat (weight: 10, not hard) ───
-- signal: urgency_threat
+- signal: accusation
   kind: phrase
-  value: "turant"
+  value: ड्रग्स तस्करी
   lang: hi
-- signal: urgency_threat
+- signal: accusation
   kind: phrase
-  value: "abhi ke abhi"
+  value: अवैध फंड्स
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "30 minute ke andar"
+  value: तुरंत
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "account block ho jayega"
+  value: अभी
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "last warning"
+  value: आज ही
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "varna arrest karenge"
+  value: अभी के अभी
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "aur koi chance nahi"
+  value: तुरंत पैसे
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "time khatam ho raha hai"
+  value: तुरंत भेजिए
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "midnight se pehle"
+  value: 15 मिनट
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "SIM block hogi"
+  value: 30 मिनट
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "bank account freeze"
+  value: खाता बंद
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "next hour ke andar"
+  value: सिम बंद
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "final notice"
+  value: बिजली काट
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "aaj hi karna hai"
+  value: आखिरी चेतावनी
   lang: hi
 - signal: urgency_threat
   kind: phrase
-  value: "act fast"
+  value: अंतिम चेतावनी
   lang: hi
-
-# ─── secrecy_isolation (weight: 24, not hard) ───
-- signal: secrecy_isolation
+- signal: urgency_threat
   kind: phrase
-  value: "kisi ko mat batayiye"
+  value: तुरंत ट्रांसफर
   lang: hi
-- signal: secrecy_isolation
+- signal: urgency_threat
   kind: phrase
-  value: "call mat katijiye"
+  value: नहीं तो अरेस्ट
   lang: hi
-- signal: secrecy_isolation
+- signal: urgency_threat
   kind: phrase
-  value: "video call par rahiye"
+  value: लॉकअप में
   lang: hi
-- signal: secrecy_isolation
+- signal: urgency_threat
   kind: phrase
-  value: "parivar ko mat batana"
+  value: आज रात
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "yeh confidential hai"
+  value: किसी को मत बताइए
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "alag kamre mein jaiye"
+  value: किसी को मत बताना
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "call connected rakhiye"
+  value: कॉल मत काटिए
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "koi aur na jaane"
+  value: फोन मत काटना
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "yeh private rakhein"
+  value: वीडियो कॉल पर रहिए
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "kisi se baat mat kijiye"
+  value: वीडियो कॉल चालू रखिए
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "phone switch off kijiye"
+  value: परिवार को मत बताना
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "quiet room mein baitiye"
+  value: घरवालों को मत बताना
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "kisi aur ko sunne na dein"
+  value: अलग कमरे में
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "rishtedaaron se chupayein"
+  value: दरवाजा बंद कर लीजिए
   lang: hi
 - signal: secrecy_isolation
   kind: phrase
-  value: "patni ko bhi mat batana"
+  value: यह गोपनीय है
   lang: hi
-
-# ─── credential_request (weight: 30, HARD) ───
-- signal: credential_request
+- signal: secrecy_isolation
   kind: phrase
-  value: "OTP batao"
+  value: अत्यधिक गोपनीय
   lang: hi
-- signal: credential_request
+- signal: secrecy_isolation
   kind: phrase
-  value: "code padho"
+  value: किसी से बात मत कीजिए
   lang: hi
-- signal: credential_request
+- signal: secrecy_isolation
   kind: phrase
-  value: "PIN bataiye"
+  value: फोन चालू रखिए
   lang: hi
-- signal: credential_request
+- signal: secrecy_isolation
   kind: phrase
-  value: "UPI PIN do"
+  value: लाइन पर रहिए
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "card number do"
+  value: ओटीपी
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "CVV bataiye"
+  value: ओटीपी बताइए
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "verification code"
+  value: ओटीपी दीजिए
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "Aadhaar number do"
+  value: ओटीपी शेयर कीजिए
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "password do"
+  value: 6 अंकों का कोड
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "six digit code"
+  value: छह अंकों का कोड
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "OTP bhejiye"
+  value: प्रमाणीकरण कोड
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "verification code kya hai"
+  value: पिन बताइए
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "screen pe code enter karo"
+  value: यूपीआई पिन
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "PIN type karo"
+  value: कार्ड नंबर
   lang: hi
 - signal: credential_request
   kind: phrase
-  value: "security code do"
+  value: सीवीवी
   lang: hi
-
-# ─── transfer_demand (weight: 30, HARD) ───
-- signal: transfer_demand
+- signal: credential_request
   kind: phrase
-  value: "paisa transfer karo"
+  value: एटीएम पिन
   lang: hi
-- signal: transfer_demand
+- signal: credential_request
   kind: phrase
-  value: "safe account"
+  value: पासवर्ड बताइए
   lang: hi
-- signal: transfer_demand
+- signal: credential_request
   kind: phrase
-  value: "jurmana do"
+  value: सत्यापन कोड
   lang: hi
-- signal: transfer_demand
+- signal: credential_request
   kind: phrase
-  value: "gift card"
+  value: वेरिफिकेशन कोड
   lang: hi
-- signal: transfer_demand
+- signal: credential_request
   kind: phrase
-  value: "cryptocurrency"
+  value: गोपनीय पिन
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "UPI is number pe bhejo"
+  value: ट्रांसफर
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "paisa bhejiye"
+  value: पैसे ट्रांसफर
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "deposit amount"
+  value: पैसे भेजिए
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "verification amount"
+  value: सुरक्षित खाते
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "security deposit"
+  value: सरकारी खाते
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "innocence prove karne ke liye transfer"
+  value: आरबीआई खाता
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "investigation ke liye funds bhejo"
+  value: जुर्माना
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "dusre account pe paise move karo"
+  value: पेनल्टी
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "cash nikal kar do"
+  value: जमानत राशि
   lang: hi
 - signal: transfer_demand
   kind: phrase
-  value: "Paytm ya PhonePe pe pay karo"
+  value: सुरक्षा राशि
   lang: hi
-
-# ─── remote_access (weight: 28, HARD) ───
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "AnyDesk"
+  value: वेरिफिकेशन राशि
   lang: hi
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "TeamViewer"
+  value: यूपीआई करिए
   lang: hi
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "QuickSupport"
+  value: इस खाते में भेजिए
   lang: hi
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "screen share"
+  value: चालान भरिए
   lang: hi
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "yeh app install karo"
+  value: इस नंबर पर भेजिए
   lang: hi
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "link pe click karo"
+  value: डिपॉजिट
   lang: hi
-- signal: remote_access
+- signal: transfer_demand
   kind: phrase
-  value: "APK file"
+  value: रकम ट्रांसफर
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "store se download karo"
+  value: स्क्रीन शेयर
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "screen access do"
+  value: एनीडेस्क
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "browser pe link kholo"
+  value: क्विकसपोर्ट
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "screen instructions follow karo"
+  value: टीमव्यूअर
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "remote support activate karo"
+  value: ऐप इंस्टॉल
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "mera phone control karne do"
+  value: एपीके डाउनलोड
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "display share karo"
+  value: लिंक पर क्लिक
   lang: hi
 - signal: remote_access
   kind: phrase
-  value: "QR code scan karo connect karne ke liye"
+  value: रिमोट एक्सेस
   lang: hi
-
-# ─── reward_task (weight: 14, not hard) ───
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "part-time job"
+  value: ऐप डाउनलोड
   lang: hi
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "like and earn"
+  value: स्क्रीन कोड बताइए
   lang: hi
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "task commission"
+  value: एनीडेस्क कोड
   lang: hi
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "paisa double"
+  value: स्क्रीन दिखाइए
   lang: hi
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "guaranteed returns"
+  value: एप्लीकेशन इंस्टॉल
   lang: hi
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "daily profit"
+  value: प्ले स्टोर से डाउनलोड
   lang: hi
-- signal: reward_task
+- signal: remote_access
   kind: phrase
-  value: "lucky draw"
+  value: लिंक भेजिए
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "lottery winner"
+  value: पार्ट-टाइम जॉब
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "prize money"
+  value: पार्ट टाइम जॉब
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "gare se kamao"
+  value: लाइक और शेयर
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "work from home opportunity"
+  value: लाइक करके कमाएं
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "investment scheme"
+  value: टेलीग्राम टास्क
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "high returns guaranteed"
+  value: वीआईपी टास्क
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "cash prizes jeeto"
+  value: गारंटीड रिटर्न
   lang: hi
 - signal: reward_task
   kind: phrase
-  value: "reviews ke liye rewarded"
+  value: डबल मनी
   lang: hi
-
-# ─── kyc_expiry (weight: 10, not hard) ───
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "KYC update"
+  value: भारी प्रॉफिट
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "KYC expire"
+  value: डेली अर्निंग
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "PAN update"
+  value: लॉटरी
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "account suspend"
+  value: केबीसी लॉटरी
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "bank account band"
+  value: लकी ड्रा
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "bijli kat jayegi"
+  value: 25 लाख
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "service deactivate"
+  value: कैश प्राइज
   lang: hi
-- signal: kyc_expiry
+- signal: reward_task
   kind: phrase
-  value: "profile locked"
+  value: इनाम
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "compliance pending"
+  value: केवाईसी
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "document verification"
+  value: केवाईसी अपडेट
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "mandatory KYC"
+  value: केवाईसी समाप्त
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "government directive"
+  value: केवाईसी एक्सपायर
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "details update karo"
+  value: पैन कार्ड लिंक
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "regulatory requirement"
+  value: आधार लिंक
   lang: hi
 - signal: kyc_expiry
   kind: phrase
-  value: "permanent suspension"
+  value: बैंक खाता बंद
   lang: hi
-
-# ─── courier_customs (weight: 10, not hard) ───
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "FedEx"
+  value: खाता ब्लॉक
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "DHL"
+  value: बिजली का बिल
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "courier delivery"
+  value: कनेक्शन काट
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "parcel airport pe phansa"
+  value: सिम कार्ड केवाईसी
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "customs duty"
+  value: योनो ब्लॉक
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "parcel mein prohibited items"
+  value: नेटबैंकिंग ब्लॉक
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "import tax dena hai"
+  value: सेवा बंद
   lang: hi
-- signal: courier_customs
+- signal: kyc_expiry
   kind: phrase
-  value: "package customs ne seize kiya"
+  value: खाता निलंबित
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "your parcel deliver karna hai"
+  value: कूरियर
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "tax ki wajah se delivery fail"
+  value: पार्सल
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "blue dart"
+  value: कस्टम ड्यूटी
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "xpressbees"
+  value: एयरपोर्ट पर रोक
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "shipment stuck hai"
+  value: कस्टम अधिकारी
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "clearance needed"
+  value: फेडेक्स
   lang: hi
 - signal: courier_customs
   kind: phrase
-  value: "international package"
+  value: डीएचएल
   lang: hi
-
-# ─── emergency_relative (weight: 16, not hard) ───
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "main aapka bhateeja hu"
+  value: स्पीड पोस्ट
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "bhaiya main phas gaya"
+  value: पार्सल पकड़ा गया
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "accident ho gaya"
+  value: अंतरराष्ट्रीय पार्सल
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "hospital ko paisa chahiye"
+  value: कस्टम क्लीयरेंस
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "turant paise bhejo"
+  value: सीमा शुल्क
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "papa ko mat batana"
+  value: पार्सल में अवैध
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "phone kho gaya"
+  value: कार्गो टर्मिनल
   lang: hi
-- signal: emergency_relative
+- signal: courier_customs
   kind: phrase
-  value: "wallet kho gaya"
+  value: पार्सल छुड़ाने
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "potu madad chahta hai"
+  value: एक्सीडेंट हो गया
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "bhai jail mein hai"
+  value: अस्पताल में हूँ
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "beti ka accident"
+  value: बहुत बड़ी मुसीबत
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "beta achanak bimmar"
+  value: चाचाजी
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "medicine ke liye paisa chahiye"
+  value: भैया
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "office ka hu main"
+  value: ऑपरेशन
   lang: hi
 - signal: emergency_relative
   kind: phrase
-  value: "relative mushkil mein"
+  value: डॉक्टर पैसे मांग रहे
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: पुलिस ने पकड़ लिया
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: पापा को मत बताना
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: चोट लगी है
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: तत्काल पैसे चाहिए
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: एक्सीडेंट
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: अस्पताल
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: मदद चाहिए
+  lang: hi
+- signal: emergency_relative
+  kind: phrase
+  value: फंस गया हूँ
   lang: hi

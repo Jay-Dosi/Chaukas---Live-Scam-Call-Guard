@@ -1,0 +1,27 @@
+{
+  "id": "s-039",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "authority_claim",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Namaste ji, main Reserve Bank verification cell se consultant bol raha hoon."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapke account security score audit ke liye mandatory balance validation required hai."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Aap ek temporary refundable verification amount transfer kijiye central holding account me."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

@@ -93,6 +93,7 @@ class CompiledPattern:
     label_en: str
     label_hi: str
     weight: float  # resolved at scoring time
+    tokens: tuple[str, ...] = ()  # pre-computed tokens for fast matching
     span_hint: tuple[int, int] | None = None  # optional hint for matches
 
 
@@ -160,6 +161,7 @@ def compile_patterns(entries: list[LexiconEntry]) -> list[CompiledPattern]:
         else:  # token
             compiled_obj = entry.value.lower()
 
+        toks = tuple(entry.value.lower().split()) if entry.kind in ("phrase", "token") else ()
         patterns.append(CompiledPattern(
             signal_id=entry.signal,
             kind=entry.kind,
@@ -169,6 +171,7 @@ def compile_patterns(entries: list[LexiconEntry]) -> list[CompiledPattern]:
             label_en="",  # filled at scoring time
             label_hi="",
             weight=0.0,  # filled at scoring time with base weight
+            tokens=toks,
         ))
 
     return patterns
@@ -216,24 +219,36 @@ LABEL_MAP: dict[str, dict[str, str]] = {
 
 # Warning cue keywords that trigger warning context
 WARNING_CUES = [
-    "never", "never share", "never tell", "don't share", "don't tell",
-    "do not share", "do not tell", "should not", "shouldn't",
-    "kabhi nahi", "कभी नहीं", "न बताएं", "मत बताइए",
-    "beware", "saavdhan", "सावधान", "fraud alert", "scam alert",
-    "OTP किसी को न बताएं", "किसी को मत बताइए", "किसी को नहीं",
+    "never", "never share", "never tell", "never ask", "never demand", "never demands",
+    "don't share", "don't tell", "dont share", "dont tell", "don't transfer",
+    "do not share", "do not tell", "do not ask", "do not transfer", "do not deposit",
+    "do not install", "should not", "shouldn't", "no real officer", "no officer",
+    "police never", "agencies never", "bank never",
+    "kabhi nahi", "kisi ko mat", "kisi ko nahi", "कभी नहीं", "कभी", "न बताएं",
+    "मत बताइए", "मत बताएं", "न दें", "मत दें", "नहीं मांगता", "नहीं मांगती", "नहीं मांगते",
+    "कोई असली", "कोई भी असली", "नहीं मांगेगा",
+    "beware", "saavdhan", "savdhan", "सावधान", "सावधान रहें", "सतर्कता", "सतर्क",
+    "fraud alert", "scam alert", "security alert", "awareness", "advisory",
+    "जागरूकता", "जनहित", "helpline", "1930", "scammers", "fraudsters",
+    "pretending", "fake calls", "fake job", "public interest", "courtesy call",
 ]
 
 # Request verbs that make credential/transfer hits score fully
 REQUEST_VERBS = [
     "tell", "give", "share", "send", "read out", "batao", "bataiye",
     "bata", "dijiye", "diijiye", "bhejo", "bhejiye", "bolo", "bolio",
-    "बताइए", "दीजिए", "भेजिए", "बताओ", "बोलो",
+    "बताइए", "दीजिए", "भेजिए", "बताओ", "बोलो", "enter", "type", "provide",
+    "deposit", "pay", "transfer", "must", "karo", "kijiye", "jama", "bharo",
+    "जमा", "पे", "डिपॉजिट", "ट्रांसफर", "भेजें", "भेजना", "डालें", "डालिए",
+    "करें", "करना होगा", "करने होंगे", "करना पड़ेगा", "पेमेंट",
 ]
 
 # Negation cues
 NEGATION_CUES = [
-    "no need", "आपको ... नहीं देना है", "not required",
-    "आवश्यक नहीं", "जरूरत नहीं", "nahi chahiye", "नहीं चाहिए",
+    "no need", "not required", "आवश्यक नहीं", "जरूरत नहीं", "nahi chahiye", "नहीं चाहिए",
+    "नहीं देना", "mat dena", "no real officer", "no officer", "never ask", "never demand",
+    "never transfer", "police never", "bank never", "नहीं मांगता", "नहीं मांगते",
+    "नहीं मांगती", "कोई भी असली पुलिस अधिकारी", "कोई असली अधिकारी",
 ]
 
 
@@ -241,23 +256,21 @@ def get_warning_context(normalised_tokens: list[str], max_pos: int) -> bool:
     """Check if any warning cue appears within ±7 tokens of position max_pos."""
     window_start = max(0, max_pos - 7)
     window_end = min(len(normalised_tokens), max_pos + 8)
-    for i in range(window_start, window_end):
-        t = normalised_tokens[i]
-        for cue in WARNING_CUES:
-            if cue in t:
-                return True
+    window_text = " ".join(normalised_tokens[window_start:window_end]).lower()
+    for cue in WARNING_CUES:
+        if cue.lower() in window_text:
+            return True
     return False
 
 
 def get_negation_context(normalised_tokens: list[str], max_pos: int) -> bool:
     """Check if any negation cue appears nearby."""
-    window_start = max(0, max_pos - 4)
-    window_end = min(len(normalised_tokens), max_pos + 4)
-    for i in range(window_start, window_end):
-        t = normalised_tokens[i]
-        for cue in NEGATION_CUES:
-            if cue in t:
-                return True
+    window_start = max(0, max_pos - 6)
+    window_end = min(len(normalised_tokens), max_pos + 7)
+    window_text = " ".join(normalised_tokens[window_start:window_end]).lower()
+    for cue in NEGATION_CUES:
+        if cue.lower() in window_text:
+            return True
     return False
 
 
@@ -265,9 +278,34 @@ def has_request_verb(normalised_tokens: list[str], hit_end_token_idx: int) -> bo
     """Check if a request verb appears within ±8 tokens of the hit."""
     window_start = max(0, hit_end_token_idx - 8)
     window_end = min(len(normalised_tokens), hit_end_token_idx + 9)
-    for i in range(window_start, window_end):
-        t = normalised_tokens[i]
-        for verb in REQUEST_VERBS:
-            if verb in t:
-                return True
+    window_tokens = normalised_tokens[window_start:window_end]
+    window_text = " ".join(window_tokens).lower()
+
+    # Noun phrases, past actions, and self-action are not request verbs
+    cleaned_window = window_text
+    for phrase in [
+        "advance pay kar diya tha", "advance pay kar diya",
+        "pay kar diya tha", "pay kar diya", "pay kar liya",
+        "pay kiya tha", "pay kiya", "transfer kar diya tha",
+        "transfer kar diya", "already paid", "kar diya tha",
+        "kar diya", "kar liya", "my share", "our share",
+        "his share", "their share", "i will transfer", "i'll transfer",
+        "i will pay", "i'll pay", "i will send", "i'll send",
+        "i will deposit", "i'll deposit", "we will transfer", "we will pay",
+        "fixed deposit", "फिक्स्ड डिपॉजिट", "फिक्स डिपॉजिट", "fd mature",
+    ]:
+        cleaned_window = cleaned_window.replace(phrase, "")
+
+    for verb in REQUEST_VERBS:
+        if f" {verb} " in f" {cleaned_window} ":
+            # Check if preceded by negation like "never share" or "do not share"
+            if (
+                f"never {verb}" in window_text
+                or f"not {verb}" in window_text
+                or f"dont {verb}" in window_text
+                or f"no {verb}" in window_text
+                or f"never ask to {verb}" in window_text
+            ):
+                continue
+            return True
     return False

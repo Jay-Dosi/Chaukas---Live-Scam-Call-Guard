@@ -1,0 +1,23 @@
+{
+  "id": "g-010",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Standard Chartered security advisory. Beware of fake calls pretending to be police or customs."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Never transfer money to any unknown account. Police never conducts digital arrest over phone."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Stay vigilant and report suspicious calls to cyber helpline 1930."
+    }
+  ]
+}

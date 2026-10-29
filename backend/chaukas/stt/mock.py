@@ -58,35 +58,28 @@ class MockSttSession:
                     break
 
                 # Yield partial
-                await self._queue.put(SttEvent(
+                yield SttEvent(
                     kind="partial",
                     id=segment["id"],
                     text=segment["text"],
                     t_ms=segment.get("t_start_ms", i * 3000),
                     lang=self.lang,
-                ))
+                )
 
                 # Simulate processing delay
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.05)
 
                 # Yield final
-                await self._queue.put(SttEvent(
+                yield SttEvent(
                     kind="final",
                     id=segment["id"],
                     text=segment["text"],
                     t_start_ms=segment.get("t_start_ms", i * 3000),
                     t_end_ms=segment.get("t_end_ms", (i + 1) * 3000),
                     lang=self.lang,
-                ))
+                )
 
-                # Wait before next segment
-                next_t = self._fixture[i + 1].get("t_start_ms", (i + 1) * 3000) if i + 1 < len(self._fixture) else 0
-                current_t = segment.get("t_end_ms", (i + 1) * 3000)
-                delay = max(0, (next_t - current_t) / 1000.0)
-                if delay > 0:
-                    await asyncio.sleep(min(delay, 2.0))
-
-            yield SttEvent(kind="closed")
+                await asyncio.sleep(0.1)
 
         return _gen()
 

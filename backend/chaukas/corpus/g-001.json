@@ -4,9 +4,25 @@
   "lang": "en",
   "tactics": [],
   "turns": [
-    {"tMs": 0, "speaker": "caller", "text": "Hello, this is a courtesy call from HDFC Bank. We're informing you about a recent transaction on your credit card."},
-    {"tMs": 3000, "speaker": "caller", "text": "A transaction of 12,500 rupees was made at Amazon yesterday. If this wasn't you, please call the number on the back of your card."},
-    {"tMs": 6000, "speaker": "caller", "text": "Remember, we will never ask for your OTP, PIN, or password. Never share these with anyone."},
-    {"tMs": 9000, "speaker": "caller", "text": "Thank you for banking with HDFC. Have a nice day."}
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, this is a courtesy call from HDFC Bank. We're informing you about a recent transaction on your credit card."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "A transaction of 12,500 rupees was made at Amazon yesterday. If this wasn't you, please call the number on the back of your card."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Remember, we will never ask for your OTP, PIN, or password. Never share these with anyone."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Thank you for banking with HDFC. Have a nice day."
+    }
   ]
 }

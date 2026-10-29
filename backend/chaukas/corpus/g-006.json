@@ -1,0 +1,23 @@
+{
+  "id": "g-006",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "ICICI Bank customer service se call hai. Aapke account me auto-debit set hua hai."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Remember bank officials will never ask for your confidential details. OTP kisi ko share mat karna."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "If you did not initiate this, please call the number on your passbook."
+    }
+  ]
+}

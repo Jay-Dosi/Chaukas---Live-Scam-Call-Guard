@@ -1,0 +1,23 @@
+{
+  "id": "s-045",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "emergency_relative",
+    "transfer_demand",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "भैया, मैं अस्पताल में हूँ, बहुत तेज चोट लगी है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "डॉक्टर ऑपरेशन शुरू नहीं कर रहे। तुरंत 20,000 रुपये भेज दीजिए अभी के अभी।"
+    }
+  ],
+  "firstHardAskTurn": 1
+}

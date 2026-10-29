@@ -7,13 +7,13 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, TypeAdapter
 
 
 # ─── Client → Server ───
 
 class ClientStart(BaseModel):
-    type: Literal["start"]
+    type: Literal["start"] = "start"
     mode: Literal["live", "inject", "upload", "drill"]
     lang: Literal["hi-IN", "en-IN", "auto"]
     sensitivity: Literal["standard", "high"]
@@ -27,7 +27,7 @@ class ClientStart(BaseModel):
 
 
 class ClientText(BaseModel):
-    type: Literal["text"]
+    type: Literal["text"] = "text"
     id: str
     text: str
     is_final: bool
@@ -35,38 +35,39 @@ class ClientText(BaseModel):
 
 
 class ClientMute(BaseModel):
-    type: Literal["mute"]
+    type: Literal["mute"] = "mute"
     ms: int
 
 
 class ClientChip(BaseModel):
-    type: Literal["chip"]
-    act: Literal["comply", "question", "verify", "refuse"]
+    type: Literal["chip"] = "chip"
+    act: Literal["comply", "question", "verify", "refuse", "hangup"]
 
 
 class ClientStop(BaseModel):
-    type: Literal["stop"]
+    type: Literal["stop"] = "stop"
 
 
 ClientMessage = ClientStart | ClientText | ClientMute | ClientChip | ClientStop
+client_message_adapter: TypeAdapter[ClientMessage] = TypeAdapter(ClientMessage)
 
 
 # ─── Server → Client ───
 
 class ReadyEvent(BaseModel):
-    type: Literal["ready"]
+    type: Literal["ready"] = "ready"
     providers: dict
 
 
 class PartialEvent(BaseModel):
-    type: Literal["partial"]
+    type: Literal["partial"] = "partial"
     id: str
     text: str
     t_ms: int
 
 
 class FinalEvent(BaseModel):
-    type: Literal["final"]
+    type: Literal["final"] = "final"
     id: str
     text: str
     t_start_ms: int
@@ -75,12 +76,12 @@ class FinalEvent(BaseModel):
 
 
 class AnalysisEvent(BaseModel):
-    type: Literal["analysis"]
+    type: Literal["analysis"] = "analysis"
     analysis: dict  # Analysis model
 
 
 class AlertEvent(BaseModel):
-    type: Literal["alert"]
+    type: Literal["alert"] = "alert"
     level: str
     text_en: str
     text_hi: str
@@ -88,7 +89,7 @@ class AlertEvent(BaseModel):
 
 
 class CallerEvent(BaseModel):
-    type: Literal["caller"]
+    type: Literal["caller"] = "caller"
     node_id: str
     text: str
     tactics: list[str]
@@ -97,19 +98,19 @@ class CallerEvent(BaseModel):
 
 
 class DrillEndEvent(BaseModel):
-    type: Literal["ended"]
+    type: Literal["ended"] = "ended"
     outcome: Literal["safe", "unsafe"]
     scorecard: dict
     debrief: dict
 
 
 class ProgressEvent(BaseModel):
-    type: Literal["progress"]
+    type: Literal["progress"] = "progress"
     pct: float
 
 
 class SummaryEvent(BaseModel):
-    type: Literal["summary"]
+    type: Literal["summary"] = "summary"
     duration_secs: int
     peak_level: str
     peak_score: int
@@ -123,13 +124,13 @@ class SummaryEvent(BaseModel):
 
 
 class ErrorEvent(BaseModel):
-    type: Literal["error"]
+    type: Literal["error"] = "error"
     code: str
     message: str
 
 
 class ClosedEvent(BaseModel):
-    type: Literal["closed"]
+    type: Literal["closed"] = "closed"
 
 
 ServerEvent = (

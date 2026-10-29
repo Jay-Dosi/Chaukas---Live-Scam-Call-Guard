@@ -1,9 +1,16 @@
 import { useTranslation } from '@i18n/useTranslation';
 
+interface Section {
+  title: string;
+  content?: string;
+  list?: Array<string | { name: string; desc: string }>;
+  paragraphs?: string[];
+}
+
 export function AboutPage() {
   const { t } = useTranslation();
 
-  const sections = [
+  const sections: Section[] = [
     {
       title: t('about.sections.whatItListensFor.title'),
       content: t('about.sections.whatItListensFor.text'),

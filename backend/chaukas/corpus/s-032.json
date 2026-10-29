@@ -1,0 +1,27 @@
+{
+  "id": "s-032",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "remote_access",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Aapka router aur banking app compromised hai."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Screen share chalu kijiye aur AnyDesk download karo turant."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Apna remote access code provide karo to secure your mobile."
+    }
+  ],
+  "firstHardAskTurn": 1
+}

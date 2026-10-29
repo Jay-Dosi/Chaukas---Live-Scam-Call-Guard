@@ -1,0 +1,29 @@
+{
+  "id": "s-020",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "courier_customs",
+    "authority_claim",
+    "accusation",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Customs clearance department Delhi airport se officer bol raha hoon."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapke parcel me contraband gold aur foreign currency mili hai."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Customs clearance fee pay karni hogi government clearing account me transfer karke."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

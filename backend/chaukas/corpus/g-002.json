@@ -4,9 +4,25 @@
   "lang": "en",
   "tactics": [],
   "turns": [
-    {"tMs": 0, "speaker": "caller", "text": "Hello, this is Blue Dart courier. Your package is out for delivery today."},
-    {"tMs": 3000, "speaker": "caller", "text": "Could you please confirm the landmark near your address for easier delivery?"},
-    {"tMs": 6000, "speaker": "caller", "text": "The tracking number is BD123456789. You can track it on our website."},
-    {"tMs": 9000, "speaker": "caller", "text": "Thank you, have a great day!"}
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello, this is Blue Dart courier. Your package is out for delivery today."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Could you please confirm the landmark near your address for easier delivery?"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "The tracking number is BD123456789. You can track it on our website."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Thank you, have a great day!"
+    }
   ]
 }

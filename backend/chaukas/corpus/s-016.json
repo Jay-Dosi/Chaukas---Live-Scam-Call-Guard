@@ -1,0 +1,29 @@
+{
+  "id": "s-016",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "authority_claim",
+    "kyc_expiry",
+    "credential_request",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "बैंक मैनेजर शर्मा बात कर रहा हूँ बैंक ऑफ बड़ौदा से।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आरबीआई गाइडलाइन के तहत आपका पैन कार्ड लिंक नहीं है। बैंक खाता बंद होने वाला है।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "अभी मैसेज में आया ओटीपी दीजिए ताकि खाता चालू रखा जा सके।"
+    }
+  ],
+  "firstHardAskTurn": 2
+}

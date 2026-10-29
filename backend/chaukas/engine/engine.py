@@ -159,8 +159,8 @@ class Engine:
     def _hard_floor(self) -> int:
         """Calculate hard-signal floor from active hits."""
         active = [h for h in self._scorer.active_hits.values() if h.decayed_weight(int(time.time() * 1000)) > 0]
-        hard_active = any(h.hard for h in active)
-        non_hard_active = any(not h.hard for h in active)
+        hard_active = any(h.hard and h.context == "asserted" for h in active)
+        non_hard_active = any(not (h.hard and h.context == "asserted") for h in active)
 
         if hard_active:
             if non_hard_active:

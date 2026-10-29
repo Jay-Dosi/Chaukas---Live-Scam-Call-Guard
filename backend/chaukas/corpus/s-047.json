@@ -1,0 +1,27 @@
+{
+  "id": "s-047",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "remote_access",
+    "credential_request"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "This is bank online security cell. We noticed unauthorized login."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Please open screen share and install the APK link we sent."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Now type your card PIN to verify your identity on the app."
+    }
+  ],
+  "firstHardAskTurn": 1
+}

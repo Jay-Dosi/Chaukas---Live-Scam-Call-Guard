@@ -133,7 +133,7 @@ button:disabled {
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--ink);
-  transition: border-color 120ms, box-shadow 120ms;
+  transition: border-color 120ms;
 }
 
 .field input:focus,

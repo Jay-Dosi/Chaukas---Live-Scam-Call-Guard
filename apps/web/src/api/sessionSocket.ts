@@ -5,8 +5,11 @@ import type {
   Analysis,
 } from '@protocol/index';
 
+export type { Level, Analysis, ClientMessage, ServerEvent };
+
 type MessageHandler = (event: ServerEvent) => void;
 type ErrorHandler = (error: Error) => void;
+type MessageType = ServerEvent['type'] | 'closed' | string;
 
 export class SessionSocket {
   private ws: WebSocket | null = null;
@@ -21,20 +24,6 @@ export class SessionSocket {
   constructor(baseUrl?: string) {
     this.url = baseUrl ?? `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/session`;
   }
-
-  private readonly MessageType = {
-    ready: 'ready',
-    partial: 'partial',
-    final: 'final',
-    analysis: 'analysis',
-    alert: 'alert',
-    caller: 'caller',
-    ended: 'ended',
-    progress: 'progress',
-    summary: 'summary',
-    error: 'error',
-    closed: 'closed',
-  } as const;
 
   connect() {
     if (this.ws && this.ws.readyState <= WebSocket.OPEN) return;
@@ -79,7 +68,12 @@ export class SessionSocket {
     }
   }
 
-  on(type: string, handler: MessageHandler) {
+  on<T extends ServerEvent['type']>(
+    type: T,
+    handler: (event: Extract<ServerEvent, { type: T }>) => void,
+  ): () => boolean;
+  on(type: string, handler: (event: any) => void): () => boolean;
+  on(type: string, handler: (event: any) => void) {
     const existing = this.handlers.get(type) ?? new Set();
     existing.add(handler);
     this.handlers.set(type, existing);

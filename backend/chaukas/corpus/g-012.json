@@ -1,0 +1,23 @@
+{
+  "id": "g-012",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hello sir, Amazon delivery agent bol raha hoon. Aap ghar par hain?"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapka package deliver karna hai. Gate par rakh doon ya neighbour ko de doon?"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Okay sir, thank you so much."
+    }
+  ]
+}

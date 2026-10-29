@@ -1,0 +1,23 @@
+{
+  "id": "g-018",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Arre yaar Sunil, kal dinner ka kya plan hai?"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Maine movie ticket book kar di hai, total 800 rupees hua tha. Kal milkar hisaab kar lenge."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Shaam ko 7 baje milte hain mall me."
+    }
+  ]
+}

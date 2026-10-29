@@ -1,0 +1,35 @@
+{
+  "id": "s-008",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "accusation",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "यह ट्राई और मुंबई पुलिस का आपातकालीन कॉल है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आपके मोबाइल नंबर से गैरकानूनी संदेश भेजे गए हैं। आपके खिलाफ केस दर्ज हुआ है।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "आप अभी इसी वक्त डिजिटल अरेस्ट के तहत हैं। वीडियो कॉल पर रहिए।"
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "आपको जुर्माना भरना होगा। अपने खाते से सरकारी खाते में तुरंत ट्रांसफर करें।"
+    }
+  ],
+  "firstHardAskTurn": 3
+}

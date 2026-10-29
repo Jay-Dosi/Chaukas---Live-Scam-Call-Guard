@@ -1,0 +1,28 @@
+{
+  "id": "s-040",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "मैं विशेष जांच अधिकारी हूँ। आपके विरुद्ध जांच आयोग ने नोटिस भेजा है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आपकी डिजिटल उपस्थिति अनिवार्य है। आप हिरासत में समझे जाएंगे।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "सुरक्षा गारंटी राशि जमा करने के लिए तुरंत खाते में पैसे ट्रांसफर कीजिए।"
+    }
+  ],
+  "firstHardAskTurn": 2
+}

@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
 
-SCENARIOS_DIR = Path(__file__).parent.parent.parent / "scenarios"
+SCENARIOS_DIR = Path(__file__).resolve().parent.parent / "scenarios"
 
 
 @router.get("/scenarios")

@@ -16,14 +16,15 @@ export default defineConfig({
       '@tts': path.resolve(__dirname, './src/tts'),
       '@i18n': path.resolve(__dirname, './src/i18n'),
       '@styles': path.resolve(__dirname, './src/styles'),
+      '@protocol': path.resolve(__dirname, '../../packages/protocol'),
     },
   },
   server: {
     port: 5173,
     proxy: {
-      '/api': 'http://localhost:8787',
+      '/api': 'http://127.0.0.1:8787',
       '/ws': {
-        target: 'ws://localhost:8787',
+        target: 'ws://127.0.0.1:8787',
         ws: true,
       },
     },

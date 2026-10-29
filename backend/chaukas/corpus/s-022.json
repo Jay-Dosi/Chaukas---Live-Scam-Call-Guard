@@ -1,0 +1,24 @@
+{
+  "id": "s-022",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "courier_customs",
+    "authority_claim",
+    "accusation",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "कस्टम अधिकारी बोल रहा हूँ। आपके पार्सल में गैरकानूनी दवाएं पाई गई हैं।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "एफआईआर से बचने के लिए तुरंत पेनल्टी राशि ट्रांसफर कीजिए।"
+    }
+  ],
+  "firstHardAskTurn": 1
+}

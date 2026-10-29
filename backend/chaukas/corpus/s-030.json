@@ -1,0 +1,33 @@
+{
+  "id": "s-030",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "remote_access",
+    "authority_claim",
+    "urgency_threat"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "This is technical support from Microsoft and your bank's IT cell."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "A severe malware is draining funds from your device right now."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Go to Play Store immediately and install AnyDesk or QuickSupport application."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Share your 9-digit screen share code so our technician can remove the virus."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

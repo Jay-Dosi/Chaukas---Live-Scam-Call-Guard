@@ -16,6 +16,7 @@ class SttEvent:
     text: str | None = None
     t_start_ms: int | None = None
     t_end_ms: int | None = None
+    t_ms: int | None = None
     lang: str | None = None
     message: str | None = None
 

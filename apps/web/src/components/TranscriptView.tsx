@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from '@i18n/useTranslation';
 import type { SignalHit } from '@protocol/index';
 
@@ -20,7 +21,8 @@ export function TranscriptView({ segments, hits, showDetails }: TranscriptViewPr
 
   const renderSegment = (seg: { id: string; text: string; isFinal: boolean; tMs: number }) => {
     const segmentHits = hitsBySegment.get(seg.id) || [];
-    let displayText = seg.text;
+    const text = seg.text;
+    let displayText: React.ReactNode = text;
 
     if (showDetails && segmentHits.length > 0) {
       // Sort hits by span_start
@@ -30,14 +32,14 @@ export function TranscriptView({ segments, hits, showDetails }: TranscriptViewPr
 
       for (const hit of sortedHits) {
         if (hit.span_start > lastEnd) {
-          parts.push(displayText.slice(lastEnd, hit.span_start));
+          parts.push(text.slice(lastEnd, hit.span_start));
         }
         parts.push(
           <span
             key={`${hit.segment_id}-${hit.signal_id}`}
             className={`transcript__highlight transcript__highlight--${hit.context}`}
           >
-            {displayText.slice(hit.span_start, hit.span_end)}
+            {text.slice(hit.span_start, hit.span_end)}
             <span className={`transcript__badge transcript__badge--${hit.context}`}>
               {hit.label_en}
             </span>
@@ -45,8 +47,8 @@ export function TranscriptView({ segments, hits, showDetails }: TranscriptViewPr
         );
         lastEnd = hit.span_end;
       }
-      if (lastEnd < displayText.length) {
-        parts.push(displayText.slice(lastEnd));
+      if (lastEnd < text.length) {
+        parts.push(text.slice(lastEnd));
       }
       displayText = parts;
     }

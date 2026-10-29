@@ -1,0 +1,18 @@
+{
+  "id": "g-030",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Maruti Suzuki service station se baat kar raha hoon sir."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapki car ki periodic maintenance complete ho gayi hai aur car ready hai pickup ke liye."
+    }
+  ]
+}

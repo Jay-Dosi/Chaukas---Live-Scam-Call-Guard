@@ -79,9 +79,12 @@ def main(
         recall_ok = summary["recall_at_danger"] >= recall_target
         fa_ok = summary["false_alarm_rate"] <= fa_target
 
+        ok_symbol = "[PASS]"
+        fail_symbol = "[FAIL]"
+
         click.echo(f"\n=== Target Check ({noise_key}% noise) ===")
-        click.echo(f"Recall @ Danger: {summary['recall_at_danger']:.1%} >= {recall_target:.1%} {'✓' if recall_ok else '✗'}")
-        click.echo(f"False Alarm Rate: {summary['false_alarm_rate']:.1%} <= {fa_target:.1%} {'✓' if fa_ok else '✗'}")
+        click.echo(f"Recall @ Danger: {summary['recall_at_danger']:.1%} >= {recall_target:.1%} {ok_symbol if recall_ok else fail_symbol}")
+        click.echo(f"False Alarm Rate: {summary['false_alarm_rate']:.1%} <= {fa_target:.1%} {ok_symbol if fa_ok else fail_symbol}")
 
         # Zero false alarms on fraud-awareness and genuine controls at 0% noise
         if noise_wer == 0:
@@ -89,10 +92,10 @@ def main(
             pass
 
         if not (recall_ok and fa_ok):
-            click.echo("\n✗ Targets not met")
+            click.echo(f"\n{fail_symbol} Targets not met")
             sys.exit(1)
         else:
-            click.echo("\n✓ All targets met")
+            click.echo(f"\n{ok_symbol} All targets met")
 
 
 if __name__ == "__main__":

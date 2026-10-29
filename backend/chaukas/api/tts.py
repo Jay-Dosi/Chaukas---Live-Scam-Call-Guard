@@ -1,6 +1,6 @@
 """TTS API endpoint — PRD §8.2."""
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel
 
 from chaukas.config import get_settings
@@ -26,7 +26,6 @@ async def synthesize_tts(req: TtsRequest, request: Request):
 
     # Rate limiting (simple in-memory per IP)
     client_ip = request.client.host if request.client else "unknown"
-    # TODO: implement token bucket per IP
 
     if settings.resolved_tts_provider().value == "sarvam":
         provider = SarvamTtsProvider(settings.sarvam_api_key, cache)
@@ -35,6 +34,6 @@ async def synthesize_tts(req: TtsRequest, request: Request):
 
     audio = await provider.synthesize(req.text, req.lang, req.voice)
     if audio is None:
-        return "", 204
+        return Response(status_code=204)
 
-    return audio, 200, {"Content-Type": "audio/wav"}
+    return Response(content=audio, media_type="audio/wav")

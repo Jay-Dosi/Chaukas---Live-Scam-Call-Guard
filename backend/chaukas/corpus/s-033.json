@@ -1,0 +1,28 @@
+{
+  "id": "s-033",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "kyc_expiry",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "बिजली विभाग हेड ऑफिस से सूचना।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "आपका पिछला बिजली बिल अपडेट नहीं हुआ है। आज रात 9 बजे बिजली काट दी जाएगी।"
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "कनेक्शन कटने से बचाने के लिए अभी इसी नंबर पर बिल की बकाया राशि तुरंत ट्रांसफर करें।"
+    }
+  ],
+  "firstHardAskTurn": 2
+}

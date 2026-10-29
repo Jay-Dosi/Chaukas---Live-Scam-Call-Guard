@@ -1,0 +1,22 @@
+{
+  "id": "s-042",
+  "label": "scam",
+  "lang": "hi",
+  "tactics": [
+    "kyc_expiry",
+    "credential_request"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "नमस्ते, आपका आधार कार्ड बैंक खाते से अनलिंक हो गया है।"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "प्रमाणीकरण कोड जो आपके फोन पर आया है वह ओटीपी बताइए।"
+    }
+  ],
+  "firstHardAskTurn": 1
+}

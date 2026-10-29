@@ -1,0 +1,23 @@
+{
+  "id": "g-031",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Good morning, this is Apollo Clinic front desk."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Confirming your consultation with Dr. Mehta for tomorrow at 10:30 AM."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Please bring your previous medical records and arrive 10 minutes early."
+    }
+  ]
+}

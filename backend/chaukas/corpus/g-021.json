@@ -1,0 +1,18 @@
+{
+  "id": "g-021",
+  "label": "genuine",
+  "lang": "hinglish",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Hi Pooja, kal trip ke liye packing shuru ki?"
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Hotel advance pay kar diya tha maine, no worries. Kal subah flight hai."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "g-007",
+  "label": "genuine",
+  "lang": "en",
+  "tactics": [],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Good morning, Axis Bank credit card division calling regarding your reward points balance."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "You have 4,000 points expiring next month. You can redeem them through our official mobile app."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Please note we do not ask for card details or one time passwords over the phone."
+    }
+  ]
+}

@@ -17,6 +17,7 @@ from chaukas.ws.protocol import (
     ClientStart,
     ClientChip,
     ClientStop,
+    client_message_adapter,
     ReadyEvent,
     CallerEvent,
     DrillEndEvent,
@@ -45,7 +46,8 @@ async def handle_drill_session(websocket: WebSocket):
             return
 
         # Load scenario
-        scenario = load_scenario(start_data.scenario_id, start_data.lang)
+        sc_id = start_data.scenario_id or "digital-arrest-hi-01"
+        scenario = load_scenario(sc_id, start_data.lang)
 
         # Initialize drill state
         state = DrillState(
@@ -54,7 +56,7 @@ async def handle_drill_session(websocket: WebSocket):
         )
 
         # Send ready with disclosure
-        disclosure = scenario.disclosure.get(start_data.lang[:2], scenario.disclosure.get("en", ""))
+        disclosure = scenario.disclosure.get(start_data.lang[:2], scenario.disclosure.get("en", "This is a practice call."))
         await websocket.send_json(ReadyEvent(
             type="ready",
             providers={
@@ -63,13 +65,13 @@ async def handle_drill_session(websocket: WebSocket):
             }
         ).model_dump())
 
-        # Send first caller line (disclosure)
+        # Send first caller line
         first_node = scenario.nodes[scenario.start]
         await websocket.send_json(CallerEvent(
             type="caller",
             node_id=scenario.start,
-            text=disclosure,
-            tactics=["disclosure"],
+            text=first_node.text,
+            tactics=first_node.tactics,
             audio_url=f"/api/audio/{scenario.id}/{scenario.start}.wav",
             pressure=0,
         ).model_dump())
@@ -78,7 +80,7 @@ async def handle_drill_session(websocket: WebSocket):
         while True:
             msg = await websocket.receive()
             if "text" in msg:
-                data = ClientMessage.model_validate_json(msg["text"])
+                data = client_message_adapter.validate_json(msg["text"])
 
                 if data.type == "chip":
                     # Process chip response
@@ -87,7 +89,22 @@ async def handle_drill_session(websocket: WebSocket):
                     if result and result.get("ended"):
                         break
 
+                elif data.type == "text":
+                    # Process spoken or typed user text
+                    state, result = run_turn(state, data.text, start_data.lang)
+                    await _send_result(websocket, state, result, scenario, start_data.lang)
+                    if result and result.get("ended"):
+                        break
+
                 elif data.type == "stop":
+                    # User invoked stop or stop word
+                    terminal_result = {
+                        "ended": True,
+                        "outcome": "safe",
+                        "debrief_key": "good_hangup",
+                    }
+                    state.ended_call_or_refused_hard = True
+                    await _send_result(websocket, state, terminal_result, scenario, start_data.lang)
                     break
 
     except WebSocketDisconnect:
@@ -98,8 +115,11 @@ async def handle_drill_session(websocket: WebSocket):
         except Exception:
             pass
     finally:
-        await websocket.send_json(ClosedEvent(type="closed").model_dump())
-        await websocket.close()
+        try:
+            await websocket.send_json(ClosedEvent(type="closed").model_dump())
+            await websocket.close()
+        except Exception:
+            pass
 
 
 async def _send_result(

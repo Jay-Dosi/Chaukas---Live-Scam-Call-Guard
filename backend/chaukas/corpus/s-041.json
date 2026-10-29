@@ -1,0 +1,29 @@
+{
+  "id": "s-041",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "authority_claim",
+    "accusation",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Internal Revenue and Income Tax Department automated legal notice."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Tax evasion case registered. Warrant issued under your Aadhaar number."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Pay the fine immediately to avoid same-day arrest and property confiscation."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

@@ -1,0 +1,35 @@
+{
+  "id": "s-012",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "accusation",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Main Telecom Authority TRAI aur Crime Branch se bol raha hoon."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapke Aadhaar se illegal SIM issue hui hai aur blackmailing ho rahi hai."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Aap digital arrest me hain. 15 minute ke andar arrest warrant execute ho jayega."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Penal fine pay kijiye safe RBI account me urgently."
+    }
+  ],
+  "firstHardAskTurn": 3
+}

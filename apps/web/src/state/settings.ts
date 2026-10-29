@@ -3,10 +3,11 @@ import type { Language } from '@i18n/useTranslation';
 
 export type TextSize = 'normal' | 'large' | 'extra-large';
 export type AlertSensitivity = 'standard' | 'high';
+export type CallLanguage = 'en-IN' | 'hi-IN' | 'auto';
 
 interface SettingsState {
   uiLanguage: Language;
-  callLanguage: Language;
+  callLanguage: CallLanguage;
   familyContactName: string;
   familyContactNumber: string;
   alertSensitivity: AlertSensitivity;
@@ -15,7 +16,7 @@ interface SettingsState {
   detailsViewDefault: boolean;
 
   setUiLanguage: (lang: Language) => void;
-  setCallLanguage: (lang: Language) => void;
+  setCallLanguage: (lang: CallLanguage) => void;
   setFamilyContactName: (name: string) => void;
   setFamilyContactNumber: (number: string) => void;
   setAlertSensitivity: (s: AlertSensitivity) => void;
@@ -43,7 +44,7 @@ function getDefaultSettings(): Omit<
 > {
   return {
     uiLanguage: 'en',
-    callLanguage: 'hi-IN' === 'hi-IN' ? 'en' : 'en',
+    callLanguage: 'auto',
     alertSensitivity: 'standard',
     textSize: 'normal',
     voiceAlerts: true,

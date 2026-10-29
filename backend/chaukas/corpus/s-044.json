@@ -1,0 +1,28 @@
+{
+  "id": "s-044",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "courier_customs",
+    "accusation",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Customs inspection desk Mumbai cargo terminal."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Parcel held containing undeclared jewelry and electronic gadgets."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Release fine must be transferred to the customs duty account within 1 hour."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

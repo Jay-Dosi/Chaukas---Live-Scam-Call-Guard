@@ -1,0 +1,34 @@
+{
+  "id": "s-009",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "authority_claim",
+    "digital_arrest",
+    "secrecy_isolation",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Attention please, this is Enforcement Directorate ED Mumbai branch."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Aapka naam 50 crore ke hawala scam me aaya hai. Court arrest warrant ready hai."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "Ghar walon ko mat batana, this is high level confidential case. Do not disconnect."
+    },
+    {
+      "tMs": 9000,
+      "speaker": "caller",
+      "text": "Agar arrest se bachna hai to security deposit paise bhejiye is government verification account me."
+    }
+  ],
+  "firstHardAskTurn": 3
+}

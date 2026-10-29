@@ -1,0 +1,28 @@
+{
+  "id": "s-021",
+  "label": "scam",
+  "lang": "en",
+  "tactics": [
+    "courier_customs",
+    "urgency_threat",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "This is SpeedPost international delivery center."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "A high value parcel sent to your address is held for unpaid clearance duties."
+    },
+    {
+      "tMs": 6000,
+      "speaker": "caller",
+      "text": "You must pay the fine and clearance fee immediately via online transfer or it will be confiscated."
+    }
+  ],
+  "firstHardAskTurn": 2
+}

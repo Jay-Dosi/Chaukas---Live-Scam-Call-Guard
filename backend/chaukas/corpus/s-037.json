@@ -1,0 +1,22 @@
+{
+  "id": "s-037",
+  "label": "scam",
+  "lang": "hinglish",
+  "tactics": [
+    "reward_task",
+    "transfer_demand"
+  ],
+  "turns": [
+    {
+      "tMs": 0,
+      "speaker": "caller",
+      "text": "Sir aapne online contest me Tata Safari car ya 15 lakh cash prize jeeta hai."
+    },
+    {
+      "tMs": 3000,
+      "speaker": "caller",
+      "text": "Prize release karane ke liye GST amount transfer kijiye is account me today."
+    }
+  ],
+  "firstHardAskTurn": 1
+}

@@ -95,6 +95,11 @@ def classify(text: str, lang: Lang, last_ask: str | None = None) -> Classificati
         if kw in lower:
             return Classification(act="hangup", evidence=[kw], gave_credential_digits=False)
 
+    # Check question before verify (e.g. "which police station?" is a question, PRD §7.3)
+    for kw in QUESTION_KEYWORDS[nlang]:
+        if kw in lower:
+            return Classification(act="question", evidence=[kw], gave_credential_digits=False)
+
     # Check verify
     for kw in VERIFY_KEYWORDS[nlang]:
         if kw in lower:
@@ -104,11 +109,6 @@ def classify(text: str, lang: Lang, last_ask: str | None = None) -> Classificati
     for kw in REFUSE_KEYWORDS[nlang]:
         if kw in lower:
             return Classification(act="refuse", evidence=[kw], gave_credential_digits=False)
-
-    # Check question
-    for kw in QUESTION_KEYWORDS[nlang]:
-        if kw in lower:
-            return Classification(act="question", evidence=[kw], gave_credential_digits=False)
 
     # Check comply
     for kw in COMPLY_KEYWORDS[nlang]:
