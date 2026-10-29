@@ -75,12 +75,15 @@ Browser (React + TS, UI only)          Backend (Python 3.12, FastAPI)
 | STT dev/test | MockStt (fixtures) | — | — |
 | TTS | Sarvam Bulbul (cached) | Browser speechSynthesis | On-screen text |
 | LLM | Anthropic (Claude Haiku) | — | Off (rules only) |
+| Telephony Drills | Bolna AI (`/api/bolna/call`) | Browser audio drill | Response chips |
 
 Set API keys in `.env` (copy from `.env.example`):
 ```bash
 SARVAM_API_KEY=your_key
 DEEPGRAM_API_KEY=your_key
 ANTHROPIC_API_KEY=your_key
+BOLNA_API_KEY=your_bolna_api_key
+BOLNA_AGENT_ID=your_bolna_agent_id
 ```
 
 With **zero keys**, the app runs fully using MockStt and browser fallbacks.
@@ -116,7 +119,7 @@ With **zero keys**, the app runs fully using MockStt and browser fallbacks.
 | 0% | 98.0% | 0.0% | 6000 ms | 9000 ms | **PASS** (Recall ≥ 92%, FAR ≤ 5%) |
 | 10% | 86.0% | 0.0% | 6000 ms | 9000 ms | **PASS** (Recall ≥ 85%, FAR ≤ 8%) |
 
-*All 28 backend unit tests passing with 100% green. Zero false Danger on all 5 fraud-awareness announcements and genuine control scenarios at 0% noise.*
+*All 29 backend unit tests passing with 100% green. Zero false Danger on all 5 fraud-awareness announcements and genuine control scenarios at 0% noise.*
 
 ## Validation Protocol (PRD §14)
 

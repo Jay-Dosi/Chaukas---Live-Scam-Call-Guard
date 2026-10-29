@@ -60,8 +60,16 @@ def test_upload_endpoint():
     assert "job_id" in data
 
 
-def test_bolna_call_unconfigured():
-    # If Bolna is not configured in test environment, should return 400
+def test_bolna_call_unconfigured(monkeypatch):
+    from chaukas.config import Settings
+    mock_settings = Settings(bolna_api_key="", bolna_agent_id="")
+    monkeypatch.setattr("chaukas.api.bolna.get_settings", lambda: mock_settings)
     resp = client.post("/api/bolna/call", json={"recipient_phone_number": "+919876543210"})
     assert resp.status_code == 400
     assert "Bolna AI integration is not configured" in resp.json()["detail"]
+
+
+def test_bolna_call_invalid_phone():
+    # Bad phone format should return 422
+    resp = client.post("/api/bolna/call", json={"recipient_phone_number": "12345"})
+    assert resp.status_code == 422
