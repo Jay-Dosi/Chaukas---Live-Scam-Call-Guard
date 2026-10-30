@@ -1,5 +1,7 @@
 # Chaukas (चौकस) — Live Scam-Call Guard and Test Lab
 
+🌐 **Live Deployment:** [https://chaukas.onrender.com/](https://chaukas.onrender.com/)
+
 > **Version 1.1** — Python 3.12 backend · React 18 frontend · Hindi, English, Hinglish
 
 Chaukas helps a person recognise a scam call while it is happening, and lets anyone test and practise against realistic scam calls.
