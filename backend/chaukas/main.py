@@ -61,9 +61,11 @@ def create_app() -> FastAPI:
     )
 
     # CORS
+    cors_origins = [o.strip() for o in settings.cors_origin.split(",") if o.strip()]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[settings.cors_origin],
+        allow_origins=cors_origins if cors_origins else ["*"],
+        allow_origin_regex=r"https?://.*\.onrender\.com",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -93,6 +95,14 @@ def create_app() -> FastAPI:
         assets_dir = build_dir / "assets"
         if assets_dir.exists():
             app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+        # Root route for SPA
+        @app.get("/")
+        async def serve_root():
+            index_file = build_dir / "index.html"
+            if index_file.is_file():
+                return FileResponse(index_file)
+            raise HTTPException(status_code=404, detail="index.html not found")
 
         # Fallback for all SPA page routes and other static root files
         @app.get("/{full_path:path}")

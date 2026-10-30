@@ -60,4 +60,4 @@ ENV PORT=8787
 
 # Run
 EXPOSE 8787
-CMD ["uv", "run", "--no-dev", "--directory", "/app/backend", "uvicorn", "chaukas.main:app", "--host", "0.0.0.0", "--port", "8787"]
+CMD ["sh", "-c", "uv run --no-dev --directory /app/backend uvicorn chaukas.main:app --host 0.0.0.0 --port ${PORT:-8787}"]
