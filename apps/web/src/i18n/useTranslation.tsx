@@ -15,15 +15,14 @@ export const translations: Record<Language, EnTranslations | HiTranslations> = {
 interface TranslationContextValue {
   lang: Language;
   setLang: (lang: Language) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   t: (key: string) => any;
 }
 
 const TranslationContext = createContext<TranslationContextValue | null>(null);
 
-function deepGet(obj: unknown, path: string): any {
+function deepGet(obj: unknown, path: string): unknown {
   const keys = path.split('.');
-  let current: any = obj;
+  let current: unknown = obj;
   for (const k of keys) {
     if (current && typeof current === 'object' && k in current) {
       current = (current as Record<string, unknown>)[k];
@@ -39,9 +38,16 @@ function useBaseTranslation(lang: Language) {
   return useCallback(
     (key: string): any => {
       const val = deepGet(dict, key);
-      if (val !== undefined && val !== '') return val;
+      if (val !== undefined && val !== '') {
+        if (typeof val === 'object') return val;
+        return String(val);
+      }
       const enVal = deepGet(en, key);
-      return enVal !== undefined && enVal !== '' ? enVal : key;
+      if (enVal !== undefined && enVal !== '') {
+        if (typeof enVal === 'object') return enVal;
+        return String(enVal);
+      }
+      return key;
     },
     [dict],
   );

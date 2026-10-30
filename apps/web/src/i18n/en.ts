@@ -63,6 +63,22 @@ export const en = {
       secondOpinion: 'Second opinion',
     },
     noAudio: 'No audio detected. Check microphone.',
+    noSignals: 'No signals detected',
+    noData: 'No data yet',
+    signalTable: {
+      tactic: 'Tactic',
+      weight: 'Weight',
+      context: 'Context',
+      matched: 'Matched phrase',
+      comboId: 'Combo',
+      bonus: 'Bonus',
+    },
+    activeCombinations: 'Active combinations',
+    thresholds: {
+      caution: 'Caution ',
+      danger: 'Danger ',
+      critical: 'Critical ',
+    },
     sessionSummary: {
       title: 'Session summary',
       duration: 'Duration',

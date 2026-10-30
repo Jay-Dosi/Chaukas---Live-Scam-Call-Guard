@@ -5,9 +5,9 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from chaukas.api import health, scenarios, tts, benchmark, upload, bolna
@@ -83,13 +83,27 @@ def create_app() -> FastAPI:
     async def ws_drill(websocket: WebSocket):
         await handle_drill_session(websocket)
 
-    # Serve built frontend in production
+    # Serve built frontend in production with SPA fallback
     repo_root = Path(__file__).resolve().parent.parent.parent
     build_dir = repo_root / "apps" / "web" / "dist"
     if not build_dir.exists():
         build_dir = Path("/app/apps/web/dist")
     if build_dir.exists():
-        app.mount("/", StaticFiles(directory=build_dir, html=True), name="static")
+        # Mount static assets directory
+        assets_dir = build_dir / "assets"
+        if assets_dir.exists():
+            app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+        # Fallback for all SPA page routes and other static root files
+        @app.get("/{full_path:path}")
+        async def serve_spa(full_path: str):
+            file_path = build_dir / full_path
+            if full_path and file_path.is_file():
+                return FileResponse(file_path)
+            index_file = build_dir / "index.html"
+            if index_file.is_file():
+                return FileResponse(index_file)
+            raise HTTPException(status_code=404, detail="Page not found")
 
     return app
 

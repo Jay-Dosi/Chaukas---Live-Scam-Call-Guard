@@ -1,3 +1,4 @@
+import { useTranslation } from '@i18n/useTranslation';
 import type { SignalHit, Combo } from '@protocol/index';
 
 interface SignalListProps {
@@ -6,56 +7,49 @@ interface SignalListProps {
 }
 
 export function SignalList({ hits, combos }: SignalListProps) {
+  const { t } = useTranslation();
   if (hits.length === 0) {
-    return <p style={{color: 'var(--ink-3)', fontStyle: 'italic', padding: '16px'}}>No signals detected</p>;
+    return <p className="signal-list__empty">{t('liveGuard.noSignals')}</p>;
   }
 
   return (
-    <div style={{overflowX: 'auto'}}>
-      <table className="signal-list">
+    <div className="signal-list__container">
+      <table className="table table--compact">
         <thead>
           <tr>
-            <th>Tactic</th>
-            <th>Weight</th>
-            <th>Context</th>
-            <th>Matched Phrase</th>
+            <th>{t('liveGuard.signalTable.tactic')}</th>
+            <th>{t('liveGuard.signalTable.weight')}</th>
+            <th>{t('liveGuard.signalTable.context')}</th>
+            <th>{t('liveGuard.signalTable.matched')}</th>
           </tr>
         </thead>
         <tbody>
-          {hits.map((hit, idx) => (
-            <tr key={`${hit.segment_id}-${hit.signal_id}-${idx}`}>
-              <td className="signal-list__signal">
-                {hit.label_en} / {hit.label_hi}
-              </td>
-              <td className="signal-list__weight">
-                {hit.weight.toFixed(1)} {hit.hard && '⬤'}
-              </td>
-              <td className={`signal-list__context signal-list__context--${hit.context}`}>
-                {hit.context}
-              </td>
-              <td className="signal-list__matched">"{hit.matched}"</td>
+          {hits.map((hit) => (
+            <tr key={`${hit.segment_id}-${hit.signal_id}`}>
+              <td className="signal-list__signal">{hit.label_en} / {hit.label_hi}</td>
+              <td className="signal-list__weight mono">{hit.weight.toFixed(1)}{hit.hard && ' •'}</td>
+              <td className={`signal-list__context signal-list__context--${hit.context}`}>{hit.context}</td>
+              <td className="signal-list__matched mono">"{hit.matched}"</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       {combos.length > 0 && (
-        <div style={{marginTop: '16px'}}>
-          <h4 style={{fontSize: 'var(--t-sm)', fontWeight: 600, marginBottom: '8px', borderBottom: '2px solid var(--line-strong)', paddingBottom: '4px'}}>
-            Active Combinations
-          </h4>
-          <table className="signal-list">
+        <div className="signal-list__combos">
+          <h3 className="signal-list__combo-title">{t('liveGuard.activeCombinations')}</h3>
+          <table className="table table--compact">
             <thead>
               <tr>
-                <th>Combo ID</th>
-                <th>Bonus</th>
+                <th>{t('liveGuard.signalTable.comboId')}</th>
+                <th>{t('liveGuard.signalTable.bonus')}</th>
               </tr>
             </thead>
             <tbody>
               {combos.map((combo) => (
                 <tr key={combo.id}>
-                  <td>{combo.id}</td>
-                  <td className="signal-list__weight">+{combo.bonus}</td>
+                  <td className="mono">{combo.id}</td>
+                  <td className="signal-list__weight mono">+{combo.bonus}</td>
                 </tr>
               ))}
             </tbody>

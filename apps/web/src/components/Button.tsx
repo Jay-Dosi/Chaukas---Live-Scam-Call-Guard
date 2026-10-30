@@ -1,23 +1,19 @@
 import type { ButtonHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'text';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  /** Primary action buttons must be at least 56px per PRD */
-  large?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', large = false, children, ...rest }, ref) => {
+  ({ className = '', variant = 'primary', size = 'md', children, ...rest }, ref) => {
     const classes = [
       'btn',
-      variant === 'primary' && 'btn-primary',
-      variant === 'secondary' && 'btn-secondary',
-      variant === 'danger' && 'btn-danger',
-      variant === 'ghost' && 'btn-ghost',
-      large ? '' : 'min-height-[48px]',
+      `btn--${variant}`,
+      `btn--${size}`,
       className,
     ].filter(Boolean).join(' ');
 

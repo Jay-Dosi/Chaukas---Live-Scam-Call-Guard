@@ -10,6 +10,7 @@ import asyncio
 import base64
 import json
 import os
+import time
 from typing import AsyncIterator
 
 import websockets
@@ -24,17 +25,20 @@ class SarvamSttSession:
     def __init__(self, api_key: str, lang: str):
         self.api_key = api_key
         self.lang = self._map_lang(lang)
+        self._start_time = time.time()
         self._ws: WebSocketClientProtocol | None = None
         self._queue: asyncio.Queue[SttEvent] = asyncio.Queue()
         self._receive_task: asyncio.Task | None = None
         self._segment_counter = 0
 
     def _map_lang(self, lang: str) -> str:
+        if not lang or lang == "auto":
+            return "auto"
         if lang.startswith("hi"):
             return "hi-IN"
         if lang.startswith("en"):
             return "en-IN"
-        return "hi-IN"  # default
+        return "auto"
 
     @property
     def _is_connected(self) -> bool:
@@ -92,7 +96,7 @@ class SarvamSttSession:
 
     async def _connect(self) -> None:
         """Establish WebSocket connection to Sarvam realtime streaming STT."""
-        url = f"wss://api.sarvam.ai/speech-to-text-realtime/ws?language_code={self.lang}&model=saaras:v3-realtime"
+        url = f"wss://api.sarvam.ai/speech-to-text-realtime/ws?language_code={self.lang}&model=saaras:v3-realtime&stream_type=fast"
         headers = {
             "api-subscription-key": self.api_key,
             "Authorization": f"Bearer {self.api_key}",
@@ -101,7 +105,7 @@ class SarvamSttSession:
         try:
             self._ws = await websockets.connect(url, additional_headers=headers)
         except TypeError:
-            self._ws = await websockets.connect(url, extra_headers=headers)
+            self._ws = await websockets.connect(url, additional_headers=headers)
 
         # Start receive loop
         self._receive_task = asyncio.create_task(self._receive_loop())
@@ -113,13 +117,15 @@ class SarvamSttSession:
                 data = json.loads(message)
                 event_type = data.get("event") or data.get("type") or ""
 
+                now_ms = int((time.time() - self._start_time) * 1000)
+
                 if event_type in ("transcript.partial", "partial"):
                     text = data.get("text") or data.get("transcript") or ""
                     if text.strip():
                         utt_idx = data.get("utterance_idx", self._segment_counter)
                         seg_id = f"utt_{utt_idx}"
-                        start_s = data.get("start_s") or data.get("timestamp") or 0
-                        t_ms = int(start_s * 1000) if isinstance(start_s, (int, float)) and start_s < 10000 else int(start_s)
+                        start_s = data.get("start_s") or data.get("timestamp")
+                        t_ms = int(start_s * 1000) if isinstance(start_s, (int, float)) and start_s < 10000 else (int(start_s) if start_s else now_ms)
                         await self._queue.put(SttEvent(
                             kind="partial",
                             id=seg_id,
@@ -133,10 +139,10 @@ class SarvamSttSession:
                         utt_idx = data.get("utterance_idx", self._segment_counter)
                         seg_id = f"utt_{utt_idx}"
                         self._segment_counter += 1
-                        start_s = data.get("start_s") or data.get("start_timestamp") or 0
-                        end_s = data.get("end_s") or data.get("end_timestamp") or (start_s + 1.0)
-                        t_start = int(start_s * 1000) if isinstance(start_s, (int, float)) and start_s < 10000 else int(start_s)
-                        t_end = int(end_s * 1000) if isinstance(end_s, (int, float)) and end_s < 10000 else int(end_s)
+                        start_s = data.get("start_s") or data.get("start_timestamp")
+                        end_s = data.get("end_s") or data.get("end_timestamp")
+                        t_start = int(start_s * 1000) if isinstance(start_s, (int, float)) and start_s < 10000 else (int(start_s) if start_s else max(0, now_ms - 1000))
+                        t_end = int(end_s * 1000) if isinstance(end_s, (int, float)) and end_s < 10000 else (int(end_s) if end_s else now_ms)
                         await self._queue.put(SttEvent(
                             kind="final",
                             id=seg_id,

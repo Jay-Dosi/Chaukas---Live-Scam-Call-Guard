@@ -377,11 +377,11 @@ export function TestLabPage() {
 
           <div style={{ display: 'flex', gap: '10px' }}>
             {!isPlayingScenario ? (
-              <Button variant="primary" large onClick={startScenarioReplay} disabled={!selectedScenarioId} style={{ flex: 1 }}>
+              <Button variant="primary" size="lg" onClick={startScenarioReplay} disabled={!selectedScenarioId} style={{ flex: 1 }}>
                 {t('scenarios.runInjection')}
               </Button>
             ) : (
-              <Button variant="danger" large onClick={stopScenarioReplay} style={{ flex: 1 }}>
+              <Button variant="danger" size="lg" onClick={stopScenarioReplay} style={{ flex: 1 }}>
                 Stop Replay
               </Button>
             )}
@@ -523,7 +523,7 @@ export function TestLabPage() {
             </select>
           </div>
 
-          <Button variant="primary" large onClick={startFireDrill} disabled={!drillScenarioId} style={{ width: '100%' }}>
+          <Button variant="primary" size="lg" onClick={startFireDrill} disabled={!drillScenarioId} style={{ width: '100%' }}>
             {t('fireDrill.disclosure.acknowledge')}
           </Button>
 
@@ -553,7 +553,7 @@ export function TestLabPage() {
               </div>
               <Button
                 variant="secondary"
-                large
+                size="lg"
                 onClick={handleTriggerBolnaCall}
                 disabled={bolnaLoading || !bolnaPhone.trim()}
                 style={{ minWidth: '180px' }}
@@ -724,7 +724,7 @@ export function TestLabPage() {
               <p style={{ margin: '4px 0 0 0', color: 'var(--ink-2)' }}>{drillResult.debrief.advice}</p>
             </div>
 
-            <Button variant="primary" large onClick={() => { setDrillResult(null); setDrillActive(false); }} style={{ width: '100%' }}>
+            <Button variant="primary" size="lg" onClick={() => { setDrillResult(null); setDrillActive(false); }} style={{ width: '100%' }}>
               Practice Another Scenario
             </Button>
           </div>
@@ -773,7 +773,7 @@ export function TestLabPage() {
 
           <Button
             variant="primary"
-            large
+            size="lg"
             onClick={handleRunBenchmark}
             disabled={benchmarkLoading}
             style={{ minWidth: '160px' }}
@@ -897,8 +897,7 @@ export function TestLabPage() {
                 {(['all', 'scam', 'genuine', 'fail'] as const).map((f) => (
                   <button
                     key={f}
-                    className={`btn ${caseFilter === f ? 'btn-primary' : 'btn-secondary'}`}
-                    style={{ padding: '2px 8px', fontSize: 'var(--t-xs)' }}
+                    className={`btn btn--sm ${caseFilter === f ? 'btn--primary' : 'btn--secondary'}`}
                     onClick={() => setCaseFilter(f)}
                   >
                     {f.toUpperCase()}

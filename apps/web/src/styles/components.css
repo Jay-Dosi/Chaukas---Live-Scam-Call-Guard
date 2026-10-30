@@ -1,37 +1,35 @@
 /* Component styles — Chaukas
+   Incident console on paper. Calm, serious, civic.
    Reusable UI components built from tokens.
    No gradients, shadows, blur, or radius > 2px.
 */
 
 /* ============================================================
-   State Block — the main status display on Live Guard
+   State Block — dominant risk display on Live Guard
+   Occupies first viewport on mobile. Segmented risk bar, not gauge.
    ============================================================ */
 .state-block {
   width: 100%;
   padding: calc(var(--space) * 6);
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 0; /* panels have 0 radius per PRD */
-}
-
-.state-block--calm {
-  border-color: var(--calm);
+  border-left: 4px solid var(--calm); /* left accent indicates state */
 }
 
 .state-block--caution {
-  border-color: var(--caution);
+  border-left-color: var(--caution);
   background: var(--caution-bg);
 }
 
 .state-block--danger {
-  border-color: var(--danger);
+  border-left-color: var(--danger);
   background: var(--danger-bg);
 }
 
 .state-block--critical {
+  border-left-color: var(--critical);
   background: var(--critical-bg);
-  border-color: var(--critical-bg);
-  color: var(--critical);
+  color: #FFFFFF;
 }
 
 .state-block__header {
@@ -40,6 +38,7 @@
   justify-content: space-between;
   gap: calc(var(--space) * 4);
   margin-bottom: calc(var(--space) * 4);
+  flex-wrap: wrap;
 }
 
 .state-block__level {
@@ -53,7 +52,7 @@
 .state-block--calm .state-block__level { color: var(--calm); }
 .state-block--caution .state-block__level { color: var(--caution); }
 .state-block--danger .state-block__level { color: var(--danger); }
-.state-block--critical .state-block__level { color: var(--critical); }
+.state-block--critical .state-block__level { color: #FFFFFF; }
 
 .state-block__meta {
   display: flex;
@@ -61,23 +60,26 @@
   gap: calc(var(--space) * 3);
   font-size: var(--t-md);
   color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
-.state-block--critical .state-block__meta { color: var(--critical); }
+.state-block--critical .state-block__meta { color: #FFFFFF; }
 
 .state-block__reason {
   font-size: var(--t-lg);
-  line-height: 1.4;
+  line-height: 1.5;
   margin-bottom: calc(var(--space) * 4);
+  max-width: 60ch;
 }
 
-.state-block--critical .state-block__reason { color: var(--critical); }
+.state-block--critical .state-block__reason { color: #FFFFFF; }
 
-/* Meter — 8-segment flat bar */
+/* Segmented risk bar — 8 segments, flat, no gradient */
 .meter {
   display: flex;
   gap: 2px;
-  height: 16px;
+  height: 20px; /* taller for touch/visibility */
   margin-bottom: calc(var(--space) * 3);
 }
 
@@ -85,6 +87,7 @@
   flex: 1;
   background: var(--line);
   border-radius: 0;
+  transition: background-color 120ms;
 }
 
 .meter__segment--filled {
@@ -100,16 +103,17 @@
   justify-content: space-between;
   font-size: var(--t-xs);
   color: var(--ink-3);
+  font-family: var(--font-mono);
   margin-top: calc(var(--space) * 1);
 }
 
 /* ============================================================
-   Transcript View
+   Transcript View — ledger style
+   Timestamp gutter left, speaker label, text. Flagged phrases inline.
    ============================================================ */
 .transcript {
   background: var(--surface-sunk);
   border: 1px solid var(--line);
-  border-radius: 0;
   padding: calc(var(--space) * 4);
   font-size: var(--t-md);
   line-height: 1.7;
@@ -121,6 +125,9 @@
   margin-bottom: calc(var(--space) * 3);
   padding-bottom: calc(var(--space) * 3);
   border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 60px 1fr; /* timestamp gutter + content */
+  gap: calc(var(--space) * 3);
 }
 
 .transcript__segment:last-child {
@@ -131,10 +138,10 @@
 
 .transcript__meta {
   display: flex;
-  gap: calc(var(--space) * 3);
+  flex-direction: column;
+  gap: calc(var(--space) * 1);
   font-size: var(--t-xs);
   color: var(--ink-3);
-  margin-bottom: calc(var(--space) * 1);
 }
 
 .transcript__speaker {
@@ -142,48 +149,48 @@
   font-weight: 600;
   text-transform: uppercase;
   font-size: var(--t-xs);
+  color: var(--ink-2);
 }
 
 .transcript__time {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .transcript__text {
-  position: relative;
   line-height: 1.7;
 }
 
+/* Inline flagged phrases — underline with colour band, never emoji */
 .transcript__highlight {
   position: relative;
   text-decoration: underline;
   text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
 }
 
-.transcript__highlight--calm { text-decoration-color: var(--calm); }
-.transcript__highlight--caution { text-decoration-color: var(--caution); }
-.transcript__highlight--danger { text-decoration-color: var(--danger); }
-.transcript__highlight--critical { text-decoration-color: var(--critical-bg); }
+.transcript__highlight--asserted { text-decoration-color: var(--danger); }
+.transcript__highlight--warning { text-decoration-color: var(--caution); }
+.transcript__highlight--negated { text-decoration-color: var(--ink-4); }
 
+/* Tactic tag beside highlighted phrase */
 .transcript__badge {
-  position: absolute;
-  top: -1.4em;
-  left: 0;
+  display: inline-block;
   font-size: var(--t-xs);
   font-weight: 600;
   padding: 0 calc(var(--space) * 1);
   border-radius: var(--radius);
+  margin-left: calc(var(--space) * 1);
   white-space: nowrap;
-  transform: translateX(-50%);
+  vertical-align: middle;
 }
 
-.transcript__badge--calm { background: var(--calm-bg); color: var(--calm); }
-.transcript__badge--caution { background: var(--caution-bg); color: var(--caution); }
-.transcript__badge--danger { background: var(--danger-bg); color: var(--danger); }
-.transcript__badge--critical { background: var(--critical-bg); color: var(--critical); }
+.transcript__badge--asserted { background: var(--danger-bg); color: var(--danger); }
+.transcript__badge--warning { background: var(--caution-bg); color: var(--caution); }
+.transcript__badge--negated { background: var(--surface-sunk); color: var(--ink-3); }
 
 /* ============================================================
-   Signal List — details panel
+   Signal List — compact table, not card grid
    ============================================================ */
 .signal-list {
   width: 100%;
@@ -196,6 +203,7 @@
   padding: calc(var(--space) * 3) calc(var(--space) * 4);
   text-align: left;
   border-bottom: 1px solid var(--line);
+  vertical-align: top;
 }
 
 .signal-list th {
@@ -213,11 +221,11 @@
 
 .signal-list__signal {
   font-weight: 600;
-  text-transform: capitalize;
 }
 
 .signal-list__weight {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--t-sm);
 }
 
@@ -237,7 +245,7 @@
 }
 
 /* ============================================================
-   Risk Timeline — flat SVG line chart
+   Risk Timeline — stepped line, hairline gridlines
    ============================================================ */
 .risk-timeline {
   width: 100%;
@@ -253,7 +261,7 @@
 }
 
 /* ============================================================
-   Table — generic data table (used in scenarios, benchmark)
+   Table — proper data tables, tabular numerals
    ============================================================ */
 .table {
   width: 100%;
@@ -287,7 +295,7 @@
 }
 
 /* ============================================================
-   Tabs — Test Lab top navigation
+   Tabs — Test Lab top navigation, pill-free
    ============================================================ */
 .tabs {
   display: flex;
@@ -321,7 +329,7 @@
 }
 
 /* ============================================================
-   Layout — Left rail / Bottom bar
+   Layout — left-aligned, no centred hero sections
    ============================================================ */
 .layout {
   display: grid;
@@ -419,7 +427,7 @@
   }
 }
 
-/* Mobile bottom bar */
+/* Mobile bottom bar — large touch targets */
 .bottom-bar {
   display: flex;
   position: fixed;
@@ -469,7 +477,7 @@
 }
 
 /* ============================================================
-   Status Panel — provider status
+   Status Panel — monospace provider info
    ============================================================ */
 .status-panel {
   display: flex;
@@ -493,10 +501,11 @@
 
 .status-panel__value {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================
-   Alert Banner
+   Alert Banner — unmistakable at Danger/Critical
    ============================================================ */
 .alert-banner {
   position: relative;
@@ -504,28 +513,29 @@
   font-size: var(--t-lg);
   font-weight: 600;
   line-height: 1.4;
+  border-left: 4px solid;
 }
 
 .alert-banner--caution {
   background: var(--caution-bg);
   color: var(--caution);
-  border: 1px solid var(--caution);
+  border-left-color: var(--caution);
 }
 
 .alert-banner--danger {
   background: var(--danger-bg);
   color: var(--danger);
-  border: 1px solid var(--danger);
+  border-left-color: var(--danger);
 }
 
 .alert-banner--critical {
   background: var(--critical-bg);
-  color: var(--critical);
-  border: 1px solid var(--critical-bg);
+  color: #FFFFFF;
+  border-left-color: var(--critical);
 }
 
 /* ============================================================
-   Action Bar — bottom actions on mobile
+   Action Bar — bottom actions, Call 1930 largest control
    ============================================================ */
 .action-bar {
   display: flex;
@@ -533,6 +543,7 @@
   padding: calc(var(--space) * 3) calc(var(--space) * 4);
   background: var(--surface);
   border-top: 1px solid var(--line);
+  flex-wrap: wrap;
 }
 
 @media (min-width: 720px) {
@@ -541,74 +552,12 @@
   }
 }
 
-.action-bar__item {
-  flex: 1;
-}
-
 /* ============================================================
-   Mic Level Meter
-   ============================================================ */
-.mic-level {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--space) * 3);
-  font-size: var(--t-sm);
-  color: var(--ink-2);
-}
-
-.mic-level__bars {
-  display: flex;
-  gap: 2px;
-  height: 24px;
-}
-
-.mic-level__bar {
-  flex: 1;
-  max-width: 12px;
-  background: var(--line);
-  border-radius: 0;
-  transition: height 50ms, background-color 50ms;
-}
-
-.mic-level__bar--active {
-  background: var(--action);
-}
-
-/* ============================================================
-   Chip — response options in Fire-Drill
-   ============================================================ */
-.chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  padding: 0 calc(var(--space) * 4);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  color: var(--ink);
-  background: var(--surface);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  transition: border-color 120ms, background 120ms;
-}
-
-.chip:hover:not(:disabled) {
-  border-color: var(--action);
-  background: var(--surface-sunk);
-}
-
-.chip:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
-}
-
-/* ============================================================
-   Card — generic panel (used sparingly, tables preferred)
+   Card — used sparingly, tables preferred for data
    ============================================================ */
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 0;
   padding: calc(var(--space) * 6);
 }
 
@@ -627,7 +576,7 @@
 }
 
 /* ============================================================
-   Summary Strip — large numbers for Benchmark
+   Summary Strip — tabular numerals for benchmark metrics
    ============================================================ */
 .summary-strip {
   display: grid;
@@ -651,6 +600,7 @@
 
 .summary-strip__value {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--t-2xl);
   font-weight: 600;
   line-height: 1;
@@ -666,7 +616,7 @@
 }
 
 /* ============================================================
-   Form — Setup page
+   Form — one input system, consistent
    ============================================================ */
 .form {
   display: flex;
@@ -696,12 +646,14 @@
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--ink);
+  font-size: var(--t-md); /* 16px prevents iOS zoom */
 }
 
 .form__input:focus,
 .form__select:focus {
   border-color: var(--ink);
-  outline: none;
+  outline: 3px solid var(--focus);
+  outline-offset: -1px;
 }
 
 .form__help {
@@ -710,7 +662,7 @@
 }
 
 /* ============================================================
-   Debrief — Fire-Drill results
+   Debrief — scorecard style, not card-with-shadow
    ============================================================ */
 .debrief {
   display: flex;
@@ -759,6 +711,7 @@
 
 .debrief__scorecard-points {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-weight: 600;
 }
 
@@ -775,6 +728,7 @@
 
 .debrief__total-value {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--t-xl);
 }
 
@@ -788,6 +742,7 @@
   padding: calc(var(--space) * 2) calc(var(--space) * 4);
   background: var(--caution-bg);
   border-bottom: 1px solid var(--caution);
+  border-left: 4px solid var(--caution);
   display: flex;
   align-items: center;
   justify-content: space-between;

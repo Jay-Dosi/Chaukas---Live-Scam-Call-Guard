@@ -13,16 +13,17 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "lucide-react": "^0.438.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
-    "zustand": "^4.5.5",
-    "lucide-react": "^0.438.0"
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@fontsource/ibm-plex-mono": "^5.0.19",
     "@fontsource/ibm-plex-sans": "^5.0.19",
     "@fontsource/noto-sans-devanagari": "^5.0.19",
+    "@playwright/test": "^1.64.1",
     "@testing-library/react": "^16.0.0",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",

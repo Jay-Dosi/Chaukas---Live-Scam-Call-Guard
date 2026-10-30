@@ -20,6 +20,7 @@ export class SessionSocket {
   private maxReconnectAttempts = 3;
   private reconnectDelay = 1000;
   private closed = false;
+  private sendQueue: string[] = [];
 
   constructor(baseUrl?: string) {
     this.url = baseUrl ?? `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/session`;
@@ -34,6 +35,21 @@ export class SessionSocket {
       this.emitError(new Error('WebSocket connection failed'));
       return;
     }
+
+    this.ws.onopen = () => {
+      this.closed = false;
+      this.reconnectAttempts = 0;
+      while (this.sendQueue.length > 0 && this.ws?.readyState === WebSocket.OPEN) {
+        const item = this.sendQueue.shift();
+        if (item) {
+          try {
+            this.ws.send(item);
+          } catch (e) {
+            console.error('Failed to flush message in queue:', e);
+          }
+        }
+      }
+    };
 
     this.ws.onmessage = (event) => {
       let data: ServerEvent;
@@ -90,15 +106,29 @@ export class SessionSocket {
   }
 
   send(message: ClientMessage) {
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      this.connect();
+    const payload = JSON.stringify(message);
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      try {
+        this.ws.send(payload);
+      } catch (err) {
+        this.sendQueue.push(payload);
+        this.emitError(new Error(`WebSocket send error: ${err}`));
+      }
+    } else {
+      this.sendQueue.push(payload);
+      if (!this.ws || this.ws.readyState > WebSocket.OPEN) {
+        this.connect();
+      }
     }
-    this.ws?.send(JSON.stringify(message));
   }
 
   sendBinary(data: ArrayBuffer | ArrayBufferView) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(data);
+      try {
+        this.ws.send(data);
+      } catch {
+        // Drop frames gracefully on backpressure
+      }
     }
   }
 

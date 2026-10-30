@@ -31,6 +31,7 @@ export function LiveGuardPage() {
 
   const { voiceAlerts, alertSensitivity } = useSettingsStore();
   const [socket, setSocket] = useState<SessionSocket | null>(null);
+  const socketRef = useRef<SessionSocket | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [providers, setProviders] = useState<HealthData | null>(null);
   const [consentGiven, setConsentGiven] = useState(() => {
@@ -54,6 +55,7 @@ export function LiveGuardPage() {
   // Initialize socket
   useEffect(() => {
     const ws = new SessionSocket();
+    socketRef.current = ws;
     setSocket(ws);
 
     ws.on('ready', (evt) => {
@@ -92,6 +94,7 @@ export function LiveGuardPage() {
     ws.connect();
 
     return () => {
+      socketRef.current = null;
       ws.close();
     };
   }, [appendTranscript, setAnalysis, setLevel, setScore, addAlert, voiceAlerts]);
@@ -119,28 +122,34 @@ export function LiveGuardPage() {
     return `${mins}:${secs}`;
   };
 
-  const handleStart = async () => {
-    if (!consentGiven) {
+  const handleStart = async (bypassConsent: boolean = false) => {
+    if (!consentGiven && !bypassConsent) {
       setShowConsent(true);
       return;
     }
     setShowConsent(false);
+    setConsentGiven(true);
     try {
       localStorage.setItem('chaukas_mic_consent', 'true');
     } catch {}
 
     try {
       // 1. Initialize session on backend first
-      if (socket) {
-        startSession(socket, {
+      const curSocket = socketRef.current || socket;
+      if (curSocket) {
+        console.log('[LiveGuard] Starting session with socket...');
+        startSession(curSocket, {
           mode: 'live',
           lang: 'auto',
           sensitivity: alertSensitivity,
           fixture_id: undefined,
         });
+      } else {
+        console.error('[LiveGuard] No socket available!');
       }
 
       // 2. Request microphone
+      console.log('[LiveGuard] Requesting microphone...');
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: false,
@@ -150,13 +159,20 @@ export function LiveGuardPage() {
           channelCount: 1,
         },
       });
+      console.log('[LiveGuard] Microphone granted:', stream.getAudioTracks().map(t => t.label));
       mediaStreamRef.current = stream;
 
       // 3. AudioWorklet for server-side STT (Sarvam)
+      let workletActive = false;
       try {
+        console.log('[LiveGuard] Setting up AudioWorklet...');
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
         audioContextRef.current = audioContext;
+        if (audioContext.state === 'suspended') {
+          await audioContext.resume();
+        }
         await audioContext.audioWorklet.addModule('/audio/capture.worklet.js');
+        console.log('[LiveGuard] AudioWorklet module loaded');
 
         const workletNode = new AudioWorkletNode(audioContext, 'pcm-processor');
         workletNodeRef.current = workletNode;
@@ -164,13 +180,24 @@ export function LiveGuardPage() {
         const source = audioContext.createMediaStreamSource(stream);
         source.connect(workletNode);
 
+        // Silent gain node ensures browser audio engine clocks the worklet continuously without speaker feedback
+        const silentGain = audioContext.createGain();
+        silentGain.gain.value = 0;
+        workletNode.connect(silentGain);
+        silentGain.connect(audioContext.destination);
+
         workletNode.port.onmessage = (e) => {
-          if (e.data.type === 'pcm' && socket) {
-            socket.sendBinary(e.data.buffer);
+          if (e.data.type === 'pcm') {
+            const s = socketRef.current || socket;
+            if (s) {
+              s.sendBinary(e.data.buffer);
+            }
           }
         };
+        workletActive = true;
+        console.log('[LiveGuard] AudioWorklet connected and active');
       } catch (workletErr) {
-        console.warn('AudioWorklet setup warning (falling back to Web Speech):', workletErr);
+        console.warn('[LiveGuard] AudioWorklet setup warning (falling back to Web Speech):', workletErr);
       }
 
       const now = Date.now();
@@ -178,18 +205,23 @@ export function LiveGuardPage() {
       setIsListening(true);
       setStartTime(now);
 
-      // 4. Client-side Web Speech API fallback for immediate 0ms live transcription
+      // 4. Client-side Web Speech API fallback if server STT is mock or worklet failed
+      const sttProviderName = (providers?.stt as any)?.provider || (providers?.stt as any) || '';
+      const shouldUseWebSpeech = !workletActive || sttProviderName === 'mock';
+      console.log('[LiveGuard] Web Speech check. shouldUseWebSpeech:', shouldUseWebSpeech, 'workletActive:', workletActive, 'provider:', sttProviderName);
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
+      if (SpeechRecognition && shouldUseWebSpeech) {
         try {
           const recognition = new SpeechRecognition();
           recognition.continuous = true;
           recognition.interimResults = true;
           const { callLanguage } = useSettingsStore.getState();
           recognition.lang = callLanguage === 'hi-IN' ? 'hi-IN' : 'en-IN';
+          console.log('[LiveGuard] Recognition lang:', recognition.lang);
 
           let turnId = `live_${Date.now()}`;
           recognition.onresult = (evt: any) => {
+            console.log('[LiveGuard] Speech recognition result:', evt.resultIndex, evt.results.length);
             const results = evt.results;
             for (let i = evt.resultIndex; i < results.length; i++) {
               const res = results[i];
@@ -199,10 +231,14 @@ export function LiveGuardPage() {
               const segId = `${turnId}_${i}`;
               const elapsedMs = Date.now() - now;
 
+              console.log('[LiveGuard] Transcript:', text, 'isFinal:', isFinal);
+
               appendTranscript(segId, text, isFinal, elapsedMs);
 
-              if (socket) {
-                socket.send({
+              const s = socketRef.current || socket;
+              if (s) {
+                console.log('[LiveGuard] Sending text to server...');
+                s.send({
                   type: 'text',
                   id: segId,
                   text,
@@ -217,23 +253,53 @@ export function LiveGuardPage() {
           };
 
           recognition.onerror = (e: any) => {
-            console.warn('Web Speech fallback notice:', e.error);
+            console.warn('[LiveGuard] Web Speech error:', e.error, e);
           };
 
           recognition.onend = () => {
+            console.log('[LiveGuard] Web Speech ended, restarting...');
             if (isListeningRef.current) {
               try { recognition.start(); } catch {}
             }
           };
 
+          recognition.onaudiostart = () => {
+            console.log('[LiveGuard] Web Speech audio start');
+          };
+
+          recognition.onsoundstart = () => {
+            console.log('[LiveGuard] Web Speech sound start');
+          };
+
+          recognition.onspeechstart = () => {
+            console.log('[LiveGuard] Web Speech speech start');
+          };
+
+          recognition.onspeechend = () => {
+            console.log('[LiveGuard] Web Speech speech end');
+          };
+
+          recognition.onsoundend = () => {
+            console.log('[LiveGuard] Web Speech sound end');
+          };
+
+          recognition.onaudioend = () => {
+            console.log('[LiveGuard] Web Speech audio end');
+          };
+
           recognition.start();
           recognitionRef.current = recognition;
+          console.log('[LiveGuard] Web Speech recognition started');
         } catch (e) {
-          console.warn('Web Speech API not available or blocked:', e);
+          console.warn('[LiveGuard] Web Speech API not available or blocked:', e);
         }
+      } else if (!shouldUseWebSpeech) {
+        console.log('[LiveGuard] Real-time Sarvam STT stream active; Web Speech fallback idle');
+      } else {
+        console.warn('[LiveGuard] Web Speech API not supported in this browser');
       }
     } catch (err) {
-      console.error('Mic error:', err);
+      console.error('[LiveGuard] Mic error:', err);
       alert(t('errors.micDenied'));
     }
   };
@@ -260,7 +326,8 @@ export function LiveGuardPage() {
     audioContextRef.current?.close();
     mediaRecorderRef.current?.stop();
 
-    if (socket) stopSession(socket);
+    const s = socketRef.current || socket;
+    if (s) stopSession(s);
     setIsListening(false);
     setStartTime(null);
     resetSession();
@@ -305,12 +372,12 @@ export function LiveGuardPage() {
         </label>
         <Button
           variant="primary"
-          large
+          size="lg"
           onClick={() => {
             setShowConsent(false);
             setConsentGiven(true);
             try { localStorage.setItem('chaukas_mic_consent', 'true'); } catch {}
-            handleStart();
+            handleStart(true);
           }}
           disabled={!consentGiven}
         >
@@ -330,12 +397,14 @@ export function LiveGuardPage() {
         <h2 style={{fontSize: 'var(--t-2xl)', marginBottom: '16px'}}>{t('liveGuard.ready')}</h2>
         <p style={{fontSize: 'var(--t-lg)', color: 'var(--ink-2)', marginBottom: '24px'}}>{t('liveGuard.disclaimer')}</p>
         <ul style={{textAlign: 'left', display: 'inline-block', marginBottom: '24px', color: 'var(--ink-2)'}}>
-          {Array.isArray(t('liveGuard.instructions')) &&
-            (t('liveGuard.instructions') as string[]).map((inst: string, i: number) => (
-              <li key={i} style={{marginBottom: '12px', fontSize: 'var(--t-md)'}}>{inst}</li>
-            ))}
+          {(Array.isArray(t('liveGuard.instructions'))
+            ? (t('liveGuard.instructions') as unknown as string[])
+            : ['Put the call on speaker.', 'Place your phone near it.', 'Tap Start.']
+          ).map((inst: string, i: number) => (
+            <li key={i} style={{marginBottom: '12px', fontSize: 'var(--t-md)'}}>{inst}</li>
+          ))}
         </ul>
-        <Button variant="primary" large onClick={handleStart} style={{minWidth: '280px'}}>
+        <Button variant="primary" size="lg" onClick={() => handleStart(false)} style={{minWidth: '280px'}}>
           <Mic size={24} style={{marginRight: '8px'}} />
           {t('liveGuard.startButton')}
         </Button>
@@ -389,32 +458,32 @@ export function LiveGuardPage() {
           <div className="status-panel">
             <div className="status-panel__item">
               <span className="status-panel__label">{t('liveGuard.statusPanel.speech')}: </span>
-              <span className="status-panel__value">{providers?.stt?.provider || 'Unknown'}</span>
+              <span className="status-panel__value mono">{providers?.stt?.provider || 'Unknown'}</span>
             </div>
             <div className="status-panel__item">
               <span className="status-panel__label">{t('liveGuard.statusPanel.voice')}: </span>
-              <span className="status-panel__value">{providers?.tts?.provider || 'Browser'}</span>
+              <span className="status-panel__value mono">{providers?.tts?.provider || 'Browser'}</span>
             </div>
             <div className="status-panel__item">
               <span className="status-panel__label">{t('liveGuard.statusPanel.secondOpinion')}: </span>
-              <span className="status-panel__value">{providers?.llm?.enabled ? 'Enabled' : 'Off'}</span>
+              <span className="status-panel__value mono">{providers?.llm?.enabled ? 'Enabled' : 'Off'}</span>
             </div>
           </div>
         </div>
       )}
 
       <div className="action-bar" style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--line)'}}>
-        <Button variant="secondary" onClick={handleStop} large>
+        <Button variant="secondary" onClick={handleStop} size="lg">
           <MicOff size={24} style={{marginRight: '8px'}} />
           {t('liveGuard.stopButton')}
         </Button>
         {(level === 'danger' || level === 'critical') && (
           <>
-            <Button variant="danger" onClick={handleCall1930} large>
+            <Button variant="danger" onClick={handleCall1930} size="lg">
               <Phone size={24} style={{marginRight: '8px'}} />
               {t('liveGuard.sessionSummary.call1930')}
             </Button>
-            <Button variant="danger" onClick={handleAlertFamily} large>
+            <Button variant="danger" onClick={handleAlertFamily} size="lg">
               <AlertTriangle size={24} style={{marginRight: '8px'}} />
               {t('liveGuard.sessionSummary.alertFamily')}
             </Button>

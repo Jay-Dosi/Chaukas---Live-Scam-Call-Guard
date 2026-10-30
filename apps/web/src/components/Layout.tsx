@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Layout as LayoutIcon, Mic, Settings, Info } from 'lucide-react';
+import { Layout as LayoutIcon, Mic, Settings, Info, Globe } from 'lucide-react';
 import { useTranslation } from '@i18n/useTranslation';
 
 export function Layout({ children }: { children?: React.ReactNode }) {
-  const { t, lang } = useTranslation();
+  const { t, lang, setLang } = useTranslation();
 
   const navItems = [
     { path: '/', label: t('nav.liveGuard'), icon: Mic },
@@ -27,14 +27,26 @@ export function Layout({ children }: { children?: React.ReactNode }) {
               key={path}
               to={path}
               className={({ isActive }) =>
-                `layout__nav-item${isActive ? ' layout__nav-item--active' : ''}`
-              }
+                `layout__nav-item${isActive ? ' layout__nav-item--active' : ''}`}
             >
               <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
               <span>{label}</span>
             </NavLink>
           ))}
         </nav>
+
+        {/* Language switcher */}
+        <div className="layout__lang-switch" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <button
+            type="button"
+            className="btn btn--ghost btn--sm"
+            onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
+            aria-label={lang === 'en' ? 'Switch to Hindi' : 'Switch to English'}
+          >
+            <Globe size={18} strokeWidth={1.5} aria-hidden="true" />
+            <span>{lang === 'en' ? 'हिन्दी' : 'English'}</span>
+          </button>
+        </div>
       </header>
 
       <main id="main" className="layout__main" role="main">
@@ -47,8 +59,7 @@ export function Layout({ children }: { children?: React.ReactNode }) {
             key={path}
             to={path}
             className={({ isActive }) =>
-              `bottom-bar__item${isActive ? ' bottom-bar__item--active' : ''}`
-            }
+              `bottom-bar__item${isActive ? ' bottom-bar__item--active' : ''}`}
           >
             <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
             <span>{label}</span>

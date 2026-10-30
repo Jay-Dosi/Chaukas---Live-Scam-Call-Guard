@@ -5,6 +5,7 @@ interface Section {
   content?: string;
   list?: Array<string | { name: string; desc: string }>;
   paragraphs?: string[];
+  text?: string;
 }
 
 export function AboutPage() {
@@ -17,11 +18,11 @@ export function AboutPage() {
     },
     {
       title: t('about.sections.tactics.title'),
-      list: t('about.sections.tactics.list'),
+      list: t('about.sections.tactics.list') as unknown as Array<string | { name: string; desc: string }>,
     },
     {
       title: t('about.sections.limitations.title'),
-      list: t('about.sections.limitations.list'),
+      list: t('about.sections.limitations.list') as unknown as Array<string | { name: string; desc: string }>,
     },
     {
       title: t('about.sections.howScoringWorks.title'),
@@ -65,16 +66,16 @@ export function AboutPage() {
             </p>
           ))}
 
-          {section.list && (
+          {Array.isArray(section.list) && (
             <ul style={{lineHeight: '1.8', color: 'var(--ink-2)', marginLeft: '24px', fontSize: 'var(--t-md)'}}>
               {section.list.map((item, i) => (
                 <li key={i} style={{marginBottom: '12px'}}>
-                  {typeof item === 'object' && 'name' in item ? (
+                  {typeof item === 'object' && item !== null && 'name' in item ? (
                     <>
-                      <strong>{item.name}:</strong> {item.desc}
+                      <strong>{(item as any).name}:</strong> {(item as any).desc}
                     </>
                   ) : (
-                    item
+                    String(item)
                   )}
                 </li>
               ))}

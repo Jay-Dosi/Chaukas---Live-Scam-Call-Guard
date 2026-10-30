@@ -172,7 +172,7 @@ async def handle_session(websocket: WebSocket):
 async def _init_stt(ctx: SessionContext):
     """Initialize STT session."""
     try:
-        lang = ctx.lang if ctx.lang != "auto" else "hi-IN"
+        lang = ctx.lang or "auto"
         ctx.stt_session = await ctx.stt_provider.open(lang, 16000)
     except Exception as e:
         logger.warning(f"STT init failed: {e}")
@@ -230,24 +230,16 @@ async def _handle_client_message(ctx: SessionContext, msg: ClientMessage):
 
 
 async def _handle_audio_frame(ctx: SessionContext, pcm16: bytes):
-    """Queue audio frame with backpressure and forward to STT."""
+    """Forward audio frame directly to STT."""
     now_ms = int(time.time() * 1000)
     if now_ms < ctx.mute_until_ms:
         return
 
-    try:
-        ctx.audio_queue.put_nowait(pcm16)
-        if ctx.stt_session:
-            await ctx.stt_session.push(pcm16)
-    except asyncio.QueueFull:
+    if ctx.stt_session:
         try:
-            ctx.audio_queue.get_nowait()
-            await ctx.websocket.send_json(ErrorEvent(
-                code="backpressure",
-                message="Audio buffer full, dropped oldest frame"
-            ).model_dump())
-        except Exception:
-            pass
+            await ctx.stt_session.push(pcm16)
+        except Exception as e:
+            logger.debug(f"STT audio push error: {e}")
 
 
 async def _stt_event_pump(ctx: SessionContext):

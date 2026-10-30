@@ -40,8 +40,8 @@ export function TranscriptView({ segments, hits, showDetails }: TranscriptViewPr
             className={`transcript__highlight transcript__highlight--${hit.context}`}
           >
             {text.slice(hit.span_start, hit.span_end)}
-            <span className={`transcript__badge transcript__badge--${hit.context}`}>
-              {hit.label_en}
+            <span className="transcript__badge">
+              {hit.context === 'asserted' ? hit.label_en : hit.label_hi}
             </span>
           </span>
         );
@@ -59,12 +59,10 @@ export function TranscriptView({ segments, hits, showDetails }: TranscriptViewPr
 
     return (
       <div key={seg.id} className="transcript__segment">
-        <div className="transcript__meta">
+        <div className="transcript__time mono">{timeStr}</div>
+        <div className="transcript__content">
           <span className="transcript__speaker">{seg.isFinal ? 'CALLER' : '...'}</span>
-          <span className="transcript__time">{timeStr}</span>
-        </div>
-        <div className="transcript__text">
-          {displayText}
+          <div className="transcript__text">{displayText}</div>
         </div>
       </div>
     );
@@ -72,11 +70,11 @@ export function TranscriptView({ segments, hits, showDetails }: TranscriptViewPr
 
   return (
     <div className="transcript" role="log" aria-label={t('liveGuard.transcriptLabel')}>
-      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px'}}>
-        <h3 style={{fontSize: 'var(--t-md)', fontWeight: 600}}>{t('liveGuard.transcriptLabel')}</h3>
+      <div className="transcript__header">
+        <h3 className="transcript__title">{t('liveGuard.transcriptLabel')}</h3>
       </div>
       {segments.length === 0 ? (
-        <p style={{color: 'var(--ink-3)', fontStyle: 'italic'}}>{t('liveGuard.noAudio')}</p>
+        <p className="transcript__empty">{t('liveGuard.noAudio')}</p>
       ) : (
         segments.map(renderSegment)
       )}

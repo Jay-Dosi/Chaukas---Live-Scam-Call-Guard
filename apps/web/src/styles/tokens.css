@@ -1,56 +1,79 @@
 /* Design tokens — Chaukas
-   Single light theme, no gradients, no shadows, max 2px radius.
-   All values from PRD §10.3.
+   Incident console on paper. Calm, serious, civic.
+   No gradients, no shadows, blur, or radius > 2px.
 */
 
 :root {
-  /* surfaces */
+  /* surfaces — warm off-white paper */
   --paper: #F7F6F2;       /* page background */
-  --surface: #FFFFFF;     /* panels */
-  --surface-sunk: #EFEDE6; /* wells, transcript bg */
+  --surface: #FFFFFF;     /* panels, cards */
+  --surface-sunk: #EFEDE6; /* wells, transcript bg, inset areas */
 
-  /* ink */
-  --ink: #14171C;         /* primary text */
+  /* ink — near-black, hierarchical */
+  --ink: #14171C;         /* primary text, headings */
   --ink-2: #454B55;       /* secondary text, 7.5:1 on paper */
-  --ink-3: #6B717C;       /* tertiary, only >=18px */
+  --ink-3: #6B717C;       /* tertiary, metadata, only >=18px */
+  --ink-4: #9CA3AF;       /* disabled, placeholders */
 
-  /* lines */
-  --line: #CFCDC4;        /* 1px borders, dividers */
-  --line-strong: #14171C; /* 2px structural rules */
+  /* lines — hairline rules, not boxes */
+  --line: #D4D2C8;        /* 1px borders, dividers */
+  --line-strong: #14171C; /* 2px structural rules, section breaks */
 
-  /* meaning — always paired with word + shape */
-  --calm: #1F6A3D;
-  --calm-bg: #E3EFE7;
+  /* meaning — three signal colours + calm, always paired with label + shape */
+  --calm: #1F6A3D;        /* green — calm state */
+  --calm-bg: #E3EFE7;     /* calm background tint */
 
-  --caution: #8A5A00;
-  --caution-bg: #F6EBCF;
+  --caution: #8A5A00;     /* amber — caution state */
+  --caution-bg: #F6EBCF;  /* caution background tint */
 
-  --danger: #B3261E;
-  --danger-bg: #F7E0DD;
+  --danger: #B3261E;      /* vermilion — danger state */
+  --danger-bg: #F7E0DD;   /* danger background tint */
 
-  --critical: #FFFFFF;
-  --critical-bg: #8F1B15; /* inverted block */
+  --critical: #FFFFFF;    /* white text on critical bg */
+  --critical-bg: #8F1B15; /* inverted block, critical state */
 
+  /* action — primary interactive elements */
   --action: #1B3A5C;
-  --action-ink: #FFFFFF;  /* primary buttons, links */
+  --action-ink: #FFFFFF;  /* text on action buttons */
+  --action-hover: #142C47; /* darker press/hover state, same hue */
+  --danger-hover: #8F1B15;  /* darker press/hover state, same hue */
 
+  /* focus — keyboard focus ring */
   --focus: #1B3A5C;
 
-  /* type */
+  /* type — IBM Plex family, Noto for Devanagari */
   --font-ui: 'IBM Plex Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  /* scale — base 18px for primary user */
-  --t-xs: 0.8125rem;   /* 14.6px */
-  --t-sm: 0.9375rem;   /* 15px */
-  --t-md: 1.125rem;    /* 18px — base */
-  --t-lg: 1.375rem;    /* 22px */
-  --t-xl: 1.75rem;     /* 28px */
-  --t-2xl: 2.5rem;     /* 40px */
-  --t-hero: 4rem;      /* 64px — state word */
+  /* type scale — 5 sizes + hero, base 18px for older adults */
+  --t-xs: 0.8125rem;   /* 13px — captions, timestamps */
+  --t-sm: 0.9375rem;   /* 15px — body small, labels */
+  --t-md: 1.125rem;    /* 18px — base body, inputs */
+  --t-lg: 1.375rem;    /* 22px — subheadings */
+  --t-xl: 1.75rem;     /* 28px — headings */
+  --t-2xl: 2.5rem;     /* 40px — large numbers */
+  --t-hero: 4rem;      /* 64px — state word, dominant element */
 
-  --space: 4px;        /* all spacing multiples of 4 */
-  --radius: 2px;       /* max border radius */
+  /* spacing — 4/8px grid, consistent */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* legacy alias for gradual migration */
+  --space: 4px;
+
+  /* border radius — max 2px, flat aesthetic */
+  --radius: 2px;
+
+  /* touch targets — minimum 48px for older adults */
+  --touch-min: 48px;
+  --touch-primary: 56px;
 }
 
 /* Text size settings — applied to :root via JS */
@@ -58,7 +81,7 @@ html[data-size="normal"] { font-size: 100%; }
 html[data-size="large"] { font-size: 118%; }
 html[data-size="extra-large"] { font-size: 135%; }
 
-/* Reduced motion */
+/* Reduced motion — respect user preference */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
